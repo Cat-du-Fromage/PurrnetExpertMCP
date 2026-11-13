@@ -1,0 +1,222 @@
+[
+  {
+    "id": "classic-networktransform",
+    "prompt": "Je veux NetworkTransform fluide avec interpolation, mais pas de PurrDiction.",
+    "assertions": [
+      "Choose NetworkTransform, not PredictedTransform without prediction intent",
+      "Owner Auth and interpolation buffer/motion writers audited",
+      "Link official component and adaptive sync docs",
+      "Late join and remote-client plan"
+    ],
+    "evaluation_status": "NOT_RUN — needs agent + Unity fixture"
+  },
+  {
+    "id": "adaptive-sync",
+    "prompt": "Optimise mon NetworkTransform avec adaptive sync sans baisse du tick rate.",
+    "assertions": [
+      "Mention adaptiveSync and SetSyncStrategy only if found in installed API",
+      "Avoid assuming lowering tick rate",
+      "Profiler before/after benchmark",
+      "Test loss and fast acceleration"
+    ],
+    "evaluation_status": "NOT_RUN — needs agent + Unity fixture"
+  },
+  {
+    "id": "networkrigidbody",
+    "prompt": "Notre boule en Rigidbody2D doit être synchronisée sur le réseau, et elle rebondit.",
+    "assertions": [
+      "Select 3D vs 2D component",
+      "Authority model explicit",
+      "Hard snap, interpolation/correction parameters sourced",
+      "Moving parent and teleport tests"
+    ],
+    "evaluation_status": "NOT_RUN — needs agent + Unity fixture"
+  },
+  {
+    "id": "networkanimator-trigger",
+    "prompt": "Sur mon NetworkAnimator, le trigger Punch ne part pas chez le second joueur.",
+    "assertions": [
+      "NetworkAnimator.SetTrigger, not only Animator.SetTrigger",
+      "Inspector parameter selection",
+      "Late join/trigger transient semantics distinguished",
+      "Do not mix predicted view and NetworkAnimator state"
+    ],
+    "evaluation_status": "NOT_RUN — needs agent + Unity fixture"
+  },
+  {
+    "id": "networkaudio-dynamicclip",
+    "prompt": "J’ai un NetworkAudioSource qui doit jouer les AudioClip chargés dynamiquement.",
+    "assertions": [
+      "Register dynamic AudioClip in NetworkAssets",
+      "Authority controller checked",
+      "Do not call Play in predicted Simulate",
+      "Late join looping/transient audio tests"
+    ],
+    "evaluation_status": "NOT_RUN — needs agent + Unity fixture"
+  },
+  {
+    "id": "networkreflection",
+    "prompt": "Je dois synchroniser une propriété d’un TrailRenderer sans écrire des RPC manuels.",
+    "assertions": [
+      "Discover official NetworkReflection before manual RPC mirroring",
+      "Selected properties and ownerAuth",
+      "Bandwidth measurements",
+      "No gameplay state written twice"
+    ],
+    "evaluation_status": "NOT_RUN — needs agent + Unity fixture"
+  },
+  {
+    "id": "classic-state-machine",
+    "prompt": "Crée un Network State Machine classique avec Countdown et RoundEnd.",
+    "assertions": [
+      "Use classic StateNode/machine appropriately",
+      "Controller and server auth checked",
+      "Inspector node list",
+      "Do not mistake for predicted state machine"
+    ],
+    "evaluation_status": "NOT_RUN — needs agent + Unity fixture"
+  },
+  {
+    "id": "predicted-state-machine",
+    "prompt": "Ajoute un PredictedStateNode pour dash et attaque avec rollback.",
+    "assertions": [
+      "Use PredictedStateNode and rollback-friendly transitions",
+      "ViewEnter/ViewExit effects do not repeat in replay",
+      "Installed PurrDiction version verified",
+      "Two client rollback test"
+    ],
+    "evaluation_status": "NOT_RUN — needs agent + Unity fixture"
+  },
+  {
+    "id": "scene-scoped-assets",
+    "prompt": "Notre jeu a 12 scènes additives et des prefabs différents: évite de tout charger globalement.",
+    "assertions": [
+      "Use NetworkScenePrefabs/NetworkSceneAssets for scene-scoped registries",
+      "Global precedence noted",
+      "Correct scene for Instantiate",
+      "Late join/additive/unload tests"
+    ],
+    "evaluation_status": "NOT_RUN — needs agent + Unity fixture"
+  },
+  {
+    "id": "addressables",
+    "prompt": "Spawn des prefabs Addressables dans les scènes multijoueur.",
+    "assertions": [
+      "Read Addressables spawning, scene, RPC pages",
+      "Async cancellation and lifetime considered",
+      "Registration and scene validity",
+      "Version verified"
+    ],
+    "evaluation_status": "NOT_RUN — needs agent + Unity fixture"
+  },
+  {
+    "id": "async-packer",
+    "prompt": "Je dois envoyer des données en RPC dont une partie est résolue après un chargement asynchrone.",
+    "assertions": [
+      "IAsyncPackable methods verified in installed version",
+      "DontPack excludes unresolved references",
+      "Stable IDs instead of GameObject.Find names",
+      "IL2CPP/AOT and cancellation tests"
+    ],
+    "evaluation_status": "NOT_RUN — needs agent + Unity fixture"
+  },
+  {
+    "id": "syncbigdata",
+    "prompt": "Envoie un grand avatar personnalisable avec SyncBigData.",
+    "assertions": [
+      "Use module instead of oversize RPC",
+      "Rate and owner/auth quota",
+      "Receiver readiness callback or check",
+      "Cancel/reconnect and old owner tests"
+    ],
+    "evaluation_status": "NOT_RUN — needs agent + Unity fixture"
+  },
+  {
+    "id": "strip-server-code",
+    "prompt": "Comment supprimer la logique secrète du client Unity via [ServerOnly] ?",
+    "assertions": [
+      "Settings and ServerOnly source checked",
+      "No API secrets in client",
+      "Client binary stripping verified",
+      "Server/player build and IL2CPP tests"
+    ],
+    "evaluation_status": "NOT_RUN — needs agent + Unity fixture"
+  },
+  {
+    "id": "type-hash-issue",
+    "prompt": "J’ai un hash de type 3153982458 inconnu dans les logs PurrNet.",
+    "assertions": [
+      "Type Hash Resolver rather than fabricated serializer",
+      "Identify assembly and registration status",
+      "Check generated packers",
+      "Explain resolver does not register types"
+    ],
+    "evaluation_status": "NOT_RUN — needs agent + Unity fixture"
+  },
+  {
+    "id": "predicted-hierarchy-spawn",
+    "prompt": "Un tir d’arme doit créer un projectile prévu par le client et confirmé par le serveur via PurrDiction.",
+    "assertions": [
+      "Store PredictedObjectID, not GameObject in state",
+      "Create in simulation or server RPC outside it",
+      "One-shot spawn counter vs extrapolation considered",
+      "Rollback/pool/reconnect tests"
+    ],
+    "evaluation_status": "NOT_RUN — needs agent + Unity fixture"
+  },
+  {
+    "id": "versioned-identity-spawner",
+    "prompt": "Dois-je mettre PredictedIdentitySpawner dans PurrDiction 1.4.0 ?",
+    "assertions": [
+      "PurrDiction 1.3 vs >=1.4 branch gate enforced",
+      "Do not add obsolete component on recent version",
+      "Verify source API",
+      "Report mismatch without generating code"
+    ],
+    "evaluation_status": "NOT_RUN — needs agent + Unity fixture"
+  },
+  {
+    "id": "owneronly-transfer",
+    "prompt": "Après un trade, le vieux propriétaire de l’inventaire voit encore ses objets secrets.",
+    "assertions": [
+      "Old owner retains stale client memory",
+      "Privacy purge before ownership transfer",
+      "New owner receives current state",
+      "Reconnect/late join tests"
+    ],
+    "evaluation_status": "NOT_RUN — needs agent + Unity fixture"
+  },
+  {
+    "id": "dedicated-observer-rpc",
+    "prompt": "Le monde est vide sur mon serveur Linux PurrNet mais fonctionne sur host.",
+    "assertions": [
+      "Do not rely on local client in dedicated server",
+      "Server state initialized separately",
+      "ObserversRpc RunLocally only if intended and verified",
+      "Headless plus two clients tested"
+    ],
+    "evaluation_status": "NOT_RUN — needs agent + Unity fixture"
+  },
+  {
+    "id": "route-interpolation",
+    "prompt": "NetworkTransform jitter avec interpolation.",
+    "assertions": [
+      "NetworkTransform interpolation routes classic",
+      "Never blanket route to predicted policies",
+      "Explain manual guide selection",
+      "Warn if package missing"
+    ],
+    "evaluation_status": "NOT_RUN — needs agent + Unity fixture"
+  },
+  {
+    "id": "conflicting-package-versions",
+    "prompt": "Assets/PurrDiction dit 1.3, PackageCache 1.4 et lockfile 1.5. Puis-je utiliser PredictedParent récent ?",
+    "assertions": [
+      "Do not pick stale PackageCache or Assets at random",
+      "Lock hash is documented or ambiguous",
+      "Strict doc gating fails closed",
+      "Check installed source for API"
+    ],
+    "evaluation_status": "NOT_RUN — needs agent + Unity fixture"
+  }
+]

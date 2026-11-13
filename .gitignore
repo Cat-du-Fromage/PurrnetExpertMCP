@@ -1,0 +1,5 @@
+# Documentation sources synced locally from upstream; NOT redistributed in release archives.
+references/cache/
+__pycache__/
+*.pyc
+.DS_Store

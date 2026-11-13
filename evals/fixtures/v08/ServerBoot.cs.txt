@@ -1,0 +1,6 @@
+using PurrNet;
+public class ServerBoot : NetworkBehaviour
+{
+    void Start(){ NetworkManager.main.StartServer(); }
+    // NetworkManager.main.StartClient(); // NOT actual code
+}

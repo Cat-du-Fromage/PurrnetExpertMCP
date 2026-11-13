@@ -1,0 +1,349 @@
+[
+  {
+    "id": "auth-before-player",
+    "prompt": "Créé un authenticator avec jeton; attends le PlayerID avant spawn.",
+    "expected_route": "auth-session",
+    "assertions": [
+      "AuthenticationBehaviour<T> et RegisterNetworkType vérifiés",
+      "onPlayerJoined seulement après validation serveur",
+      "token invalide/expiré rejeté",
+      "aucun secret côté client",
+      "deux clients et reconnexion"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "auth-denial",
+    "prompt": "Ajoute des raisons de refus détaillées et une UI de reconnexion.",
+    "expected_route": "auth-session",
+    "assertions": [
+      "vérifie support AuthenticationBehaviour<TRequest,TDenial> version",
+      "handler client et timeout ACK",
+      "pas de PlayerID sur refus",
+      "pas de fuite secret dans denial"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "lifecycle-host",
+    "prompt": "onPlayerJoined exécuté deux fois en host: corrige sans casser dédié.",
+    "expected_route": "auth-session",
+    "assertions": [
+      "examine asServer et subscription",
+      "distingue transport state, PlayerID, scène et observer",
+      "unsubscribe symétrique",
+      "test host, client, dédié"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "private-inventory",
+    "prompt": "Inventaire ownerOnly transféré à nouveau propriétaire: supprime fuite de données.",
+    "expected_route": "inventory",
+    "assertions": [
+      "ownerOnly filtre module, pas object",
+      "ancien owner conserve dernière valeur",
+      "purgation des données sensibles avant transfer",
+      "late join/règles/serializer validés"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "visibility-or",
+    "prompt": "Une règle distance et une règle Always Visible rendent tout visible.",
+    "expected_route": "visibility",
+    "assertions": [
+      "explique OR pas AND",
+      "ordre owner/whitelist/blacklist",
+      "serveur évalue les règles",
+      "observe changements d observers"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "visibility-components",
+    "prompt": "Sur GameObject plusieurs NetworkIdentity ont visibility distincte.",
+    "expected_route": "visibility",
+    "assertions": [
+      "component-level observers reconnus",
+      "GameObject reste si un composant visible",
+      "pas de renderer.SetActive comme sécurité",
+      "client non observer ne reçoit pas state"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "syncinput-choice",
+    "prompt": "Je veux un mouvement autoritaire et simple sans prediction, aide-moi.",
+    "expected_route": "classic-input",
+    "assertions": [
+      "propose SyncInput<T> si applicable",
+      "distingue input delay vs prediction",
+      "valide serveur",
+      "pas RPC par frame par défaut"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "validated-syncvar",
+    "prompt": "Implementer une variable modifiable owner avec validation serveur.",
+    "expected_route": "sync-serialization",
+    "assertions": [
+      "ValidatedSyncVar version détectée",
+      "serverValidation et reject callback",
+      "ownerAuth ne remplace pas sécurité",
+      "late join et ACKs multiples"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "modules-list",
+    "prompt": "Peux-tu garder List<SyncVar<int>> ?",
+    "expected_route": "sync-serialization",
+    "assertions": [
+      "interdit listes de NetworkModule",
+      "propose champs/propriétés et OnInitializeModules",
+      "pas réassigner après spawn"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "serialization",
+    "prompt": "Un RPC sérialise un objet CustomType avec references Unity.",
+    "expected_route": "sync-serialization",
+    "assertions": [
+      "exam IPackedAuto/IPackedSimple/codegen",
+      "explique limites Unity refs",
+      "round-trip et AOT",
+      "vérifie source package"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "rpc-dedicated",
+    "prompt": "ObserversRpc setup world marche en host mais monde vide en dédié.",
+    "expected_route": "rpc-events",
+    "assertions": [
+      "explique absence serveur par défaut",
+      "RunLocally ou state serveur séparé",
+      "pas de duplications host",
+      "test dédié"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "broadcast-auth",
+    "prompt": "Chat pré-authentification, puis broadcast aux joueurs.",
+    "expected_route": "rpc-events",
+    "assertions": [
+      "Connection scope avant auth",
+      "Player scope après auth",
+      "unsubscribe",
+      "ne révèle pas lobby secret"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "scene-additive",
+    "prompt": "Spawn prefabs dans scène additive avec Addressables et late join.",
+    "expected_route": "spawn-scenes",
+    "assertions": [
+      "scènes synchronisées au bon moment",
+      "prefab registration/scene-scoped",
+      "addressables config version",
+      "late join/reconnect + pool"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "pooling",
+    "prompt": "Les références enfant se cassent après pool network.",
+    "expected_route": "spawn-scenes",
+    "assertions": [
+      "pooling children partiel",
+      "vérifie Reference<> pour la version",
+      "reset state au reuse",
+      "test destruction/observation"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "predicted-input",
+    "prompt": "Mon jump GetKeyDown est perdu à 20 ticks/s.",
+    "expected_route": "predicted-controller",
+    "assertions": [
+      "UpdateInput capte edge",
+      "GetFinalInput par tick",
+      "ModifyExtrapolatedInput retire jump",
+      "server sanitize et cooldown"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "predicted-sound",
+    "prompt": "AudioSource.Play à chaque tick en Simulate : corrige.",
+    "expected_route": "predicted-controller",
+    "assertions": [
+      "pas audio répété",
+      "PredictedEvent / view",
+      "state change toujours pendant replay",
+      "scanner détecte instance.Play"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "predicted-state",
+    "prompt": "Mon cooldown est en MonoBehaviour pas en STATE.",
+    "expected_route": "predicted-controller",
+    "assertions": [
+      "ramène cooldown et rng dans STATE",
+      "GetUnityState/SetUnityState si besoin",
+      "tests replay/correction",
+      "versionnée"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "predicted-hierarchy",
+    "prompt": "Je spawn une roquette predicted en UI, elle disparait.",
+    "expected_route": "predicted-combat",
+    "assertions": [
+      "créer par INPUT Simulate pour local prediction",
+      "ou ServerRpc hors simulation = server-driven",
+      "counter action one-shot",
+      "IDs au lieu GameObject refs"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "predicted-parent",
+    "prompt": "Le pickup reparent sous player se détache après rollback.",
+    "expected_route": "predicted-structure",
+    "assertions": [
+      "PredictedParent et state de parent",
+      "parent transform doit être piece quand cohérence requise",
+      "late join, pooling, rollback"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "predicted-physics",
+    "prompt": "CharacterController trigger pendant rollback s active deux fois.",
+    "expected_route": "predicted-combat",
+    "assertions": [
+      "PredictedPhysicsCallbacks",
+      "event semantics et version >=1.4",
+      "contact list durée callback",
+      "effects replay-safe"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "predicted-policy",
+    "prompt": "Remote joueur jitter, SoftCorrection sur hitbox compétitive ?",
+    "expected_route": "predicted-policy",
+    "assertions": [
+      "non pour hit validation critique",
+      "PredictedIfOwned/ServerRelay analysé",
+      "soft fallback silencieux sur non supporté",
+      "test pings et scopes"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "predicted-modules",
+    "prompt": "PredictedModuleRosterMismatchException sur un client.",
+    "expected_route": "predicted-structure",
+    "assertions": [
+      "roster statique ordre identique",
+      "no conditional by owner",
+      "module dynamique créé en Simulate",
+      "lookup après rollback"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "deterministic-desync",
+    "prompt": "DeterministicIdentity divergence entre Linux/Windows.",
+    "expected_route": "deterministic",
+    "assertions": [
+      "sfloat et STATE strict",
+      "Ignore/Report/Resync/Correct distingués",
+      "diagnostic first divergent tick",
+      "ne pas masquer avec soft correction"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "lagcomp-version",
+    "prompt": "PurrDiction 1.3 je veux lagCompensationTick API moderne.",
+    "expected_route": "predicted-combat",
+    "assertions": [
+      "détecte version incompatibilité >=1.4.0",
+      "ne propose pas code impossible",
+      "source exacte versionnée et alternative classique",
+      "sécurité de server hit test"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "predicted-visibility",
+    "prompt": "Je veux fog of war pour objet predit; Network Visibility PurrNet ?",
+    "expected_route": "visibility",
+    "assertions": [
+      "distingue visibility de predicted world",
+      "HideFrom/ShowTo côté serveur si version",
+      "scene objects exception",
+      "owned ancestor règles"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "voice-lobby",
+    "prompt": "Lobby Steam + PurrVoice + dedicated Unity.",
+    "expected_route": "lobby-voice",
+    "assertions": [
+      "packages addons indépendants",
+      "PurrLobby provider et scene setup",
+      "voice permissions et intégration",
+      "delegation Edgegap si pertinente"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "webgl",
+    "prompt": "Mon client WebGL PurrNet utilise UDP et échoue.",
+    "expected_route": "hosting",
+    "assertions": [
+      "exclut UDP depuis navigateur",
+      "transport WS/WSS compatible",
+      "adresse externe/ports/SSL",
+      "test build navigateur"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "version-api",
+    "prompt": "Les docs montrent une API 1.4 mais mon projet est PurrDiction 1.3.",
+    "expected_route": "predicted-controller",
+    "assertions": [
+      "compare version gate et local package",
+      "prévient que main ≠ installé",
+      "pas de code inventé",
+      "si non vérifié le dit"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  },
+  {
+    "id": "unknown-feature",
+    "prompt": "Une nouvelle fonctionnalité PurrNet X ajoutée demain n est pas dans routing.json.",
+    "expected_route": null,
+    "assertions": [
+      "recherche all docs",
+      "ouvre liens croisés",
+      "ne prétend pas feature inexistante",
+      "contrôle la version locale"
+    ],
+    "evaluation_method": "Manual or agent harness: inspect modified Unity project; compile and execute when Unity is available. This file alone is not a test run."
+  }
+]

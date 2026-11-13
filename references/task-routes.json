@@ -1,0 +1,1810 @@
+{
+  "schema": 5,
+  "purpose": "Heuristic AFTER skill activation: route game engineering tasks to focused docs. v0.8 includes end-to-end workflows, dedicated readiness and Edgegap handoff; it does NOT trigger model activation.",
+  "rules": [
+    {
+      "id": "auth-session",
+      "keywords": [
+        "auth",
+        "token",
+        "login",
+        "connexion",
+        "connect",
+        "reconnect",
+        "cookie",
+        "joueur rejoint"
+      ],
+      "guides": [
+        "core/authentication.md",
+        "core/connection-lifecycle.md",
+        "core/network-manager.md",
+        "core/auth-permission-hardening.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-manager/authentication.md",
+        "systems-and-modules/network-manager/connection-and-player-events.md"
+      ],
+      "context": "classic"
+    },
+    {
+      "id": "inventory",
+      "keywords": [
+        "inventaire",
+        "inventory",
+        "équipement",
+        "equipment",
+        "item",
+        "loot",
+        "trading",
+        "trade"
+      ],
+      "guides": [
+        "core/sync-types.md",
+        "core/ownership-and-rules.md",
+        "core/serialization.md",
+        "core/spawning-and-scenes.md",
+        "core/sync-types-decision.md",
+        "core/auth-permission-hardening.md",
+        "core/sync-recipes.md",
+        "core/scene-playbook.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-modules/owner-only.md",
+        "systems-and-modules/network-modules/sync-types/synclist.md",
+        "systems-and-modules/network-identity/spawning-and-despawning/README.md"
+      ],
+      "context": "classic"
+    },
+    {
+      "id": "rpc-events",
+      "keywords": [
+        "rpc",
+        "message",
+        "broadcast",
+        "evenement réseau",
+        "événement réseau",
+        "chat",
+        "événement",
+        "evenement",
+        "events",
+        "event réseau"
+      ],
+      "guides": [
+        "core/rpc-and-broadcasts.md",
+        "core/ownership-and-rules.md",
+        "core/connection-lifecycle.md",
+        "core/rpc-advanced.md",
+        "core/messaging-and-mtu.md"
+      ],
+      "docs": [
+        "systems-and-modules/remote-procedure-call-rpc/README.md",
+        "systems-and-modules/broadcast.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "visibility",
+      "keywords": [
+        "visibilité",
+        "visibility",
+        "observer",
+        "interest",
+        "fog",
+        "cacher",
+        "hide",
+        "secret"
+      ],
+      "guides": [
+        "core/network-visibility.md",
+        "core/ownership-and-rules.md",
+        "core/visibility-advanced.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-manager/network-visibility/README.md",
+        "systems-and-modules/network-manager/network-visibility/visibility-rules.md",
+        "systems-and-modules/network-manager/network-visibility/using-the-visibility.md",
+        "systems-and-modules/network-manager/network-visibility/whitelist-and-blacklist.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "classic-input",
+      "keywords": [
+        "syncinput",
+        "server authoritative movement",
+        "input sync",
+        "input synchron",
+        "mouvement serveur"
+      ],
+      "guides": [
+        "core/sync-types.md",
+        "core/ownership-and-rules.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-modules/sync-types/syncinput.md"
+      ],
+      "context": "classic"
+    },
+    {
+      "id": "spawn-scenes",
+      "keywords": [
+        "spawn",
+        "despawn",
+        "instantiat",
+        "scene",
+        "scène",
+        "addressable",
+        "pool",
+        "prefab",
+        "late join"
+      ],
+      "guides": [
+        "core/spawning-and-scenes.md",
+        "core/network-visibility.md",
+        "core/network-assets-addressables.md",
+        "core/scene-playbook.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-identity/spawning-and-despawning/README.md",
+        "systems-and-modules/scene-module.md",
+        "systems-and-modules/network-manager/scene-scoped-prefabs-and-assets.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "sync-serialization",
+      "keywords": [
+        "syncvar",
+        "syncdict",
+        "synclist",
+        "syncarray",
+        "serialization",
+        "serialize",
+        "bitpacker",
+        "packer",
+        "réplication",
+        "delta",
+        "synchronisation",
+        "synchroniser",
+        "synchronise",
+        "synchronizing",
+        "sync health",
+        "sync event",
+        "sync timer",
+        "validatedsyncvar",
+        "syncevent",
+        "synctimer",
+        "health",
+        "santé",
+        "sante",
+        "points de vie",
+        "hp",
+        "syncqueue",
+        "syncarray",
+        "synchashset",
+        "synclazyref",
+        "synchronisation santé",
+        "événement synchronisé",
+        "network sync"
+      ],
+      "guides": [
+        "core/sync-types.md",
+        "core/network-modules.md",
+        "core/serialization.md",
+        "core/sync-types-decision.md",
+        "core/sync-recipes.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-modules/common-pitfalls.md",
+        "systems-and-modules/bitpacker-serialization/networking-custom-classes-structs-and-types.md",
+        "systems-and-modules/network-modules/sync-types/syncvar.md",
+        "systems-and-modules/network-modules/sync-types/validated-syncvar.md",
+        "systems-and-modules/network-modules/sync-types/syncevent.md",
+        "systems-and-modules/network-modules/sync-types/synctimer.md",
+        "systems-and-modules/network-modules/sync-types/synclist.md",
+        "systems-and-modules/network-modules/sync-types/syncdictionary.md",
+        "systems-and-modules/network-modules/sync-types/syncinput.md"
+      ],
+      "context": "classic"
+    },
+    {
+      "id": "predicted-controller",
+      "keywords": [
+        "predicted",
+        "purrdiction",
+        "prediction",
+        "prédict",
+        "rollback",
+        "reconciliation",
+        "character controller",
+        "controller",
+        "mouvement prédit"
+      ],
+      "guides": [
+        "prediction/best-practices.md",
+        "prediction/input-and-state.md",
+        "prediction/lifecycle-and-rollback.md",
+        "prediction/prediction-policies.md",
+        "prediction/memory-and-pooling.md",
+        "prediction/manager-inspector.md",
+        "prediction/real-world-recipes.md"
+      ],
+      "docs": [
+        "client-side-prediction/best-practices.md",
+        "client-side-prediction/input-handling.md",
+        "client-side-prediction/state-handling.md",
+        "client-side-prediction/flow.md",
+        "client-side-prediction/security.md",
+        "client-side-prediction/installation.md",
+        "client-side-prediction/overview.md",
+        "client-side-prediction/predicted-identities.md"
+      ],
+      "context": "prediction"
+    },
+    {
+      "id": "predicted-combat",
+      "keywords": [
+        "predicted projectile",
+        "predicted combat",
+        "predicted physics",
+        "predicted collision",
+        "projectile",
+        "fire",
+        "shoot",
+        "tir",
+        "collision",
+        "trigger",
+        "hit",
+        "combat",
+        "lag compens",
+        "weapon",
+        "arme"
+      ],
+      "guides": [
+        "prediction/best-practices.md",
+        "prediction/hierarchy-and-parenting.md",
+        "prediction/physics-and-collisions.md",
+        "prediction/lag-compensation.md",
+        "prediction/input-and-state.md",
+        "prediction/manager-inspector.md",
+        "prediction/hierarchy-advanced.md",
+        "prediction/real-world-recipes.md"
+      ],
+      "docs": [
+        "client-side-prediction/best-practices.md",
+        "client-side-prediction/built-in-components/predicted-projectile-3d.md",
+        "client-side-prediction/built-in-components/predicted-physics-callbacks.md",
+        "client-side-prediction/lag-compensation.md"
+      ],
+      "context": "prediction"
+    },
+    {
+      "id": "predicted-policy",
+      "keywords": [
+        "policy",
+        "policies",
+        "softcorrection",
+        "serverrelay",
+        "predictedifowned",
+        "fullprediction",
+        "predicted policy",
+        "prediction policy",
+        "predicted interpolation",
+        "rollback interpolation"
+      ],
+      "guides": [
+        "prediction/best-practices.md",
+        "prediction/prediction-policies.md",
+        "prediction/lifecycle-and-rollback.md"
+      ],
+      "docs": [
+        "client-side-prediction/prediction-policies.md",
+        "client-side-prediction/views-and-interpolation.md"
+      ],
+      "context": "prediction"
+    },
+    {
+      "id": "predicted-structure",
+      "keywords": [
+        "reparent",
+        "parent",
+        "hierarch",
+        "module préd",
+        "predictedmodule",
+        "predictedparent",
+        "state node",
+        "state machine"
+      ],
+      "guides": [
+        "prediction/best-practices.md",
+        "prediction/hierarchy-and-parenting.md",
+        "prediction/predicted-modules.md",
+        "prediction/visibility-and-interactions.md",
+        "prediction/manager-inspector.md",
+        "prediction/hierarchy-advanced.md"
+      ],
+      "docs": [
+        "client-side-prediction/predicted-hierarchy.md",
+        "client-side-prediction/built-in-components/predicted-parent.md",
+        "client-side-prediction/predicted-modules/README.md"
+      ],
+      "context": "prediction"
+    },
+    {
+      "id": "deterministic",
+      "keywords": [
+        "détermin",
+        "determin",
+        "sfloat",
+        "desync",
+        "resync",
+        "predict random",
+        "hash diverge"
+      ],
+      "guides": [
+        "prediction/best-practices.md",
+        "prediction/deterministic-identity.md",
+        "prediction/memory-and-pooling.md"
+      ],
+      "docs": [
+        "client-side-prediction/deterministic-identity.md",
+        "client-side-prediction/disposable-collections.md"
+      ],
+      "context": "prediction"
+    },
+    {
+      "id": "hosting",
+      "keywords": [
+        "edgegap",
+        "dedicated",
+        "headless",
+        "héberg",
+        "hosting",
+        "udp",
+        "webgl",
+        "steam",
+        "server build",
+        "transport udp",
+        "udptransport",
+        "webtransport",
+        "purrtransport",
+        "compositetransport",
+        "steamtransport"
+      ],
+      "guides": [
+        "core/network-manager.md",
+        "core/transports.md",
+        "addons/hosting-and-samples.md",
+        "core/connection-lifecycle.md",
+        "core/transports-platforms.md",
+        "build/build-release-checklist.md"
+      ],
+      "docs": [
+        "systems-and-modules/transports/README.md",
+        "guides/setting-up-a-server.md",
+        "systems-and-modules/network-manager/connection-and-player-events.md",
+        "systems-and-modules/transports/web-transport.md",
+        "systems-and-modules/transports/composite-transport.md",
+        "systems-and-modules/transports/steam-transport.md",
+        "systems-and-modules/transports/eos-transport.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "lobby-workflow",
+      "keywords": [
+        "purrlobby",
+        "lobby",
+        "purrui",
+        "matchmaker lobby",
+        "matchmaking lobby",
+        "partie lobby",
+        "salle d attente",
+        "salle d’attente"
+      ],
+      "guides": [
+        "addons/purrlobby-workflow.md",
+        "core/authentication.md",
+        "core/connection-lifecycle.md"
+      ],
+      "docs": [
+        "tools/purrlobby/README.md",
+        "tools/purrlobby/getting-started.md",
+        "tools/purrlobby/scene-setup.md",
+        "tools/purrlobby/providers.md",
+        "tools/purrlobby/in-game.md"
+      ],
+      "context": "classic"
+    },
+    {
+      "id": "performance",
+      "keywords": [
+        "bandwidth",
+        "profil",
+        "performance",
+        "allocation",
+        "gc",
+        "packet",
+        "bitrate",
+        "optimisation",
+        "latence",
+        "jitter",
+        "dropp",
+        "dropped message",
+        "bande passante",
+        "profilage"
+      ],
+      "guides": [
+        "core/profiling.md",
+        "core/serialization.md",
+        "prediction/memory-and-pooling.md"
+      ],
+      "docs": [
+        "systems-and-modules/bandwidth-profiler.md",
+        "systems-and-modules/bitpacker-serialization/delta-packers.md",
+        "systems-and-modules/bandwidth-profiler.md",
+        "systems-and-modules/transports/simulating-latency.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "component-select",
+      "context": "any",
+      "keywords": [
+        "composant",
+        "component",
+        "plug n play",
+        "plug-n-play",
+        "builtin",
+        "built-in",
+        "built in",
+        "out of the box"
+      ],
+      "guides": [
+        "components/component-selector.md"
+      ],
+      "docs": [
+        "plug-n-play-components/README.md"
+      ]
+    },
+    {
+      "id": "network-transform",
+      "context": "classic",
+      "keywords": [
+        "networktransform",
+        "network transform",
+        "adaptive sync",
+        "interpolation transform",
+        "synchronisation position",
+        "sync position",
+        "smooth position",
+        "sync movement",
+        "synchroniser position",
+        "mouvement fluide"
+      ],
+      "guides": [
+        "components/component-selector.md",
+        "components/network-transform.md",
+        "core/ownership-and-rules.md",
+        "tools/troubleshooting-playbook.md"
+      ],
+      "docs": [
+        "plug-n-play-components/network-transform.md",
+        "plug-n-play-components/network-transform/adaptive-sync.md"
+      ]
+    },
+    {
+      "id": "network-rigidbody",
+      "context": "classic",
+      "keywords": [
+        "networkrigidbody",
+        "network rigidbody",
+        "rigidbody sync",
+        "physique réseau",
+        "network physics",
+        "physique multijoueur",
+        "network rigidbody 2d",
+        "networkrigidbody2d",
+        "networkrb",
+        "physique 2d réseau"
+      ],
+      "guides": [
+        "components/component-selector.md",
+        "components/network-rigidbody.md"
+      ],
+      "docs": [
+        "plug-n-play-components/network-rigidbody.md",
+        "plug-n-play-components/network-rigidbody-2d.md",
+        "guides/physics-in-multiplayer.md"
+      ]
+    },
+    {
+      "id": "network-animator",
+      "context": "classic",
+      "keywords": [
+        "networkanimator",
+        "network animator",
+        "trigger animation",
+        "sync animation",
+        "synchroniser animation",
+        "animation synchronisée",
+        "animation multijoueur"
+      ],
+      "guides": [
+        "components/component-selector.md",
+        "components/network-animator.md"
+      ],
+      "docs": [
+        "plug-n-play-components/network-animator.md"
+      ]
+    },
+    {
+      "id": "network-audio",
+      "context": "classic",
+      "keywords": [
+        "networkaudiosource",
+        "network audio",
+        "audio source réseau",
+        "audio synchronisé",
+        "networked sound",
+        "son réseau",
+        "playoneshot"
+      ],
+      "guides": [
+        "components/component-selector.md",
+        "components/network-audio.md",
+        "core/network-assets-addressables.md"
+      ],
+      "docs": [
+        "plug-n-play-components/network-audio-source.md",
+        "systems-and-modules/network-manager/network-assets.md"
+      ]
+    },
+    {
+      "id": "network-reflection",
+      "context": "classic",
+      "keywords": [
+        "networkreflection",
+        "network reflection",
+        "networkbones",
+        "network bones",
+        "networkownershiptoggle",
+        "ownership toggle",
+        "reflection sync",
+        "sync bones"
+      ],
+      "guides": [
+        "components/component-selector.md",
+        "components/network-reflection.md",
+        "components/network-bones-ownership.md"
+      ],
+      "docs": [
+        "plug-n-play-components/network-reflection-auto-sync.md",
+        "plug-n-play-components/network-bones.md",
+        "plug-n-play-components/network-ownership-toggle.md"
+      ]
+    },
+    {
+      "id": "classic-state-machines",
+      "context": "classic",
+      "keywords": [
+        "networkstatemachine",
+        "network state machine",
+        "state machine",
+        "machine a etats",
+        "machine à états"
+      ],
+      "guides": [
+        "components/component-selector.md",
+        "components/network-state-machine.md"
+      ],
+      "docs": [
+        "plug-n-play-components/state-machine-auto-networked.md"
+      ]
+    },
+    {
+      "id": "assets-registries",
+      "context": "classic",
+      "keywords": [
+        "networkassets",
+        "networkprefabs",
+        "networksceneprefabs",
+        "networksceneassets",
+        "network assets",
+        "scene scoped",
+        "registries",
+        "registre prefab",
+        "asset registry",
+        "asset référence",
+        "assets réseau",
+        "addressable",
+        "scènes additives"
+      ],
+      "guides": [
+        "core/network-assets-addressables.md",
+        "core/spawning-and-scenes.md",
+        "core/serialization.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-manager/network-assets.md",
+        "systems-and-modules/network-manager/network-prefabs.md",
+        "systems-and-modules/network-manager/scene-scoped-prefabs-and-assets.md",
+        "systems-and-modules/addressables/README.md",
+        "systems-and-modules/addressables/addressable-spawning-and-despawning.md",
+        "systems-and-modules/addressables/addressable-scene-handling.md",
+        "systems-and-modules/addressables/addressable-rpcs.md"
+      ]
+    },
+    {
+      "id": "large-data",
+      "context": "classic",
+      "keywords": [
+        "syncbigdata",
+        "synctexturefile",
+        "fichier réseau",
+        "avatar image",
+        "large payload",
+        "texture sync",
+        "custom packer",
+        "iasyncpackable",
+        "dontpack",
+        "packing async",
+        "packing",
+        "bitpacker",
+        "ipackedauto"
+      ],
+      "guides": [
+        "core/serialization.md",
+        "core/serialization-advanced.md",
+        "core/profiling.md",
+        "core/serialization-playbook.md"
+      ],
+      "docs": [
+        "systems-and-modules/bitpacker-serialization/async-serialization-packing.md",
+        "systems-and-modules/bitpacker-serialization/delta-packers.md",
+        "systems-and-modules/network-modules/syncbigdata/README.md",
+        "systems-and-modules/network-modules/syncbigdata/synctexturefile.md"
+      ]
+    },
+    {
+      "id": "code-stripping",
+      "context": "any",
+      "keywords": [
+        "serveronly",
+        "code stripping",
+        "strip code",
+        "stripcodemode",
+        "il2cpp",
+        "aot",
+        "build dédié",
+        "dedicated server build",
+        "headless build",
+        "compiler joueur"
+      ],
+      "guides": [
+        "build/production-and-stripping.md",
+        "core/network-manager.md"
+      ],
+      "docs": [
+        "systems-and-modules/code-stripping.md",
+        "guides/setting-up-a-server.md"
+      ]
+    },
+    {
+      "id": "diagnostics",
+      "context": "any",
+      "keywords": [
+        "type hash",
+        "typehash",
+        "hash resolver",
+        "bandwidth profiler",
+        "message dropped",
+        "packet loss",
+        "ping simulation",
+        "simulat latency",
+        "bots",
+        "instancehandler",
+        "conversion tool",
+        "debug logs",
+        "network profiler"
+      ],
+      "guides": [
+        "tools/diagnostics.md",
+        "core/profiling.md",
+        "tools/troubleshooting-playbook.md"
+      ],
+      "docs": [
+        "tools/type-hash-resolver.md",
+        "systems-and-modules/bandwidth-profiler.md",
+        "systems-and-modules/transports/simulating-latency.md",
+        "systems-and-modules/instance-handler.md",
+        "systems-and-modules/bots.md"
+      ]
+    },
+    {
+      "id": "predicted-advanced",
+      "context": "prediction",
+      "keywords": [
+        "predictedphysicscallbacks",
+        "predicted physics callbacks",
+        "predictedstatenode",
+        "predicted state machine",
+        "predictedtimer",
+        "predicted module",
+        "state simulate",
+        "verified view",
+        "development shortcuts",
+        "simulation event"
+      ],
+      "guides": [
+        "prediction/best-practices.md",
+        "prediction/advanced-state-and-tools.md",
+        "prediction/predicted-modules.md",
+        "prediction/physics-and-collisions.md",
+        "prediction/state-machine-playbook.md"
+      ],
+      "docs": [
+        "client-side-prediction/predicted-state-machine/README.md",
+        "client-side-prediction/predicted-state-machine/predicted-state-node.md",
+        "client-side-prediction/predicted-modules/README.md",
+        "client-side-prediction/predicted-modules/predicted-timer-module.md",
+        "client-side-prediction/built-in-components/predicted-physics-callbacks.md",
+        "client-side-prediction/development-shortcuts.md"
+      ]
+    },
+    {
+      "id": "predicted-hierarchy",
+      "context": "prediction",
+      "keywords": [
+        "predictedhierarchy",
+        "predictedparent",
+        "predictedgameobject",
+        "predictedvisibility",
+        "predicted visibility",
+        "predicted object",
+        "predicted prefab"
+      ],
+      "guides": [
+        "prediction/best-practices.md",
+        "prediction/hierarchy-and-parenting.md",
+        "prediction/visibility-and-interactions.md",
+        "prediction/manager-inspector.md",
+        "prediction/hierarchy-advanced.md",
+        "prediction/real-world-recipes.md"
+      ],
+      "docs": [
+        "client-side-prediction/predicted-hierarchy.md",
+        "client-side-prediction/built-in-components/predicted-parent.md",
+        "client-side-prediction/predicted-visibility.md",
+        "client-side-prediction/built-in-components/predicted-identity-spawner.md"
+      ]
+    },
+    {
+      "id": "predicted-hit",
+      "context": "prediction",
+      "keywords": [
+        "lagcompensationtick",
+        "lag compensation",
+        "compensation de latence",
+        "hit scan",
+        "hitscan",
+        "rewind collider",
+        "collider rollback"
+      ],
+      "guides": [
+        "prediction/best-practices.md",
+        "prediction/lag-compensation.md",
+        "prediction/physics-and-collisions.md",
+        "prediction/manager-inspector.md"
+      ],
+      "docs": [
+        "client-side-prediction/lag-compensation.md",
+        "systems-and-modules/collider-rollback.md"
+      ]
+    },
+    {
+      "id": "voice-workflow",
+      "context": "any",
+      "keywords": [
+        "purrvoice",
+        "voice",
+        "voix",
+        "microphone",
+        "dissonance",
+        "voice chat",
+        "muting",
+        "mute",
+        "lip sync"
+      ],
+      "guides": [
+        "addons/purrvoice-workflow.md",
+        "core/connection-lifecycle.md"
+      ],
+      "docs": [
+        "tools/purrvoice-voice-chat/README.md",
+        "tools/purrvoice-voice-chat/microphone-input.md",
+        "tools/purrvoice-voice-chat/muting.md",
+        "tools/purrvoice-voice-chat/filters.md",
+        "integrations/dissonance.md"
+      ]
+    },
+    {
+      "id": "predicted-state-machines",
+      "context": "prediction",
+      "keywords": [
+        "predictedstatemachine",
+        "predictedstatenode",
+        "predicted state machine",
+        "state machine",
+        "machine à états",
+        "machine a etats"
+      ],
+      "guides": [
+        "prediction/best-practices.md",
+        "prediction/advanced-state-and-tools.md",
+        "prediction/manager-inspector.md",
+        "prediction/state-machine-playbook.md"
+      ],
+      "docs": [
+        "client-side-prediction/predicted-state-machine/README.md",
+        "client-side-prediction/predicted-state-machine/predicted-state-node.md"
+      ]
+    },
+    {
+      "id": "classic-projectiles",
+      "context": "classic",
+      "keywords": [
+        "projectile",
+        "tir",
+        "arme",
+        "weapon",
+        "shoot",
+        "fire",
+        "combat projectile",
+        "balle réseau"
+      ],
+      "guides": [
+        "core/spawning-and-scenes.md",
+        "components/network-rigidbody.md",
+        "core/rpc-advanced.md",
+        "core/messaging-and-mtu.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-identity/spawning-and-despawning/README.md",
+        "plug-n-play-components/network-rigidbody.md"
+      ]
+    },
+    {
+      "id": "general-multiplayer",
+      "keywords": [
+        "multijoueur",
+        "multiplayer",
+        "co-op",
+        "coop",
+        "netcode",
+        "jeu en ligne",
+        "online game",
+        "game multiplayer",
+        "two clients",
+        "deux clients",
+        "network gameplay",
+        "serveur de jeu"
+      ],
+      "guides": [
+        "core/network-manager.md",
+        "core/ownership-and-rules.md",
+        "components/component-selector.md",
+        "core/scene-playbook.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-manager/README.md",
+        "getting-started/getting-started.md",
+        "guides/setting-up-a-player.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "jitter-network-classic",
+      "keywords": [
+        "jitter",
+        "tremble",
+        "tremblement",
+        "saccade",
+        "rubber band",
+        "rubberbanding",
+        "téléportation",
+        "teleportation",
+        "lag",
+        "latence",
+        "network lag",
+        "network delay"
+      ],
+      "guides": [
+        "components/network-transform.md",
+        "components/network-rigidbody.md",
+        "tools/troubleshooting-playbook.md"
+      ],
+      "docs": [
+        "plug-n-play-components/network-transform.md",
+        "plug-n-play-components/network-transform/adaptive-sync.md",
+        "systems-and-modules/transports/simulating-latency.md"
+      ],
+      "context": "classic"
+    },
+    {
+      "id": "jitter-predicted",
+      "keywords": [
+        "jitter",
+        "tremble",
+        "tremblement",
+        "saccade",
+        "rubber band",
+        "rubberbanding",
+        "lag",
+        "latence",
+        "désync",
+        "desync"
+      ],
+      "guides": [
+        "prediction/best-practices.md",
+        "prediction/lifecycle-and-rollback.md",
+        "prediction/prediction-policies.md",
+        "prediction/real-world-recipes.md"
+      ],
+      "docs": [
+        "client-side-prediction/views-and-interpolation.md",
+        "client-side-prediction/flow.md",
+        "client-side-prediction/prediction-policies.md"
+      ],
+      "context": "prediction"
+    },
+    {
+      "id": "host-client-mismatch",
+      "keywords": [
+        "fonctionne en host",
+        "works as host",
+        "dedicated empty",
+        "empty world",
+        "world empty",
+        "host works",
+        "works in editor",
+        "not on client",
+        "client does not see",
+        "client ne voit pas",
+        "pas sur client",
+        "only on host",
+        "late join broken",
+        "en retard",
+        "joueur rejoint tard"
+      ],
+      "guides": [
+        "core/connection-lifecycle.md",
+        "core/spawning-and-scenes.md",
+        "core/scene-playbook.md",
+        "tools/troubleshooting-playbook.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-manager/connection-and-player-events.md",
+        "systems-and-modules/network-identity/spawning-and-despawning/README.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "health-events-recipes",
+      "keywords": [
+        "santé",
+        "sante",
+        "health",
+        "points de vie",
+        "hitpoints",
+        "hp",
+        "sync health",
+        "sync event",
+        "evenement synchronise",
+        "événement synchronisé",
+        "inventaire",
+        "inventory",
+        "syncvar"
+      ],
+      "guides": [
+        "core/sync-recipes.md",
+        "core/sync-types.md",
+        "core/ownership-and-rules.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-modules/sync-types/syncvar.md",
+        "systems-and-modules/network-modules/sync-types/syncevent.md",
+        "systems-and-modules/network-modules/owner-only.md"
+      ],
+      "context": "classic"
+    },
+    {
+      "id": "rpc-troubleshoot",
+      "keywords": [
+        "rpc not received",
+        "rpc not arriving",
+        "rpc not called",
+        "rpc twice",
+        "rpc ne marche",
+        "rpc non recu",
+        "rpc non reçu",
+        "rpc dupliqué",
+        "observer rpc",
+        "server rpc",
+        "target rpc"
+      ],
+      "guides": [
+        "core/messaging-and-mtu.md",
+        "core/rpc-and-broadcasts.md",
+        "tools/troubleshooting-playbook.md"
+      ],
+      "docs": [
+        "systems-and-modules/remote-procedure-call-rpc/README.md",
+        "systems-and-modules/network-manager/network-rules.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "assets-scene-workflow",
+      "keywords": [
+        "scene additive",
+        "scène additive",
+        "late join",
+        "addressables",
+        "networkassets",
+        "networksceneprefabs",
+        "networksceneassets",
+        "network prefabs",
+        "chargement scene",
+        "loading scene",
+        "prefabs missing"
+      ],
+      "guides": [
+        "core/scene-playbook.md",
+        "core/network-assets-addressables.md",
+        "core/connection-lifecycle.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-manager/scene-scoped-prefabs-and-assets.md",
+        "systems-and-modules/addressables/README.md",
+        "systems-and-modules/scene-module.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "large-data-serialization",
+      "keywords": [
+        "pack",
+        "packer",
+        "serialize",
+        "sérialis",
+        "serializ",
+        "syncbigdata",
+        "synctexturefile",
+        "texture sync",
+        "type hash",
+        "binary serializer",
+        "big data",
+        "big file",
+        "iasyncpackable",
+        "serializer",
+        "packable",
+        "dontpack",
+        "async pack"
+      ],
+      "guides": [
+        "core/serialization-playbook.md",
+        "core/serialization-advanced.md",
+        "tools/diagnostics.md"
+      ],
+      "docs": [
+        "systems-and-modules/bitpacker-serialization/networking-custom-classes-structs-and-types.md",
+        "systems-and-modules/bitpacker-serialization/async-serialization-packing.md",
+        "systems-and-modules/network-modules/syncbigdata/README.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "mtu-and-network-messages",
+      "keywords": [
+        "mtu",
+        "fragment",
+        "unreliable",
+        "sequenced",
+        "reliable",
+        "lost packet",
+        "paquet perdu",
+        "message dropped",
+        "rpc channel",
+        "rpc bandwidth"
+      ],
+      "guides": [
+        "core/messaging-and-mtu.md",
+        "core/profiling.md",
+        "tools/troubleshooting-playbook.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-manager/README.md",
+        "systems-and-modules/bandwidth-profiler.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "network-bones-ownership",
+      "keywords": [
+        "networkbones",
+        "network bones",
+        "synchroniser les os",
+        "bone syncing",
+        "networkownershiptoggle",
+        "ownership toggle",
+        "camera owner"
+      ],
+      "guides": [
+        "components/network-bones-ownership.md",
+        "components/component-selector.md"
+      ],
+      "docs": [
+        "plug-n-play-components/network-bones.md",
+        "plug-n-play-components/network-ownership-toggle.md"
+      ],
+      "context": "classic"
+    },
+    {
+      "id": "predicted-real-world",
+      "keywords": [
+        "input state",
+        "input/state",
+        "controller",
+        "movement predicted",
+        "mouvement prédit",
+        "predicted projectile",
+        "predicted pawn",
+        "prediction tick"
+      ],
+      "guides": [
+        "prediction/real-world-recipes.md",
+        "prediction/best-practices.md",
+        "prediction/input-and-state.md"
+      ],
+      "docs": [
+        "client-side-prediction/best-practices.md",
+        "client-side-prediction/input-handling.md",
+        "client-side-prediction/state-handling.md"
+      ],
+      "context": "prediction"
+    },
+    {
+      "id": "predicted-state-machine-guide",
+      "keywords": [
+        "predictedstatenode",
+        "predictedstatemachine",
+        "predicted state machine",
+        "viewenter",
+        "viewexit",
+        "statesimulate"
+      ],
+      "guides": [
+        "prediction/state-machine-playbook.md",
+        "prediction/advanced-state-and-tools.md",
+        "prediction/best-practices.md"
+      ],
+      "docs": [
+        "client-side-prediction/predicted-state-machine/README.md",
+        "client-side-prediction/predicted-state-machine/predicted-state-node.md"
+      ],
+      "context": "prediction"
+    },
+    {
+      "id": "build-production-qa",
+      "keywords": [
+        "build",
+        "il2cpp",
+        "aot",
+        "stripping",
+        "serveronly",
+        "client build",
+        "build serveur",
+        "dedicated server",
+        "headless",
+        "code stripping"
+      ],
+      "guides": [
+        "build/build-release-checklist.md",
+        "build/production-and-stripping.md",
+        "tools/troubleshooting-playbook.md"
+      ],
+      "docs": [
+        "systems-and-modules/code-stripping.md",
+        "systems-and-modules/network-manager/README.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "inspector-config-check",
+      "keywords": [
+        "inspector",
+        "configuration unity",
+        "component setup",
+        "configurer networkmanager",
+        "configurer predictionmanager",
+        "setup PurrNet"
+      ],
+      "guides": [
+        "components/component-selector.md",
+        "core/network-manager.md",
+        "prediction/manager-inspector.md"
+      ],
+      "docs": [
+        "getting-started/getting-started.md",
+        "systems-and-modules/network-manager/README.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "historical-host-double",
+      "keywords": [
+        "observer rpc twice",
+        "rpc double host",
+        "runlocally",
+        "run locally",
+        "onspawned twice",
+        "rpc appelé deux fois",
+        "rpc appelé 2 fois",
+        "double rpc",
+        "double spawn host",
+        "double tick"
+      ],
+      "guides": [
+        "historical/triage-playbook.md",
+        "historical/case-studies.md",
+        "tools/troubleshooting-playbook.md",
+        "core/connection-lifecycle.md",
+        "core/rpc-and-broadcasts.md"
+      ],
+      "docs": [
+        "systems-and-modules/remote-procedure-call-rpc/README.md",
+        "systems-and-modules/network-manager/connection-and-player-events.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "historical-duplicate-spawns",
+      "keywords": [
+        "duplicate spawn",
+        "duplicates on client",
+        "duplicated client objects",
+        "objets dupliqués",
+        "joueur dupliqué",
+        "duplicate player",
+        "spawn wrong scene",
+        "player spawner wrong scene"
+      ],
+      "guides": [
+        "historical/triage-playbook.md",
+        "historical/case-studies.md",
+        "tools/troubleshooting-playbook.md",
+        "core/spawning-and-scenes.md",
+        "core/scene-playbook.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-identity/spawning-and-despawning/README.md",
+        "systems-and-modules/network-manager/scene-scoped-prefabs-and-assets.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "historical-sync-errors",
+      "keywords": [
+        "syncvar null",
+        "sync dictionary error",
+        "syncdictionary serialization",
+        "synclist empty",
+        "liste vide late join",
+        "late join empty",
+        "on pool reset",
+        "pooled syncvar",
+        "syncvar reconnect"
+      ],
+      "guides": [
+        "historical/triage-playbook.md",
+        "historical/case-studies.md",
+        "tools/troubleshooting-playbook.md",
+        "core/sync-recipes.md",
+        "core/sync-types.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-modules/sync-types/syncvar.md",
+        "systems-and-modules/network-modules/sync-types/synclist.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "historical-buffered-rpc",
+      "keywords": [
+        "bufferlast",
+        "buffered rpc",
+        "rpc not arriving",
+        "rpc arrive avant",
+        "rpc sent before spawn",
+        "rpc order",
+        "rpc dupliqué",
+        "rpc queued before spawned"
+      ],
+      "guides": [
+        "historical/triage-playbook.md",
+        "historical/case-studies.md",
+        "tools/troubleshooting-playbook.md",
+        "core/messaging-and-mtu.md",
+        "core/rpc-advanced.md"
+      ],
+      "docs": [
+        "systems-and-modules/remote-procedure-call-rpc/README.md",
+        "systems-and-modules/network-manager/network-visibility/README.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "historical-scene-ready",
+      "keywords": [
+        "onplayerjoinedscene",
+        "onplayerdisconnected",
+        "onplayerloadedscene",
+        "scène joueur non chargée",
+        "scene cleanup",
+        "scene build index"
+      ],
+      "guides": [
+        "historical/triage-playbook.md",
+        "historical/case-studies.md",
+        "tools/troubleshooting-playbook.md",
+        "core/connection-lifecycle.md",
+        "core/scene-playbook.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-manager/connection-and-player-events.md",
+        "systems-and-modules/scene-module.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "historical-build-steam",
+      "keywords": [
+        "steamworks cs1061",
+        "getclientplayload",
+        "ilpp generic",
+        "il2cpp build error",
+        "unity git missing",
+        "no git executable"
+      ],
+      "guides": [
+        "historical/triage-playbook.md",
+        "historical/case-studies.md",
+        "tools/troubleshooting-playbook.md",
+        "build/build-release-checklist.md",
+        "core/authentication.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-manager/authentication.md",
+        "systems-and-modules/code-stripping.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "historical-transform-transport",
+      "keywords": [
+        "networktransform bizarre",
+        "webtransport jitter",
+        "web transport transform",
+        "networktransform frozen",
+        "non controller transform",
+        "rigidbody parenting jitter"
+      ],
+      "guides": [
+        "historical/triage-playbook.md",
+        "historical/case-studies.md",
+        "tools/troubleshooting-playbook.md",
+        "components/network-transform.md",
+        "components/network-rigidbody.md",
+        "core/transports-platforms.md"
+      ],
+      "docs": [
+        "plug-n-play-components/network-transform.md",
+        "plug-n-play-components/network-rigidbody.md",
+        "systems-and-modules/transports/web-transport.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "historical-packer-symptoms",
+      "keywords": [
+        "bitpacker array",
+        "packer corrupted",
+        "gameobject not serializable",
+        "transform rpc null",
+        "type hash unknown",
+        "syncdictionary failing"
+      ],
+      "guides": [
+        "historical/triage-playbook.md",
+        "historical/case-studies.md",
+        "tools/troubleshooting-playbook.md",
+        "core/serialization-playbook.md",
+        "core/sync-types-decision.md"
+      ],
+      "docs": [
+        "systems-and-modules/bitpacker-serialization/networking-custom-classes-structs-and-types.md",
+        "systems-and-modules/network-modules/sync-types/synclazyref.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "historical-prediction-rollback",
+      "keywords": [
+        "prediction pool",
+        "predicted input leak",
+        "purrdiction late join",
+        "purrdiction lag rollback",
+        "predicted spawn disappears",
+        "hierarchy replay"
+      ],
+      "guides": [
+        "historical/triage-playbook.md",
+        "historical/case-studies.md",
+        "tools/troubleshooting-playbook.md",
+        "prediction/best-practices.md",
+        "prediction/hierarchy-and-parenting.md",
+        "prediction/lifecycle-and-rollback.md"
+      ],
+      "docs": [
+        "client-side-prediction/best-practices.md",
+        "client-side-prediction/predicted-hierarchy.md",
+        "client-side-prediction/flow.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "historical-legacy-guidance",
+      "keywords": [
+        "blenminer purrnet",
+        "old purrnet git",
+        "no dissonance integration",
+        "dissonance unsupported",
+        "purrtransport dev only",
+        "purrnet latest version"
+      ],
+      "guides": [
+        "historical/triage-playbook.md",
+        "historical/case-studies.md",
+        "tools/troubleshooting-playbook.md",
+        "addons/lobby-voice-and-integrations.md",
+        "core/transports-platforms.md",
+        "version-policy.md"
+      ],
+      "docs": [
+        "integrations/dissonance.md",
+        "systems-and-modules/transports/purr-transport.md",
+        "getting-started/installation-setup.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "historical-owner-lifecycle",
+      "keywords": [
+        "isowner false despawn",
+        "isowner ondespawn",
+        "ownership skipped host",
+        "onownerchanged wrong",
+        "on owner changed false"
+      ],
+      "guides": [
+        "historical/triage-playbook.md",
+        "historical/case-studies.md",
+        "tools/troubleshooting-playbook.md",
+        "core/ownership-and-rules.md",
+        "core/connection-lifecycle.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-identity/ownership.md",
+        "systems-and-modules/network-identity/networkbehaviour.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "historical-packets-mtu",
+      "keywords": [
+        "mtu exceeded",
+        "fragment corruption",
+        "packet fragmented",
+        "unreliable packet dropped",
+        "drops bandwidth profiler"
+      ],
+      "guides": [
+        "historical/triage-playbook.md",
+        "historical/case-studies.md",
+        "tools/troubleshooting-playbook.md",
+        "core/messaging-and-mtu.md",
+        "core/profiling.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-manager/README.md",
+        "systems-and-modules/bandwidth-profiler.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "workflow-dedicated-readiness",
+      "keywords": [
+        "dedicated",
+        "headless",
+        "server build",
+        "host vs dedicated",
+        "host to dedicated",
+        "works on host",
+        "world empty dedicated",
+        "serveur dédié",
+        "serveur dedie",
+        "no local client",
+        "sans client local"
+      ],
+      "guides": [
+        "workflows/dedicated.md",
+        "dedicated-server.md",
+        "validation/acceptance.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-manager/README.md",
+        "systems-and-modules/network-manager/connection-and-player-events.md",
+        "systems-and-modules/remote-procedure-call-rpc/README.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "workflow-edgegap-handoff",
+      "keywords": [
+        "edgegap",
+        "arbitrium",
+        "matchmaker edgegap",
+        "edgegap deployment",
+        "edgegap plugin"
+      ],
+      "guides": [
+        "workflows/edgegap-handoff.md",
+        "edgegap-integration.md",
+        "edgegap-comparison.md"
+      ],
+      "docs": [
+        "game-server-hosting/edgegap.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "workflow-feature-acceptance",
+      "keywords": [
+        "implémenter la fonctionnalité",
+        "implement a feature",
+        "ajouter une fonctionnalité réseau",
+        "build multiplayer feature",
+        "feature network",
+        "network gameplay feature"
+      ],
+      "guides": [
+        "workflows/feature.md",
+        "validation/acceptance.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-modules/README.md"
+      ],
+      "context": "any"
+    },
+    {
+      "id": "client-spawn-validation",
+      "keywords": [
+        "onClientSpawnValidate",
+        "TryGetRawPrefab",
+        "SpawnPacket",
+        "spawn client non autorisé",
+        "validation spawn client",
+        "client spawned object",
+        "client spawning validator",
+        "spawnent",
+        "valide leurs spawn",
+        "les clients spawnent"
+      ],
+      "context": "classic",
+      "guides": [
+        "core/spawn-security-and-persistence.md",
+        "core/ownership-and-rules.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-identity/spawning-and-despawning/client-spawning-validation.md",
+        "systems-and-modules/network-manager/network-rules.md"
+      ]
+    },
+    {
+      "id": "persistent-ddol",
+      "keywords": [
+        "dontdestroyonload",
+        "dont destroy on load",
+        "ddol",
+        "not spawned persistent",
+        "persistance scène",
+        "persistance de scene",
+        "objet persistant scene"
+      ],
+      "context": "classic",
+      "guides": [
+        "core/spawn-security-and-persistence.md",
+        "core/scene-playbook.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-identity/dont-destroy-on-load.md",
+        "systems-and-modules/network-manager/network-rules.md"
+      ]
+    },
+    {
+      "id": "playeridentity-and-lazyref",
+      "keywords": [
+        "playeridentity",
+        "trygetlocal",
+        "trygetplayer",
+        "synclazyref",
+        "globalnetworkid",
+        "cross scene reference",
+        "reference entre scenes",
+        "reference differée",
+        "référence différée"
+      ],
+      "context": "classic",
+      "guides": [
+        "core/player-identity-and-lazy-refs.md",
+        "core/connection-lifecycle.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-identity/playeridentity.md",
+        "systems-and-modules/network-modules/sync-types/synclazyref.md",
+        "systems-and-modules/network-manager/connection-and-player-events.md"
+      ]
+    },
+    {
+      "id": "visibility-priority",
+      "keywords": [
+        "visibility rules",
+        "visibilite rules",
+        "whitelist blacklist",
+        "blacklist whitelist",
+        "visibility override",
+        "cansee",
+        "invisible object",
+        "objet invisible observateur",
+        "visibility priority",
+        "rule set visibility"
+      ],
+      "context": "classic",
+      "guides": [
+        "core/visibility-priority.md",
+        "core/network-visibility.md"
+      ],
+      "docs": [
+        "systems-and-modules/network-manager/network-visibility/README.md",
+        "systems-and-modules/network-manager/network-visibility/visibility-rules.md",
+        "systems-and-modules/network-manager/network-visibility/using-the-visibility.md"
+      ]
+    },
+    {
+      "id": "collider-rollback-classic",
+      "keywords": [
+        "colliderrollback",
+        "collider rollback",
+        "hitbox historique",
+        "raycast lag",
+        "rollback collider",
+        "hit validation classic"
+      ],
+      "context": "classic",
+      "guides": [
+        "core/collider-rollback-classic.md",
+        "core/ownership-and-rules.md"
+      ],
+      "docs": [
+        "systems-and-modules/collider-rollback.md",
+        "client-side-prediction/lag-compensation.md"
+      ]
+    },
+    {
+      "id": "predicted-mirroring",
+      "keywords": [
+        "predictedidentityspawner",
+        "networkidentity mirrored",
+        "network identities in predicted prefabs",
+        "mirroring automatique",
+        "networkidentity dans prefab predit",
+        "mirror predicted",
+        "predicted mirror"
+      ],
+      "context": "prediction",
+      "guides": [
+        "prediction/mirror-and-visibility.md",
+        "prediction/best-practices.md"
+      ],
+      "docs": [
+        "client-side-prediction/built-in-components/predicted-identity-spawner.md",
+        "client-side-prediction/predicted-visibility.md"
+      ]
+    },
+    {
+      "id": "predicted-visibility-edgecases",
+      "keywords": [
+        "hidefrom",
+        "showto",
+        "predicted visibility",
+        "visibilite predite",
+        "invisible predicted",
+        "fog of war predicted"
+      ],
+      "context": "prediction",
+      "guides": [
+        "prediction/mirror-and-visibility.md",
+        "prediction/visibility-and-interactions.md"
+      ],
+      "docs": [
+        "client-side-prediction/predicted-visibility.md",
+        "client-side-prediction/built-in-components/predicted-identity-spawner.md"
+      ]
+    },
+    {
+      "id": "predicted-one-shot-input",
+      "keywords": [
+        "getkeydowntick",
+        "updateinput",
+        "getfinalinput",
+        "modifyextrapolatedinput",
+        "one shot predicted",
+        "one shot input",
+        "lost jump",
+        "missing fire input",
+        "jump lost between ticks"
+      ],
+      "context": "prediction",
+      "guides": [
+        "prediction/one-shot-input-and-events.md",
+        "prediction/input-and-state.md"
+      ],
+      "docs": [
+        "client-side-prediction/input-handling.md",
+        "client-side-prediction/best-practices.md"
+      ]
+    },
+    {
+      "id": "predicted-multi-identity-interactions",
+      "keywords": [
+        "multi identity interaction",
+        "multi-identity interactions",
+        "interagir avec autre predictedidentity",
+        "interagir entre identites predites",
+        "predictedcomponentid",
+        "inter-identity state",
+        "cross identity predicted"
+      ],
+      "context": "prediction",
+      "guides": [
+        "prediction/visibility-and-interactions.md",
+        "prediction/mirror-and-visibility.md",
+        "prediction/best-practices.md"
+      ],
+      "docs": [
+        "client-side-prediction/multi-identity-interactions.md",
+        "client-side-prediction/predicted-object-references.md",
+        "client-side-prediction/security.md"
+      ]
+    }
+  ],
+  "fallback": {
+    "guides": [
+      "../documentation-map.md",
+      "../documentation-policy.md",
+      "../version-policy.md"
+    ],
+    "instruction": "Unknown intent: search all PurrDocs titles AND contents; open relevant pages and related links. Do not infer feature absence from routes."
+  }
+}

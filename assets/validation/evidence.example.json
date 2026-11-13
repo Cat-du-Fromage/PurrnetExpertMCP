@@ -1,0 +1,16 @@
+{
+  "schema": "purrnet-expert-evidence-v1",
+  "task": "EXEMPLE UNIQUEMENT - NE PAS PRESENTER COMME RESULTAT",
+  "project": "./UnityProject",
+  "purrnet_version": "unknown",
+  "gates": {
+    "D0": {"status": "not_run", "evidence": []},
+    "D1": {"status": "not_run", "evidence": []},
+    "D2": {"status": "not_run", "evidence": []},
+    "D3": {"status": "not_run", "evidence": []},
+    "D4": {"status": "not_run", "evidence": []},
+    "D5": {"status": "not_run", "evidence": []},
+    "D6": {"status": "not_run", "evidence": []}
+  },
+  "notes": "Copier hors du dossier skill; remplacer les status uniquement après observation; ne jamais mettre de secrets ni tokens dans les preuves."
+}

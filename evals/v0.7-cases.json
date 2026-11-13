@@ -1,0 +1,242 @@
+[
+  {
+    "id": "host-observers-rpc",
+    "prompt": "Le ObserversRpc runLocally joue deux fois en host, corrige-le.",
+    "project_is_purrnet": true,
+    "assertions": [
+      "Show dual server/client contexts and RPC invocation vs execution logs",
+      "Check installed version; old v1.2.0 bug is not automatically current",
+      "Dedicated server state must still execute once"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  },
+  {
+    "id": "duplicate-player",
+    "prompt": "Mon joueur apparaît en double quand je lance ParrelSync.",
+    "project_is_purrnet": true,
+    "assertions": [
+      "Inspect Start Server/Client Flags and two Instantiate paths",
+      "Distinguish scene object from runtime spawn and source commit",
+      "Do not patch by hiding one object on clients"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  },
+  {
+    "id": "syncvar-null",
+    "prompt": "SyncVar<SomeClass> NullReferenceException pendant OnSpawned",
+    "project_is_purrnet": true,
+    "assertions": [
+      "Check current serialization for T and module initialization",
+      "Mention historical fix v1.2.3 as historical",
+      "Do not replace a NetworkModule after spawn"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  },
+  {
+    "id": "synclist-late-join",
+    "prompt": "Un nouveau joueur rejoint mais sa SyncList inventaire est vide",
+    "project_is_purrnet": true,
+    "assertions": [
+      "Inspect ownerOnly, observers, snapshot, scene readiness",
+      "Do not assume historic v1.5.0 bug still occurs",
+      "Test ownership transfer and late joining"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  },
+  {
+    "id": "owner-false-despawn",
+    "prompt": "isOwner est false dans OnDespawn; c est un bug ?",
+    "project_is_purrnet": true,
+    "assertions": [
+      "Explain expected lifecycle possibility",
+      "Do not mislabel a v1.3.3 historical note as a current bug",
+      "Capture owner before teardown and verify installed callback"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  },
+  {
+    "id": "rpc-buffered",
+    "prompt": "ObserversRpc bufferLast pas reçu par le nouvel observateur",
+    "project_is_purrnet": true,
+    "assertions": [
+      "Inspect network identity visibility and spawn order",
+      "Inspect target buffer semantics and channels",
+      "Do not promise bufferLast persistence across all scenarios"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  },
+  {
+    "id": "player-scene-event",
+    "prompt": "onPlayerJoinedScene déclenche avant mon joueur est prêt",
+    "project_is_purrnet": true,
+    "assertions": [
+      "Distinguish membership from onPlayerLoadedScene",
+      "Check current official event signatures",
+      "Test ready-to-spawn after auth and loaded scene"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  },
+  {
+    "id": "steamworks-cs1061",
+    "prompt": "SteamWorks CS1061 après import PurrNet",
+    "project_is_purrnet": true,
+    "assertions": [
+      "Collect complete compiler trace and asmdefs",
+      "Historical restart hint may be appropriate but not sufficient",
+      "Check Steamworks.NET package version and Unity import"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  },
+  {
+    "id": "auth-typo",
+    "prompt": "GetClientPlayload override ne compile plus",
+    "project_is_purrnet": true,
+    "assertions": [
+      "Check installed AuthenticationBehaviour<T> method",
+      "Identify historical rename to GetClientPayload",
+      "Do not blindly edit without type resolution"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  },
+  {
+    "id": "weird-webgl-transform",
+    "prompt": "WebGL joueur jitter avec NetworkTransform",
+    "project_is_purrnet": true,
+    "assertions": [
+      "Check correct WebTransport setup and client authority",
+      "Test current NetworkTransform interpolation/patch behavior",
+      "Historical old v1.2.1 bug not presumed"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  },
+  {
+    "id": "bitpacker-array",
+    "prompt": "BitPacker corrompt la taille d un tableau",
+    "project_is_purrnet": true,
+    "assertions": [
+      "Inspect read/write packing order and type registration",
+      "Historical v1.3.2 note is only a clue",
+      "Test isolated pack/unpack both platforms"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  },
+  {
+    "id": "pack-gameobject",
+    "prompt": "Peut on envoyer un GameObject en ServerRpc sur PurrNet ?",
+    "project_is_purrnet": true,
+    "assertions": [
+      "Reject old blanket claim of no support for every GameObject",
+      "Check spawned network identity and serialization context",
+      "Differentiate PredictedObjectID and SyncLazyRef"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  },
+  {
+    "id": "dissonance",
+    "prompt": "PurrNet a une intégration Dissonance actuellement ?",
+    "project_is_purrnet": true,
+    "assertions": [
+      "Prefer official PurrDocs Dissonance page",
+      "Reject old FAQ assertion no integration",
+      "Check installed add-on and version"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  },
+  {
+    "id": "prediction-version",
+    "prompt": "PurrDiction 1.3.3 SoftCorrection ne marche pas, PurrNet 1.25.0",
+    "project_is_purrnet": true,
+    "assertions": [
+      "Check addon version independently",
+      "Apply version-gated documentation to PurrDiction",
+      "Do not use PurrNet core version as prediction feature proof"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  },
+  {
+    "id": "old-latest",
+    "prompt": "Stray Help dit que PurrNet 1.20 est latest",
+    "project_is_purrnet": true,
+    "assertions": [
+      "Explain historical timestamp / stale latest",
+      "Check installed source and official release package",
+      "Do not blindly recommend old branch or BlenMiner URL"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  },
+  {
+    "id": "network-rigidbody",
+    "prompt": "NetworkRigidbody saute après SetParent",
+    "project_is_purrnet": true,
+    "assertions": [
+      "Check supported parenting and owner source",
+      "Measure jitter, error, parent-relative settings",
+      "Do not blame v1.20.0 fix automatically"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  },
+  {
+    "id": "mtu",
+    "prompt": "Unreliable packet fragments dropped / MTU dépassée",
+    "project_is_purrnet": true,
+    "assertions": [
+      "Inspect MTU policy, channel and Bandwidth Profiler drops",
+      "Explain unreliable fragments may be lost by design",
+      "Do not assume all drops are historical bug"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  },
+  {
+    "id": "il2cpp",
+    "prompt": "Build IL2CPP crash alors que Editor marche",
+    "project_is_purrnet": true,
+    "assertions": [
+      "Read Unity build log and stripping settings",
+      "Historical v1.19.1 fixes do not resolve new error automatically",
+      "Compile target and verify client/dedicated differences"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  },
+  {
+    "id": "prefab-register",
+    "prompt": "PlayerSpawner spawns prefab in wrong scene",
+    "project_is_purrnet": true,
+    "assertions": [
+      "Check scene scoped registries and spawn scene",
+      "Wait onPlayerLoadedScene for readiness where applicable",
+      "Compare old 1.3.3 fixed bug vs current config"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  },
+  {
+    "id": "purrtransport-policy",
+    "prompt": "Puis-je utiliser PurrTransport en production ?",
+    "project_is_purrnet": true,
+    "assertions": [
+      "Do not repeat historical blanket no",
+      "Verify current official documentation, service policies and traffic model",
+      "Never invent platform reliability/production availability"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  },
+  {
+    "id": "cross-server-chat",
+    "prompt": "Comment faire un chat global entre serveurs PurrNet indépendants ?",
+    "project_is_purrnet": true,
+    "assertions": [
+      "Explain separate backend/broker architectural requirement",
+      "Avoid assuming a cross-server RPC",
+      "Include authentication and moderation design"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  },
+  {
+    "id": "negative",
+    "prompt": "Mon shader Unity a une erreur de compilation sans multijoueur",
+    "project_is_purrnet": false,
+    "assertions": [
+      "Should not activate PurrNet specialist without project evidence"
+    ],
+    "type": "evaluation_scenario_not_executed"
+  }
+]

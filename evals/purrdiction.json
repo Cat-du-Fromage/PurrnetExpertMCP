@@ -1,0 +1,62 @@
+[
+  {
+    "id": "missing-state-cooldown",
+    "prompt": "PurrDiction: mon cooldown est un champ MonoBehaviour, ça marche en host mais se désynchronise au rollback. Refactorise.",
+    "assertions": ["Inclut cooldown dans STATE IPredictedData", "Vérifie GetInitialState et état Unity restaurable", "Ne prétend pas avoir compilé sans Unity", "Cite best-practices et state-handling"]
+  },
+  {
+    "id": "replayed-shot-rpc",
+    "prompt": "Mon PredictedIdentity appelle ServerRpc à chaque balle tirée dans Simulate; le serveur reçoit plusieurs coups lors de rollback.",
+    "assertions": ["Remplace RPC de gameplay par INPUT et STATE", "Simulate replay-safe", "PredictedEvent/isVerifiedView pour FX", "Validation cooldown/ammo serveur"]
+  },
+  {
+    "id": "spawn-predicted-projectile",
+    "prompt": "Génère un projectile dans un PredictedIdentity avec Instantiate et Destroy, fonctionnel après rollback.",
+    "assertions": ["Refuse Instantiate/Destroy dans simulation prédite", "Utilise hierarchy.Create/Delete vérifié par version", "Conserve PredictedObjectID, pas GameObject", "Teste late join/pool/replay"]
+  },
+  {
+    "id": "input-edges-extrapolation",
+    "prompt": "Je perds mes touches jump à 30 fps et la touche fire est répétée après packet loss avec PurrDiction.",
+    "assertions": ["Capture front en UpdateInput", "GetFinalInput par tick", "SanitizeInput", "ModifyExtrapolatedInput retire événements ponctuels", "Teste perte/jitter"]
+  },
+  {
+    "id": "determinism-rng",
+    "prompt": "Mon Simulate utilise Time.deltaTime et UnityEngine.Random; il marche sur mon PC mais pas chez mes amis.",
+    "assertions": ["Utilise delta fourni, PredictedTime et PredictedRandom", "Mentionne limites Unity Physics cross-platform", "DeterministicIdentity/sfloat si strict", "Vérifie sources versionnées"]
+  },
+  {
+    "id": "policy-correctness",
+    "prompt": "Je veux SoftCorrection partout pour cacher le jitter, y compris les hitbox d'un shooter.",
+    "assertions": ["Explique convergence vs rollback exact", "Refuse soft correction pour hit validation critique", "Donne PredictedIfOwned/FullPrediction selon besoin", "Mentionne fallback silencieux ServerRelay sur non supporté"]
+  },
+  {
+    "id": "version-mirroring",
+    "prompt": "J'utilise PurrDiction 1.3.x avec PredictedIdentitySpawner, puis-je suivre la doc 1.4.0 de NetworkIdentity mirroring ?",
+    "assertions": ["Identifie version <1.4.0", "N'applique pas mirroring automatique", "Consulte doc versionnée et package installé", "N'invente pas de migration sans vérification"]
+  },
+  {
+    "id": "predicted-modules-roster",
+    "prompt": "Je construis un PredictedModule statique seulement en isOwner dans LateAwake, certains clients ont un roster mismatch.",
+    "assertions": ["Même roster et ordre static modules sur tous les peers", "N'utilise pas flag owner pour créer statique", "Dynamic modules sur timeline et constructors compatibles", "Mentionne PredictedModuleRosterMismatchException"]
+  },
+  {
+    "id": "disposable-history",
+    "prompt": "Mon STATE a une DisposableList, je copie le struct et les deux copies appellent Dispose; l'éditeur crashe.",
+    "assertions": ["Détecte shallow copy et double dispose", "Propose Duplicate() ou IDuplicate<T>", "STATE.Dispose correct", "Teste pooling/reconciliation"]
+  },
+  {
+    "id": "lag-compensation",
+    "prompt": "En PurrDiction >=1.4 mon hitscan est faux à 150 ms ; je veux utiliser un ServerRpc avec rollbackTick classique.",
+    "assertions": ["Distingue rollbackTick et lagCompensationTick", "Vérifie ColliderRollback + predictionManager.lagCompensation", "Garde hit-test côté serveur et offset borné", "Vérifie version et pipeline de Simulate"]
+  },
+  {
+    "id": "classic-modules",
+    "prompt": "Je veux une List<SyncVar<int>> de mes skills PurrNet, réallouée quand l'inventaire change.",
+    "assertions": ["Interdit List/Array de network modules", "Ne réassigne jamais après spawn", "OnInitializeModules avant IDs", "Propose données dans SyncList plutôt que liste de SyncVars et vérifie API"]
+  },
+  {
+    "id": "unknown-feature-docs",
+    "prompt": "Configure PurrNet PurrVoice micro input filters et PurrLobby, même si aucune page n'est dans la liste de 10 fichiers de la skill.",
+    "assertions": ["Cherche les docs complètes dans tools/purrvoice-voice-chat et tools/purrlobby", "Ne conclut pas à l'absence de documentation", "Vérifie packages addon exacts", "N'invente pas signatures non vérifiées"]
+  }
+]

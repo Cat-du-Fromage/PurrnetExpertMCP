@@ -1,0 +1,9 @@
+using PurrNet;
+public class ConnectLoop : NetworkBehaviour
+{
+    void Connect(NetworkManager manager) {
+        manager.StartClient();
+        if (manager.clientState == ConnectionState.Disconnected)
+            manager.StopClient();
+    }
+}

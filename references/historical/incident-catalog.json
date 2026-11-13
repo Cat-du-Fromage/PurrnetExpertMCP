@@ -1,0 +1,777 @@
+{
+  "schema": 1,
+  "version": "0.7.0",
+  "snapshot": "e6140a571228044fe670b500e245f6bb370b2e06",
+  "source_repository": "https://github.com/nmban/Purrnet-Stray_Help",
+  "scope": "Curated cases from archived FAQ, QUICK_REFERENCE, CONTEXT_REFERENCE, changelog; the full 15k exchanges were NOT exhaustively read.",
+  "status_meanings": {
+    "historical_fixed": "Archive says patched by this historical version. Recheck version, source and reproducer; do not assume bug remains.",
+    "feature_milestone": "A feature became available; never infer exact current signature.",
+    "expected_behavior": "The archived report identifies intentional behavior, not a bug.",
+    "stale_guidance": "Old instructions or absolute claims conflict with or predate current official docs.",
+    "historical_workaround": "Context-dependent operational workaround, not a fix.",
+    "current_pattern": "Architecture principle to verify in current context."
+  },
+  "issues": [
+    {
+      "id": "HOST_OBSERVERS_RPC_TWICE",
+      "title": "ObserversRpc exécuté deux fois en host",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.2.0",
+      "search_terms": [
+        "observer rpc twice",
+        "rpc twice",
+        "runlocally",
+        "double rpc",
+        "rpc doublé",
+        "rpc dupliqué"
+      ],
+      "historical_hypothesis": "Archived host loopback bug with runLocally; normal server/client dual context can also explain two events.",
+      "verify": "Log server/client roles and RPC call count; inspect runLocally and current installed method; verify effects once on host and dedicated.",
+      "official_docs": [
+        "systems-and-modules/remote-procedure-call-rpc/README.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "HOST_DEFAULT_OWNER",
+      "title": "Propriété par défaut absente en host",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.2.1",
+      "search_terms": [
+        "ownership host",
+        "host owner false",
+        "isowner host",
+        "propriété host",
+        "ownership skipped"
+      ],
+      "historical_hypothesis": "Historically a host ownership initialization bug; current code may instead use a different owner or restrictive network rules.",
+      "verify": "Inspect current ownership at spawn and after owner-change; compare pure client and host; log asServer and isOwner.",
+      "official_docs": [
+        "systems-and-modules/network-identity/ownership.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "DUPLICATE_CLIENT_SPAWN",
+      "title": "GameObject dupliqué côté client",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.2.1",
+      "search_terms": [
+        "duplicate spawn",
+        "object duplicated",
+        "duplicated client",
+        "objets dupliqués",
+        "prefab double",
+        "deux joueurs dupliqués"
+      ],
+      "historical_hypothesis": "Historical client duplication fix; modern duplicates can be caused by auto-start and a second Instantiate or a buffered RPC.",
+      "verify": "Count Instantiate calls, network IDs, scene object vs prefab spawn, auto-start flags and roles; inspect spawned event order.",
+      "official_docs": [
+        "systems-and-modules/network-identity/spawning-and-despawning/README.md",
+        "systems-and-modules/network-manager/README.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "WEB_TRANSPORT_TRANSFORM",
+      "title": "NetworkTransform tremble sous WebTransport",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.2.1",
+      "search_terms": [
+        "web transport transform",
+        "websocket jitter",
+        "webgl transform",
+        "networktransform weird",
+        "weird interpolation web"
+      ],
+      "historical_hypothesis": "Old transport-related NetworkTransform fix does not diagnose contemporary interpolation without packet evidence.",
+      "verify": "Compare WebTransport and UDP with same build; log RTT/jitter, authority, update phase, buffers and version.",
+      "official_docs": [
+        "plug-n-play-components/network-transform.md",
+        "systems-and-modules/transports/web-transport.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "HOST_REFLECTION",
+      "title": "NetworkReflection incorrect en host",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.2.3",
+      "search_terms": [
+        "networkreflection host",
+        "reflection host",
+        "reflection desync"
+      ],
+      "historical_hypothesis": "Host reflection component historical bug; modern issue may be authority and property selection.",
+      "verify": "Inspect selected properties, writer, ownerAuth, and callback invocation for both host contexts.",
+      "official_docs": [
+        "plug-n-play-components/network-reflection-auto-sync.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "SYNCVAR_NULL_OLD",
+      "title": "Null exception dans SyncVar de référence",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.2.3",
+      "search_terms": [
+        "syncvar null",
+        "non valuetype syncvar",
+        "syncvar nullreference",
+        "syncvar référence nulle"
+      ],
+      "historical_hypothesis": "Old non-value-type SyncVar exception fix; current null requires reproducer and serialization ownership check.",
+      "verify": "Capture full stack trace, exact T type, initialization timing and OnSpawn; check module replacement and local version.",
+      "official_docs": [
+        "systems-and-modules/network-modules/sync-types/syncvar.md",
+        "systems-and-modules/network-modules/common-pitfalls.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "BITPACKER_ARRAY_SIZE",
+      "title": "Taille de tableau BitPacker incorrecte",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.3.2",
+      "search_terms": [
+        "bitpacker array size",
+        "packer array corrupted",
+        "tableau bitpacker",
+        "array deserialization"
+      ],
+      "historical_hypothesis": "Historical array-size packing fix; current failure could be mismatched serializer and read/write field ordering.",
+      "verify": "Inspect packed type, serialized length, write/read symmetry, ILPP and platform; reproduce in isolated pack/unpack test.",
+      "official_docs": [
+        "systems-and-modules/bitpacker-serialization/networking-custom-classes-structs-and-types.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "SYNCDICTIONARY_OLD",
+      "title": "SyncDictionary ne se sérialise pas",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.3.2",
+      "search_terms": [
+        "syncdictionary serialization",
+        "syncdictionary fails",
+        "dictionary not synced",
+        "dictionnaire réseau"
+      ],
+      "historical_hypothesis": "Historical dictionary improvements; current issues often stem from unsupported item serialization or authority.",
+      "verify": "Check K/V serializer, module declared as field, initialization before spawn, writer permission, and late join behavior.",
+      "official_docs": [
+        "systems-and-modules/network-modules/sync-types/syncdictionary.md",
+        "systems-and-modules/network-modules/common-pitfalls.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "PLAYER_SPAWNER_SCENE",
+      "title": "PlayerSpawner apparaît dans mauvaise scène",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.3.3",
+      "search_terms": [
+        "player spawner wrong scene",
+        "spawn wrong scene",
+        "joueur mauvaise scène",
+        "player spawner scene"
+      ],
+      "historical_hypothesis": "Historical spawner scene bug; current wrong scene can be placement, registry or scene membership.",
+      "verify": "Compare spawner scene, new instance scene and each client loaded scene; verify scene prefab scope and network rules.",
+      "official_docs": [
+        "systems-and-modules/network-manager/scene-scoped-prefabs-and-assets.md",
+        "systems-and-modules/scene-module.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "SCENE_LOAD_CLEANUP",
+      "title": "Chargement et cleanup de scènes incohérents",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.3.3",
+      "search_terms": [
+        "scene cleanup",
+        "scene wont load",
+        "scene unload",
+        "scène ne charge pas",
+        "scene load issues",
+        "build index"
+      ],
+      "historical_hypothesis": "Historical scene cleanup/validity fix; modern failures need readiness-event diagnosis.",
+      "verify": "Distinguish scene membership from onPlayerLoadedScene and current loaded/unloaded events; check build settings and unload order.",
+      "official_docs": [
+        "systems-and-modules/network-manager/connection-and-player-events.md",
+        "systems-and-modules/scene-module.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "NETANIM_EXCLUDE_HASH",
+      "title": "Exclusion de paramètres NetworkAnimator",
+      "classification": "feature_milestone",
+      "claimed_fixed_in": "1.3.3",
+      "search_terms": [
+        "networkanimator bandwidth",
+        "exclude animation hash",
+        "animator too much traffic",
+        "networkanimator performance"
+      ],
+      "historical_hypothesis": "Historical feature for excluding selected animation hashes; mechanism can differ in newer versions.",
+      "verify": "Inspect installed NetworkAnimator Inspector, sync selection, triggers and bandwidth profiler before adding custom messages.",
+      "official_docs": [
+        "plug-n-play-components/network-animator.md",
+        "systems-and-modules/bandwidth-profiler.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "OWNER_FALSE_DESPAWN",
+      "title": "isOwner faux pendant OnDespawn",
+      "classification": "expected_behavior",
+      "claimed_fixed_in": "1.3.3",
+      "search_terms": [
+        "isowner false despawn",
+        "on despawn owner",
+        "owner false ondespawn",
+        "on despawn propriétaire"
+      ],
+      "historical_hypothesis": "Archived note explicitly calls this expected behaviour, not a bug. Teardown may occur after ownership is cleared.",
+      "verify": "Capture old owner before despawn if needed; base cleanup on server context, stored identifiers and lifecycle, not only isOwner.",
+      "official_docs": [
+        "systems-and-modules/network-identity/networkbehaviour.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "The archive labels this expected behavior around v1.3.3; do not recommend upgrading to fix an expected lifecycle state."
+    },
+    {
+      "id": "LATE_JOIN_LIST",
+      "title": "Late join reçoit SyncList vide",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.5.0",
+      "search_terms": [
+        "synclist late join",
+        "late join empty list",
+        "late join inventory",
+        "nouveau joueur liste vide"
+      ],
+      "historical_hypothesis": "Historical late-join list synchronization fix; current empty list may be visibility, module init, or scene readiness.",
+      "verify": "Check authoritative list contents before join, ownerOnly, observer registration, scene load, snapshot and both client logs.",
+      "official_docs": [
+        "systems-and-modules/network-modules/sync-types/synclist.md",
+        "systems-and-modules/network-modules/owner-only.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "ONTICK_DOUBLE",
+      "title": "OnTick appelé deux fois",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.5.0",
+      "search_terms": [
+        "ontick twice",
+        "ontick double",
+        "tick callback twice",
+        "tick called twice"
+      ],
+      "historical_hypothesis": "Old OnTick duplication fix; host and multi-manager contexts can also appear as duplicate ticks.",
+      "verify": "Log tick counter, manager instance, server/client context and all subscriptions; check actual registered listeners.",
+      "official_docs": [
+        "systems-and-modules/network-identity/networkbehaviour.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "RPC_DUPLICATE_HOST",
+      "title": "ServerRpc appelé en double en host",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.8.0",
+      "search_terms": [
+        "serverrpc double host",
+        "server rpc duplicate host",
+        "host rpc twice"
+      ],
+      "historical_hypothesis": "Old loopback duplicate RPC issue distinct from expected host dual-context callbacks.",
+      "verify": "Distinguish RPC invocation count from method body execution, runLocally and host side; confirm installed build version.",
+      "official_docs": [
+        "systems-and-modules/remote-procedure-call-rpc/README.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "VISIBILITY_EVALUATION",
+      "title": "Évaluation de visibilité nécessaire après changement",
+      "classification": "feature_milestone",
+      "claimed_fixed_in": "1.8.2",
+      "search_terms": [
+        "evaluatevisibility",
+        "visibility stale",
+        "observer not appearing",
+        "objet invisible après changement"
+      ],
+      "historical_hypothesis": "Archive notes EvaluateVisibility API availability; current visibility is not necessarily continuously re-evaluated.",
+      "verify": "Inspect rule type, parent and whitelists, then call supported reevaluation at change boundaries; log observers.",
+      "official_docs": [
+        "systems-and-modules/network-manager/network-visibility/using-the-visibility.md",
+        "systems-and-modules/network-manager/network-visibility/README.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "BUFFERED_RPC_EARLY",
+      "title": "Buffered RPC manquant pour nouveau client",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.9.3",
+      "search_terms": [
+        "bufferlast late join",
+        "buffered rpc missing",
+        "target rpc before spawn",
+        "buffered rpc premature"
+      ],
+      "historical_hypothesis": "Historic premature buffered RPC fix; currently recipient may not yet observe spawned identity.",
+      "verify": "Check spawn batch/observer readiness, bufferLast target, sender, channel and late-join durable state alternative.",
+      "official_docs": [
+        "systems-and-modules/remote-procedure-call-rpc/README.md",
+        "systems-and-modules/network-manager/network-visibility/README.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "NETTRANSFORM_NON_CONTROLLER",
+      "title": "NetworkTransform n’actualise pas le non-controller",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.10.2",
+      "search_terms": [
+        "networktransform non controller",
+        "observer transform frozen",
+        "observer position stuck"
+      ],
+      "historical_hypothesis": "Historical view update fix; current wrong writer or authority can also freeze remote instances.",
+      "verify": "Check who moves transform, ownerAuth, animator/physics double-writing, transport and interpolation settings.",
+      "official_docs": [
+        "plug-n-play-components/network-transform.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "AUTH_API_TYPO",
+      "title": "Ancienne méthode GetClientPlayload",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.13.2",
+      "search_terms": [
+        "getclientplayload",
+        "auth method missing",
+        "authenticator compile",
+        "auth payload misspelled"
+      ],
+      "historical_hypothesis": "Changelog documents GetClientPlayload -> GetClientPayload rename (old spelling obsolete).",
+      "verify": "Inspect installed AuthenticationBehaviour<T> exact method signature and return type before modifying override.",
+      "official_docs": [
+        "systems-and-modules/network-manager/authentication.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "GENERIC_RPC_ILPP",
+      "title": "Generic RPC échec ILPP ou IL2CPP",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.20.0",
+      "search_terms": [
+        "generic rpc il",
+        "generic rpc compile",
+        "rpc generic formatting",
+        "ilpp generic",
+        "async rpc issue"
+      ],
+      "historical_hypothesis": "Historical generic/async RPC and ILPP fixes across several releases; no single cause is implied.",
+      "verify": "Capture full ILPP diagnostic, Unity version, generic closed instantiations, .asmdef, IL2CPP/Mono and package SHA; isolate minimal case.",
+      "official_docs": [
+        "systems-and-modules/remote-procedure-call-rpc/generic-rpc.md",
+        "systems-and-modules/remote-procedure-call-rpc/awaitable-rpc.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "RPC_BATCH_ORDER",
+      "title": "RPCs hors ordre/host loopback",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.20.0",
+      "search_terms": [
+        "rpc order",
+        "rpc ordering",
+        "bufferlast per target",
+        "host loopback",
+        "rpc delivered before spawn"
+      ],
+      "historical_hypothesis": "Historical fixes cover RPC batching/ordering and host loopback in 1.20.0. Current case needs packet/observer evidence.",
+      "verify": "Check transport channel, target observer, object spawned at send, per-target buffering, Unity runtime log and release source.",
+      "official_docs": [
+        "systems-and-modules/remote-procedure-call-rpc/README.md",
+        "systems-and-modules/network-manager/README.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "NETRIGIDBODY_PARENT_TELEPORT",
+      "title": "Rigidbody et Transform jitter lors du parenting/teleport",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.20.0",
+      "search_terms": [
+        "rigidbody teleport",
+        "networkrigidbody parent",
+        "parent rotation jitter",
+        "soft parent desync"
+      ],
+      "historical_hypothesis": "1.20.0 changelog includes parenting, teleport and handoff corrections for NetworkRigidbody/Transform.",
+      "verify": "Check authority, parent reference, interpolation, teleport API, physics double-writer and 2D/3D; compare clean spawn.",
+      "official_docs": [
+        "plug-n-play-components/network-rigidbody.md",
+        "plug-n-play-components/network-transform.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "NETWORK_MODULE_POOL_RECONNECT",
+      "title": "SyncVar/collections divergent au reconnect/pooling",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.20.0",
+      "search_terms": [
+        "syncvar reconnect",
+        "synclist pooling",
+        "owner transfer syncvar",
+        "pooled syncvar old value"
+      ],
+      "historical_hypothesis": "1.20.0 notes resolved issues across reconnect, pooling, ownership change and dedicated server. New problems need trace.",
+      "verify": "Check OnPoolReset, initial snapshot, serialization type, ownerOnly and ownership transfer; test two lifetimes of same pooled instance.",
+      "official_docs": [
+        "systems-and-modules/network-identity/pooling.md",
+        "systems-and-modules/network-modules/sync-types/syncvar.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "PACKET_MTU_FRAGMENT",
+      "title": "Paquets Unreliable fragmentés/perdus",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.20.0",
+      "search_terms": [
+        "mtu fragment",
+        "oversized unreliable",
+        "fragment corrupted",
+        "fragment lost",
+        "packet fragmentation"
+      ],
+      "historical_hypothesis": "1.20.0 included improvements to fragmentation and MTU handling; delivery can still fail normally for unreliable packets.",
+      "verify": "Inspect transport MTU, fragmentation policy, channel, Bandwidth Profiler drop reason, payload size, and corruption vs normal loss.",
+      "official_docs": [
+        "systems-and-modules/network-manager/README.md",
+        "systems-and-modules/bandwidth-profiler.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "NETASSETS_ADDRESSABLES",
+      "title": "Addressables et network assets au late join",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.20.0",
+      "search_terms": [
+        "addressables late join",
+        "asset not found after scene load",
+        "prefab missing network assets",
+        "addressable spawn"
+      ],
+      "historical_hypothesis": "1.20.0 changelog includes asset/scene/Addressables fixes; current failures may involve scope and registry.",
+      "verify": "Check global vs scene registries, PrefabProvider, Addressables loaded, scene identity mapping, client build assets and loading order.",
+      "official_docs": [
+        "systems-and-modules/addressables/addressable-spawning-and-despawning.md",
+        "systems-and-modules/network-manager/scene-scoped-prefabs-and-assets.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "IL2CPP_PRODUCTION",
+      "title": "IL2CPP/build/stripping plantage",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.19.1",
+      "search_terms": [
+        "il2cpp error",
+        "server stripping error",
+        "build crash production",
+        "code stripping build"
+      ],
+      "historical_hypothesis": "Historical fixes in 1.19.1 for IL2CPP/build/platform; a new failure still needs exact compiler and assembly evidence.",
+      "verify": "Record Unity version, target, stripping mode, Scripting Backend, link.xml, asmdef and full build log; compare Editor vs build.",
+      "official_docs": [
+        "systems-and-modules/code-stripping.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "PREDICTION_ROLLBACK_LATE_JOIN",
+      "title": "Prediction late join, pool or input replay divergence",
+      "classification": "historical_fixed",
+      "claimed_fixed_in": "1.3.3",
+      "search_terms": [
+        "purrdiction rollback",
+        "predicted pool",
+        "predicted late join",
+        "prediction desync",
+        "predicted input leak"
+      ],
+      "historical_hypothesis": "Archive PurrDiction 1.2.3/1.3.3 changelogs cover input disposal, hierarchy, replays and late join. Do not compare against core version.",
+      "verify": "Identify PurrDiction version separately; snapshot state, input, predicted hierarchy, policy, pools, isVerifiedView and tick delta.",
+      "official_docs": [
+        "client-side-prediction/best-practices.md",
+        "client-side-prediction/flow.md"
+      ],
+      "historical_source": "docs/changelogs/versions.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Version is for PurrDiction, NOT PurrNet core; time window spans multiple releases; 1.3.3 is latest milestone named in this archived summary."
+    },
+    {
+      "id": "STEAM_CS1061",
+      "title": "SteamWorks CS1061 après import",
+      "classification": "historical_workaround",
+      "claimed_fixed_in": null,
+      "search_terms": [
+        "steamworks cs1061",
+        "steamworks net compile",
+        "steam cs1061",
+        "steam error"
+      ],
+      "historical_hypothesis": "Archive suggests restarting Unity after adding Steamworks; that may only clear stale compilation/package state.",
+      "verify": "Inspect real missing member/type, installed Steamworks.NET version, .asmdef and compile errors; restart only after recording logs.",
+      "official_docs": [
+        "systems-and-modules/transports/steam-transport.md"
+      ],
+      "historical_source": "docs/FAQ.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/FAQ.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "UPM_GIT_NOT_FOUND",
+      "title": "Unity ne trouve pas git",
+      "classification": "historical_workaround",
+      "claimed_fixed_in": null,
+      "search_terms": [
+        "no git executable",
+        "git not found",
+        "unity git missing",
+        "unity package git error"
+      ],
+      "historical_hypothesis": "Archive recommends installing Git and restarting Editor/Hub; local environment/configuration issue not necessarily PurrNet.",
+      "verify": "Run git --version in same shell as Unity, check executable PATH and restart Hub; keep UPM error log.",
+      "official_docs": [
+        "getting-started/installation-setup.md"
+      ],
+      "historical_source": "docs/FAQ.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/FAQ.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "DISSONANCE_NO_INTEGRATION",
+      "title": "Ancienne affirmation: pas d’intégration Dissonance",
+      "classification": "stale_guidance",
+      "claimed_fixed_in": null,
+      "search_terms": [
+        "dissonance missing",
+        "voice purrnet integration",
+        "dissonance pas integration"
+      ],
+      "historical_hypothesis": "Historical FAQ says integration absent, but current official documentation contains Dissonance integration instructions.",
+      "verify": "Prefer current docs and repository for integration; verify installed addon, Dissonance and transport.",
+      "official_docs": [
+        "integrations/dissonance.md"
+      ],
+      "historical_source": "docs/FAQ.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/FAQ.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "CONTRADICTED by PurrDocs/main and official packages listing; never repeat historical negative claim as a current fact."
+    },
+    {
+      "id": "TRANSFORM_NOT_SERIALIZABLE",
+      "title": "Ancienne règle absolue sur Transform/GameObject",
+      "classification": "stale_guidance",
+      "claimed_fixed_in": null,
+      "search_terms": [
+        "transform cannot serialize",
+        "gameobject not serializable",
+        "transform rpc null",
+        "sync list gameobject"
+      ],
+      "historical_hypothesis": "Archive says Transform/GameObject never serialize, but modern PurrNet supports object/transform packers under specific registration/spawn conditions.",
+      "verify": "Check actual type and whether its NetworkIdentity is spawned/registered/visible; when in predicted STATE use PredictedObjectID, for deferred classic references evaluate SyncLazyRef.",
+      "official_docs": [
+        "systems-and-modules/bitpacker-serialization/networking-custom-classes-structs-and-types.md",
+        "systems-and-modules/network-modules/sync-types/synclazyref.md"
+      ],
+      "historical_source": "docs/FAQ.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/FAQ.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Older blanket claims are overbroad; some non-networked Transform references still serialize as null. Verify exact installed packer and context."
+    },
+    {
+      "id": "LEGACY_SCENE_EVENT",
+      "title": "Ancien onPlayerJoinedScene utilisé comme signal prêt",
+      "classification": "stale_guidance",
+      "claimed_fixed_in": null,
+      "search_terms": [
+        "onplayerjoinedscene",
+        "onplayerdisconnected",
+        "player entered scene",
+        "scene player event"
+      ],
+      "historical_hypothesis": "Archived FAQ proposes onPlayerJoinedScene for readiness and onPlayerDisconnected; current docs distinguish membership from scene loaded, and show onPlayerLeft.",
+      "verify": "For ready-to-spawn use onPlayerLoadedScene; for leave use onPlayerLeft; distinguish membership vs completed loading; verify APIs.",
+      "official_docs": [
+        "systems-and-modules/network-manager/connection-and-player-events.md"
+      ],
+      "historical_source": "docs/FAQ.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/FAQ.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "The older callback names may still exist for other semantics; do not claim they never existed."
+    },
+    {
+      "id": "LEGACY_LATEST",
+      "title": "Ancien latest/stable v1.20.0 et vieux dépôt BlenMiner",
+      "classification": "stale_guidance",
+      "claimed_fixed_in": null,
+      "search_terms": [
+        "blenminer purrnet",
+        "latest 1.20.0",
+        "purrnet current version",
+        "upgrade purrnet latest"
+      ],
+      "historical_hypothesis": "Archive index calls v1.20.0 latest, relative to Aug 2026; not valid for contemporary installs.",
+      "verify": "Inspect lock SHA and installed package.json, compare official PurrNet/PurrNet release package; do not auto-upgrade or invent version.",
+      "official_docs": [
+        "getting-started/installation-setup.md"
+      ],
+      "historical_source": "docs/CONTEXT_REFERENCE.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/CONTEXT_REFERENCE.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    },
+    {
+      "id": "PURRTRANSPORT_PRODUCTION",
+      "title": "Ancien avertissement relay PurrTransport dev-only",
+      "classification": "stale_guidance",
+      "claimed_fixed_in": null,
+      "search_terms": [
+        "purrtransport production",
+        "purrtransport dev only",
+        "purrtransport relay free",
+        "purrtransport unsafe"
+      ],
+      "historical_hypothesis": "Archived support advice described its free relay in 2024/25 as development only; this is deployment and service-policy dependent.",
+      "verify": "Check official current PurrTransport documentation, relay terms, capacity, deployment architecture and latest package.",
+      "official_docs": [
+        "systems-and-modules/transports/purr-transport.md"
+      ],
+      "historical_source": "docs/FAQ.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/FAQ.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Never generalize a historical service limitation to every present PurrTransport topology."
+    },
+    {
+      "id": "SCENE_PERSISTENT_CHAT",
+      "title": "Chat entre serveurs non connectés",
+      "classification": "current_pattern",
+      "claimed_fixed_in": null,
+      "search_terms": [
+        "cross server chat",
+        "global chat between servers",
+        "chat inter serveur"
+      ],
+      "historical_hypothesis": "Independent PurrNet servers cannot receive each other’s ordinary object RPCs directly without a messaging bridge.",
+      "verify": "Design authenticated backend/pubsub, moderation, delivery and persistence separately from per-match networking.",
+      "official_docs": [
+        "systems-and-modules/broadcast.md"
+      ],
+      "historical_source": "docs/FAQ.md",
+      "historical_url": "https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/FAQ.md",
+      "source_revision": "e6140a571228044fe670b500e245f6bb370b2e06",
+      "note": "Archived incident: the claimed patch/version is historical evidence, not proof of current regression or a mandatory upgrade."
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+[
+  {
+    "query": "Sur mon projet Unity avec dev.purrnet.purrnet, corrige cette SyncVar<int> qui ne réplique rien.",
+    "expect": "purrnet-expert"
+  },
+  {
+    "query": "Unity PurrNet : NetworkBehaviour OnSpawned appelé deux fois quand je host.",
+    "expect": "purrnet-expert"
+  },
+  {
+    "query": "Implémente un inventaire server-authoritative pour PurrNet, y compris l'inspector.",
+    "expect": "purrnet-expert"
+  },
+  {
+    "query": "Migrer mes Command de Mirror vers les ServerRpc PurrNet.",
+    "expect": "purrnet-expert"
+  },
+  {
+    "query": "PurrDiction : mon client fait un rollback infini au déplacement.",
+    "expect": "purrnet-expert"
+  },
+  {
+    "query": "Build mon serveur PurrNet sur Edgegap avec matchmaker et Find Match.",
+    "expect": "edgegap-purrnet-if-installed"
+  },
+  {
+    "query": "Comment configurer une partie FishNet avec Tugboat ?",
+    "expect": null
+  },
+  {
+    "query": "Propose moi un joli menu dans Unity sans code multijoueur.",
+    "expect": null
+  }
+]

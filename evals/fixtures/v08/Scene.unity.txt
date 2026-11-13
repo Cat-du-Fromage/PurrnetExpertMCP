@@ -1,0 +1,6 @@
+%YAML 1.1
+--- !u!1 &1234
+GameObject:
+  m_Name: PurrNet NetworkManager
+  startServerFlags: 7
+  startClientFlags: 3

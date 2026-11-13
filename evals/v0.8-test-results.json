@@ -1,0 +1,46 @@
+{
+  "kind": "local_python_tests_only",
+  "results": [
+    {
+      "script": "test_scripts.py",
+      "tests": 4,
+      "exit": 0,
+      "summary": "SkillScriptsTests.test_offline_git_clone_sync_indexes_all_pages_not_allowlist) ... ok\ntest_summary_broken_path_fails_coverage (__main__.SkillScriptsTests.test_summary_broken_path_fails_coverage) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.302s\n\nOK\n"
+    },
+    {
+      "script": "test_v04.py",
+      "tests": 21,
+      "exit": 0,
+      "summary": "ulate (__main__.V04Tests.test_rpc_called_in_simulate) ... ok\ntest_semver_basic (__main__.V04Tests.test_semver_basic) ... ok\ntest_system_rng_is_found (__main__.V04Tests.test_system_rng_is_found) ... ok\n\n----------------------------------------------------------------------\nRan 21 tests in 0.053s\n\nOK\n"
+    },
+    {
+      "script": "test_v05.py",
+      "tests": 22,
+      "exit": 0,
+      "summary": "ion_page_excluded_exit) ... ok\ntest_version_unknown_exit (__main__.V05Tests.test_version_unknown_exit) ... ok\ntest_voice_does_not_force_lobby (__main__.V05Tests.test_voice_does_not_force_lobby) ... ok\n\n----------------------------------------------------------------------\nRan 22 tests in 6.574s\n\nOK\n"
+    },
+    {
+      "script": "test_v06.py",
+      "tests": 9,
+      "exit": 0,
+      "summary": "ng_skill) ... ok\ntest_skill_metadata_conforms (__main__.ActivationTests.test_skill_metadata_conforms) ... ok\ntest_transparent_test_limits (__main__.ActivationTests.test_transparent_test_limits) ... ok\n\n----------------------------------------------------------------------\nRan 9 tests in 10.727s\n\nOK\n"
+    },
+    {
+      "script": "test_v07.py",
+      "tests": 12,
+      "exit": 0,
+      "summary": "st_stale_and_expected_behavior_not_reported_as_patch) ... ok\ntest_version_gate_does_not_elevate_old_legacy_claims (__main__.StrayRegression.test_version_gate_does_not_elevate_old_legacy_claims) ... ok\n\n----------------------------------------------------------------------\nRan 12 tests in 0.199s\n\nOK\n"
+    },
+    {
+      "script": "test_v08.py",
+      "tests": 21,
+      "exit": 0,
+      "summary": ".....................\n----------------------------------------------------------------------\nRan 21 tests in 3.041s\n\nOK\n"
+    }
+  ],
+  "validate_skill": {
+    "returncode": 0,
+    "stdout": "OK: 120 required files, 28 parsable Python files, frontmatter, JSON evaluations and BP-01..BP-10.\nDISCLAIMER: No Unity compilation, multiplayer E2E, or live documentation sync was executed."
+  },
+  "note": "No Unity, agent activation or Edgegap deployment was tested."
+}

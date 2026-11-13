@@ -1,0 +1,440 @@
+[
+  {
+    "query": "Aide-moi avec PurrNet dans Unity",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "PurrDiction rollback not working",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "PurrLobby CreateLobby cannot join",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "PurrVoice mute on mobile",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "SyncBigData upload images",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "PredictedHierarchy Delete gets rolled back",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "How to add PredictedModule?",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "dev.purrnet.purrnet package build error",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "PurrTransport relay host",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "NetworkIdentity PurrNet observer rules",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "Pourquoi mes RPC PurrNet ne fonctionnent pas ?",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "PurrNet NetworkTransform jitter",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "Sérialiser des types avec PurrNet",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "PurrDiction PredictedIdentity PlayerState",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "PurrNet steam network lobby",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "migration de Mirror vers PurrNet",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "purrnet-expert validate code",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "Mon joueur tremble quand je le vois sur le deuxième PC",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "My remote player jitters whenever he jumps",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Les tirs ne se synchronisent pas entre les clients",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "My host works but the client build shows an empty world",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "How to sync health across two clients?",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "L’inventaire des joueurs est différent côté client",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Why does the remote rigidbody teleport?",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Add lobby and matchmaking to our Unity co-op game",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Après un reconnect les objets sont en double",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Client-side movement has rubber banding",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Le joueur qui rejoint en retard ne voit pas le boss",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Owner can cheat with impossible speed",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Need a dedicated server for the co-op mode",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "How to synchronize state machine animations over the network?",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "J’ai des desync en cas de packet loss",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Build for WebGL cannot connect to UDP server",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Change owner during gameplay and keep inventory private",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "RPC called twice on host",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Configure server authentication for our multiplayer",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Le spawn de projectile ne marche pas chez les autres",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Pool network objects and reuse them on reconnect",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Simulation rollback causes audio to replay",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Client scene loading hangs in multiplayer",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Connection state says Disconnected immediately after StartClient",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Aide-moi à écrire un shader de lave Unity",
+    "project_is_purrnet": false,
+    "expected": false,
+    "category": "negative"
+  },
+  {
+    "query": "Créer un menu UI purement local",
+    "project_is_purrnet": false,
+    "expected": false,
+    "category": "negative"
+  },
+  {
+    "query": "Make a single player inventory",
+    "project_is_purrnet": false,
+    "expected": false,
+    "category": "negative"
+  },
+  {
+    "query": "Write a camera cutscene",
+    "project_is_purrnet": false,
+    "expected": false,
+    "category": "negative"
+  },
+  {
+    "query": "Render terrain foliage",
+    "project_is_purrnet": false,
+    "expected": false,
+    "category": "negative"
+  },
+  {
+    "query": "How do I migrate from Unity to Unreal Engine?",
+    "project_is_purrnet": false,
+    "expected": false,
+    "category": "negative"
+  },
+  {
+    "query": "FishNet Tugboat dedicated server, no PurrNet",
+    "project_is_purrnet": false,
+    "expected": false,
+    "category": "negative"
+  },
+  {
+    "query": "Mirror networking NetworkTransform smoothing",
+    "project_is_purrnet": false,
+    "expected": false,
+    "category": "negative"
+  },
+  {
+    "query": "How to use Unity Netcode for GameObjects?",
+    "project_is_purrnet": false,
+    "expected": false,
+    "category": "negative"
+  },
+  {
+    "query": "Photon Fusion client-side prediction",
+    "project_is_purrnet": false,
+    "expected": false,
+    "category": "negative"
+  },
+  {
+    "query": "Dockerize my Flask web app",
+    "project_is_purrnet": false,
+    "expected": false,
+    "category": "negative"
+  },
+  {
+    "query": "Make a C# sorting utility",
+    "project_is_purrnet": false,
+    "expected": false,
+    "category": "negative"
+  },
+  {
+    "query": "Write an email to my teammate",
+    "project_is_purrnet": false,
+    "expected": false,
+    "category": "negative"
+  },
+  {
+    "query": "Best restaurants in Zürich",
+    "project_is_purrnet": false,
+    "expected": false,
+    "category": "negative"
+  },
+  {
+    "query": "Find the current EUR/USD rate",
+    "project_is_purrnet": false,
+    "expected": false,
+    "category": "negative"
+  },
+  {
+    "query": "Fix my C# editor window without networking",
+    "project_is_purrnet": false,
+    "expected": false,
+    "category": "negative"
+  },
+  {
+    "query": "Make an offline HUD for my local single-player menu",
+    "project_is_purrnet": true,
+    "expected": false,
+    "category": "negative-project"
+  },
+  {
+    "query": "SyncVar null exception after respawn",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "OnPlayerLoadedScene does not fire",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "GetClientPlayload override causes compile error",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "OnPlayerJoinedScene vs OnPlayerLoadedScene ?",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "NetworkTransform freezes on remote client",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "PurrNet bufferLast RPC never reaches late joining player",
+    "project_is_purrnet": false,
+    "expected": true,
+    "category": "explicit"
+  },
+  {
+    "query": "My player duplicates in host when ParrelSync clone connects",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Après connexion ma liste est vide chez le nouveau joueur",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Le callback OnSpawned est appelé deux fois",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Mon SteamWorks me donne erreur CS1061 sur projet réseau Unity",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Mon build IL2CPP tombe en panne mais pas Editor",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Mon GameObject n est pas visible après chargement scène",
+    "project_is_purrnet": true,
+    "expected": true,
+    "category": "implicit-project"
+  },
+  {
+    "query": "Comment écrire un shader de feux pour Unity ?",
+    "project_is_purrnet": false,
+    "expected": false,
+    "category": "negative"
+  },
+  {
+    "query": "Mon composant FishNet NetworkTransform lag",
+    "project_is_purrnet": false,
+    "expected": false,
+    "category": "negative"
+  },
+  {
+    "query": "Mirror networking NetworkTransform smoothing",
+    "project_is_purrnet": false,
+    "expected": false,
+    "category": "negative"
+  }
+]

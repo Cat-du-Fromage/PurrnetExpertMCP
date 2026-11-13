@@ -1,0 +1,81 @@
+[
+  {
+    "id": "syncvar-no-update",
+    "prompt": "Dans Unity PurrNet ma SyncVar<int> s'actualise côté host mais pas sur l'autre client. Examine la cause et corrige.",
+    "assertions": [
+      "Inspecte package et network rules avant de coder",
+      "Diagnostique writer authority, observers, registration, spawn et late join",
+      "Ne confond pas propriétés de NGO NetworkVariable avec SyncVar",
+      "Distingue vérification de code et test Unity"
+    ]
+  },
+  {
+    "id": "rpc-ownership",
+    "prompt": "Le client non owner doit pouvoir interagir avec une porte PurrNet sans tricher.",
+    "assertions": [
+      "Vérifie RequireOwnership selon version exacte",
+      "Valide distance et permission sur le serveur",
+      "N'accepte pas un état final arbitraire envoyé par client",
+      "Donne config Network Rules et test non-owner"
+    ]
+  },
+  {
+    "id": "host-duplicates",
+    "prompt": "Mon OnSpawned initialise deux fois la manche sur l'host.",
+    "assertions": [
+      "Explique double rôle serveur/client en host",
+      "Garde création état sur branche asServer",
+      "Évite de s'abonner deux fois à des events",
+      "Teste host et dedicated"
+    ]
+  },
+  {
+    "id": "empty-world-dedicated",
+    "prompt": "En host les ressources spawnent, en dedicated la scène reste vide.",
+    "assertions": [
+      "Cherche ObserversRpc d'initialisation serveur",
+      "Envisage runLocally ciblé ou séparation logique serveur",
+      "Ne prétend pas qu'un RPC client s'exécute sur dedicated",
+      "Teste monde serveur avant matchmaking"
+    ]
+  },
+  {
+    "id": "startclient-loop",
+    "prompt": "StartClient() appelé, état Disconnected immédiatement, mon code abandonne.",
+    "assertions": [
+      "Comprend la transition asynchrone",
+      "N'annule pas au premier Disconnected",
+      "Vérifie transport / port / logs",
+      "Signale le résultat de test réellement effectué"
+    ]
+  },
+  {
+    "id": "legacy-stray",
+    "prompt": "La FAQ dit qu'il n'y a pas Dissonance. Est-ce toujours vrai ?",
+    "assertions": [
+      "Traite Stray comme archive historique",
+      "Vérifie dépôts officiels et intégration docs plus récents",
+      "N'affirme pas l'installation ou la compatibilité sans code local"
+    ]
+  },
+  {
+    "id": "predicted-movement",
+    "prompt": "Fais un character controller prédictif PurrDiction pour Unity.",
+    "assertions": [
+      "Vérifie addon PurrDiction installé",
+      "Vérifie hooks input/state/view au lieu d'inventer",
+      "Teste reconciliation et latence simulée",
+      "Sépare simulation et effets visuels"
+    ]
+  },
+  {
+    "id": "edgegap-handoff",
+    "prompt": "Ajoute dedicated Edgegap et Find Match à mon projet PurrNet.",
+    "assertions": [
+      "Route vers edgegap-purrnet si installé",
+      "N'utilise pas le port 7777 comme valeur PurrNet universelle",
+      "Conserve secrets hors client",
+      "Différencie validité local, Docker, cloud et matchmaker"
+    ]
+  }
+]

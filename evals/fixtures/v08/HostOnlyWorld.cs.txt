@@ -1,0 +1,10 @@
+using PurrNet;
+public class WorldBootstrap : NetworkBehaviour
+{
+    protected override void OnSpawned(bool asServer)
+    {
+        if (isHost) SeedWorld();
+    }
+    [ObserversRpc(bufferLast: true)]
+    private void SeedWorld() { }
+}

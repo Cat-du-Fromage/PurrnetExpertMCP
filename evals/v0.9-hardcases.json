@@ -1,0 +1,97 @@
+{
+  "version": "0.9.0",
+  "evidence_note": "Scenarios for future real-agent/Unity evaluation; existence and routing are statically tested, behavior is not.",
+  "cases": [
+    {
+      "id": "v09-spawn-client-untrusted",
+      "prompt": "Dans notre projet Unity PurrNet, les clients spawnent des pièges sans aucune limite. Valide leurs spawn sur le serveur et refuse les prefabs interdits.",
+      "required_route": "client-spawn-validation",
+      "required_reference": "references/core/spawn-security-and-persistence.md",
+      "assertions": ["Inspect onClientSpawnValidate and TryGetRawPrefab on installed version", "Reject unauthorized prefab, enforce quota and permissions on server", "Handle partial SpawnPacket", "Test rejection on remote client"]
+    },
+    {
+      "id": "v09-ddol-not-spawned",
+      "prompt": "Un NetworkIdentity persistant DontDestroyOnLoad reste Not Spawned après changement de scène.",
+      "required_route": "persistent-ddol",
+      "required_reference": "references/core/spawn-security-and-persistence.md",
+      "assertions": ["Check timing before network start", "Check alwaysIncludeDontDestroyOnLoadScene rule and NetworkManager scene", "Test additive scenes and deduplication"]
+    },
+    {
+      "id": "v09-lazy-cross-scene",
+      "prompt": "Une référence SyncLazyRef vers un autre niveau n'est pas résolue avant chargement.",
+      "required_route": "playeridentity-and-lazyref",
+      "required_reference": "references/core/player-identity-and-lazy-refs.md",
+      "assertions": ["Explain GlobalNetworkID and deferred resolution", "Check target spawned on assignment", "Handle cleared/re-resolved on unload"]
+    },
+    {
+      "id": "v09-player-registry",
+      "prompt": "Comment retrouver tous les PlayerIdentity et TryGetPlayer à partir du PlayerID?",
+      "required_route": "playeridentity-and-lazyref",
+      "required_reference": "references/core/player-identity-and-lazy-refs.md",
+      "assertions": ["Check PlayerIdentity<T> API installed", "No self-invented singleton player registry", "Account for auth/scene ready and late join"]
+    },
+    {
+      "id": "v09-visibility-overrides",
+      "prompt": "Network Visibility override ne masque pas tout mon prefab, certains composants restent visibles.",
+      "required_route": "visibility-priority",
+      "required_reference": "references/core/visibility-priority.md",
+      "assertions": ["Observers are per NetworkIdentity component", "Order of override in inspector matters", "Whitelists, blacklists, parent and owner priority"]
+    },
+    {
+      "id": "v09-colliderlag-classic",
+      "prompt": "Je veux du ColliderRollback pour valider mes raycasts sur le serveur PurrNet sans PurrDiction.",
+      "required_route": "collider-rollback-classic",
+      "required_reference": "references/core/collider-rollback-classic.md",
+      "assertions": ["Prefer classic ColliderRollback over PurrDiction lagCompensation", "Check authoritative server and tick window", "Do not trust client's hit declaration"]
+    },
+    {
+      "id": "v09-predicted-mirror-new",
+      "prompt": "PurrDiction 1.4.0 PredictedIdentitySpawner nécessaire pour mes NetworkIdentity mirrored ?",
+      "required_route": "predicted-mirroring",
+      "required_reference": "references/prediction/mirror-and-visibility.md",
+      "assertions": [">=1.4.0 uses automatic mirroring", "Do not manually spawn/despawn mirrored identities", "Prediction controls owner and observers"]
+    },
+    {
+      "id": "v09-predicted-mirror-old",
+      "prompt": "Nous utilisons PurrDiction 1.3 et PredictedIdentitySpawner, comment migrer ?",
+      "required_route": "predicted-mirroring",
+      "required_reference": "references/prediction/mirror-and-visibility.md",
+      "assertions": ["Detect separate PurrDiction version before changes", "Explain old component vs automatic >=1.4", "Verify installed source not current docs blindly"]
+    },
+    {
+      "id": "v09-predicted-fog",
+      "prompt": "Implémenter HideFrom ShowTo pour visibilité prédite, sans Network Visibility classique.",
+      "required_route": "predicted-visibility-edgecases",
+      "required_reference": "references/prediction/mirror-and-visibility.md",
+      "assertions": ["Server-only predicted visibility", "Hide whole root, ownership and ancestor exceptions", "Scene predicted objects not affected in same way"]
+    },
+    {
+      "id": "v09-input-edges",
+      "prompt": "Le saut est perdu entre deux ticks, je lis GetKeyDown dans GetFinalInput PurrDiction.",
+      "required_route": "predicted-one-shot-input",
+      "required_reference": "references/prediction/one-shot-input-and-events.md",
+      "assertions": ["Use UpdateInput for one-shot edges", "GetFinalInput for continuous axes", "ModifyExtrapolatedInput disables repeat", "No input handler read inside Simulate"]
+    },
+    {
+      "id": "v09-ordinary-multiplayer-no-purrnet",
+      "prompt": "Développe un contrôleur solo Unity hors ligne.",
+      "required_route": null,
+      "required_reference": null,
+      "assertions": ["Do not force unrelated PurrNet guidance without project context"]
+    },
+    {
+      "id": "v09-existing-mirror-fishnet",
+      "prompt": "Notre projet utilise uniquement FishNet et Mirror, pas PurrNet : configure NetworkTransform.",
+      "required_route": null,
+      "required_reference": null,
+      "assertions": ["Do not hijack FishNet/Mirror-only work"]
+    },
+    {
+      "id": "v09-skill-auto-trigger",
+      "prompt": "Le serveur dédié de mon jeu PurrNet démarre mais le monde est vide, alors qu'en host ça marche.",
+      "required_route": "workflow-dedicated-readiness",
+      "required_reference": "references/workflows/dedicated.md",
+      "assertions": ["Skill auto-selection must be tested with actual agent", "Review ObserversRpc server mutations and runLocally, not only connection status"]
+    }
+  ]
+}

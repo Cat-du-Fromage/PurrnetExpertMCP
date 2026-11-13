@@ -1,45 +1,45 @@
-# Déclenchement automatique : contrat et limites
+# Automatic triggering: contract and limits
 
-**Le modèle choisit une skill d'après son `name` et surtout son `description`** (frontmatter). Le routeur `scripts/route_docs.py` est exécuté **après** activation et n'influence pas directement cette décision. Aucun texte dans `SKILL.md` ne garantit que tous les modèles chargeront spontanément cette skill.
+**The model chooses a skill based on its `name` and especially its `description`** (frontmatter). The `scripts/route_docs.py` router is executed **after** activation and does not directly influence this decision. No text in `SKILL.md` guarantees that all models will spontaneously load this skill.
 
-## Déclenchement souhaité
+## Desired trigger
 
-1. **Mention explicite** : PurrNet, PurrDiction, PurrLobby, PurrVoice, `NetworkTransform`, `NetworkBehaviour`, `SyncVar`, `ServerRpc`, `PredictionManager` et autres symboles officiels ; génération, correction, documentation, review, erreur de compilation.
-2. **Contexte implicite dans un projet reconnu PurrNet** : jeu multijoueur, joueur distant qui jitter, balles non synchronisées, late join, owner vs server, scènes qui diffèrent, inventaire entre clients, serveur dédié, matchmaking, désync, lag, packet loss.
-3. **Fichiers** : `Packages/manifest.json` déclare `dev.purrnet.purrnet` / `dev.purrnet.purrdiction`, code `using PurrNet;`, sous-classes `NetworkBehaviour` / `PredictedIdentity`; une tâche qui modifie ces fichiers et leurs données réseau.
-4. **Coopération** : PurrNet gameplay + Edgegap déploiement -> utiliser les deux skills si installées ; ne pas remplacer `edgegap-purrnet` sur la gestion Edgegap.
+1. **Explicit statement**: PurrNet, PurrDiction, PurrLobby, PurrVoice, `NetworkTransform`, `NetworkBehaviour`, `SyncVar`, `ServerRpc`, `PredictionManager` and other official symbols; generation, correction, documentation, review, compilation error.
+2. **Implicit context in a recognized project PurrNet**: multiplayer game, remote player who jitters, unsynchronized balls, late join, owner vs server, different scenes, client inventory, dedicated server, matchmaking, desync, lag, packaget loss.
+3. **Files**: `Packages/manifest.json` declares `dev.purrnet.purrnet` / `dev.purrnet.purrdiction`, code `using PurrNet;`, subclasses `NetworkBehaviour` / `PredictedIdentity`; a task that modifies these files and their network data.
+4. **Cooperation**: PurrNet gameplay + Edgegap deployment -> use both skills if installed; do not replace `edgegap-purrnet` on Edgegap management.
 
-## Anti-triggers (négatifs)
+## Anti-triggers (negative)
 
-Ne pas activer juste parce que l'utilisateur dit Unity, C#, animation d'une cinématique locale, dessin de shader, UI non synchronisée, sauvegarde solo, caméra offline, ou jeu multijoueur **FishNet/Mirror/NGO** sans PurrNet.
+Do not activate just because the user says Unity, C#, animation of a local kinematic, shadow drawing, unsynchronized UI, solo backup, offline camera, or multiplayer game **FishNet/Mirror/NGO** without PurrNet.
 
-## Déploiement dans les agents
+## Deployment of staff
 
-- Codex : installer `purrnet-expert/` dans `.agents/skills/` (répertoire du projet) ; la description sert à l'activation implicite. `AGENTS.md` optionnel renforce les tâches sous-entendues.
-- Claude Code : installer `purrnet-expert/` dans `.claude/skills/` ; conserver le déclenchement par le modèle activé (ne pas définir `disable-model-invocation: true`). `CLAUDE.md` optionnel donne le contexte du projet.
-- Utiliser `scripts/install_activation.py <projet> --target both --apply` **uniquement** si les deux installations existent. Sans `--apply`, le script est en lecture seule. `--remove --apply` retire uniquement les blocs balisés. Les autres lignes des fichiers existants restent intactes.
-- Ce hook est **une instruction textuelle** et **pas** un système déterministe d'événements. Les tests hors modèle ci-dessous valident les métadonnées, les chemins et des routes, pas la probabilité réelle de déclenchement chez Codex/Claude.
+- Codex: Install `purrnet-expert/` in `.agents/skills/` (project directory); description is used for implicit activation. `AGENTS.md` optional strengthens the underlying tasks.
+- Claude Code : install `purrnet-expert/` in `.claude/skills/` ; keep the trigger by the enabled model (do not set `disable-model-invocation: true`). `CLAUDE.md` optional gives the context of the project.
+- Use `scripts/install_activation.py <PROJECT> --target both --apply` **only** if both installations exist. Without `--apply`, the script is read-only. `--remove --apply` removes only marked blocks. Other lines of existing files remain intact.
+- This hook is **a textual instruction** and **not** a deterministic event system. The off-model tests below validate metadata, paths and routes, not the actual probability of triggering at Codex/Claude.
 
-## Validation de l'activation sur vrais agents
+## Validation of activation on real agents
 
-Exécuter les prompts positifs et négatifs du fichier `evals/activation-cases.json` à partir de sessions fraîches de l'agent, skill visible dans son catalogue. Mesurer : `loaded` (le fichier SKILL.md a-t-il été ouvert ?), `references_read` (guides requis ?), `API_verified`, `no_wrong_activation`. Comparer avec/sans `AGENTS.md` / `CLAUDE.md`, versions de modèle, et noter les false negatives. Le script `test_v06.py` n'est qu'un **proxy déterministe** ; il ne teste pas l'activation réelle d'un LLM.
+Execute the positive and negative prompts of the `evals/activation-cases.json` file from fresh sessions of the agent, visible in its catalog. Measure: `loaded` (file SKILL.md was opened?), `references_read` (guides required?), `API_verified`, `no_wrong_activation`. Compare with/without `AGENTS.md` / `CLAUDE.md`, model versions, and note negative false. The `test_v06.py` script is only a **terministic proxy**; it does not test the actual activation of a LLM.
 
-## Format de compte rendu d'un essai réel
+## Reporting format of a real test
 
 | Champ | Valeur |
 |---|---|
 | Agent/version | ... |
-| Projet détecté comme PurrNet | oui/non |
+| Project detected as PurrNet | yes/no |
 | Prompt | ... |
-| Skill sélectionnée automatiquement | oui/non/non vérifiable |
+| Self-selected Skills | yes/no/not verifiable |
 | Routes choisies | ... |
 | Guides effectivement lus | ... |
-| Justification des erreurs | ... |
+| Justification of errors | ... |
 
-## v0.8 — Eviter la collision de skills entre PurrNet et Edgegap
+## v0.8 — Avoiding skill collision between PurrNet and Edgegap
 
-- Si la demande parle **seulement** de PurrNet `SyncVar`, ownership, prediction ou code gameplay : `purrnet-expert`, pas Edgegap.
-- Si la demande implique explicitement **Edgegap cloud** (déploiement, Docker, build app/version, matchmaker, port externe, self-stop) : `edgegap-purrnet` est l'implémenteur principal ; `purrnet-expert` reste un reviewer gameplay si nécessaire.
-- Serveur dédié **sans Edgegap** : `purrnet-expert` (préparation générique) ; ne pas inventer des dépendances Edgegap.
-- Projet uniquement Mirror/FishNet/NGO : ne pas sélectionner `purrnet-expert`, même sur Edgegap, sauf migration explicite.
-- Le diagnostic `python scripts/cross_skill_selector.py "<demande>" [--purrnet-project]` et les cas `evals/v0.8-routing.json` restent des **proxies statiques**. Les vraies activations spontanées doivent être observées dans des sessions agent.
+- If the application speaks **only** of PurrNet `SyncVar`, ownership, prediction or gameplay code: `purrnet-expert`, not Edgegap.
+- If the request explicitly involves **Edgegap cloud** (deployment, Docker, build app/version, matchmaker, external port, self-stop): `edgegap-purrnet` is the main implementer; `purrnet-expert` remains a gameplay reviewer if necessary.
+- Dedicated server **without Edgegap**: `purrnet-expert` (generic preparation); do not invent Edgegap dependencies.
+- Project only Mirror/FishNet/NGO: do not select `purrnet-expert`, even on Edgegap, unless explicitly migrated.
+- The `python scripts/cross_skill_selector.py "<demande>" [--purrnet-project]` diagnosis and the `evals/v0.8-routing.json` cases remain static **proxices**. True spontaneous activations should be observed in agent sessions.

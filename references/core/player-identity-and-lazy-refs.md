@@ -1,27 +1,27 @@
-# PlayerIdentity, SyncLazyRef, ordre des événements
+# PlayerIdentity, SyncLazyRef, order of events
 
-**Sources officielles** : `systems-and-modules/network-identity/playeridentity.md`, `systems-and-modules/network-modules/sync-types/synclazyref.md`, `systems-and-modules/network-manager/connection-and-player-events.md`.
+**Official sources**: `systems-and-modules/network-identity/playeridentity.md`, `systems-and-modules/network-modules/sync-types/synclazyref.md`, `systems-and-modules/network-manager/connection-and-player-events.md`.
 
-## Choix rapide
+## Fast pick
 
-| Besoin | Privilégier | Attention |
+| Need | Priority | Attention |
 | --- | --- | --- |
-| Retrouver la représentation d'un `PlayerID` | `PlayerIdentity<T>.TryGetPlayer` | Joueur authentifié n'implique pas forcément scène prête |
-| Retrouver le joueur local | `PlayerIdentity<T>.TryGetLocal` | Peut être indisponible avant l'attribution locale |
-| Énumérer les joueurs | `PlayerIdentity<T>.allPlayers` | Registry vivant; gérer spawn/déspawn/reconnect |
-| Référence d'identité entre scènes | `SyncLazyRef<T>` | Référence résolue plus tard, peut redevenir `null` |
-| Référence d'objet prédit | `PredictedObjectID` | Ne pas mélanger avec `SyncLazyRef` classique |
+| Find the representation of a `PlayerID` | `PlayerIdentity<T>.TryGetPlayer` | Authenticated player doesn't necessarily involve ready stage |
+| Find the local player | `PlayerIdentity<T>.TryGetLocal` | May not be available before local allocation |
+| List Players | `PlayerIdentity<T>.allPlayers` | Registry living; manage spamwn/dispawn/reconnect |
+| Identity reference between scenes | `SyncLazyRef<T>` | Reference resolved later, can become again `null` |
+| Predicted object reference | `PredictedObjectID` | Do not mix with classic `SyncLazyRef` |
 
-## Exemples ciblés (API à vérifier sur la version installée)
+## Targeted examples (API to check on the installed version)
 
 ```csharp
-// Sur une classe représentant le joueur :
+// On a class representing a player.
 public class PlayerPawn : PlayerIdentity<PlayerPawn> { }
 
-// Depuis la logique serveur, une fois le PlayerID connu :
+// In server logic after resolving the PlayerID.
 if (PlayerPawn.TryGetPlayer(playerId, out var player))
 {
-    // Utiliser player dans une logique autorisée, pas sur le client par confiance.
+    // Use player only in authorized logic. Verify permissions on the server.
 }
 ```
 
@@ -32,7 +32,7 @@ private SyncLazyRef<NetworkIdentity> _target = new();
 protected override void OnSpawned(bool asServer)
 {
     _target.onChanged += OnTargetChanged;
-    if (asServer) _target.value = targetIdentity; // Doit déjà être spawné.
+    if (asServer) _target.value = targetIdentity; // The target must already be spawned.
 }
 
 protected override void OnDespawned(bool asServer)
@@ -42,18 +42,18 @@ protected override void OnDespawned(bool asServer)
 
 private void OnTargetChanged(NetworkIdentity oldValue, NetworkIdentity newValue)
 {
-    // newValue == null : cible absente, scène non chargée ou cible despawned.
+    // A null value means the target is absent, its scene is unloaded or it has despawned.
 }
 ```
 
-Ces snippets illustrent des signatures tirées des docs ; ils nécessitent des champs définis et un contrôle dans Unity. Pour `SyncLazyRef` la référence est portée par `GlobalNetworkID` (scène + NetworkID). Le **cible doit être spawné au moment de l'assignation**, même si le destinataire peut la résoudre plus tard. Au déspawn/unload la valeur résolue peut redevenir `null`, puis se résoudre après retour.
+These snippets illustrate signatures drawn from docs; they require defined fields and control in Unity. For `SyncLazyRef` the reference is carried by `GlobalNetworkID` (Scene + NetworkID). The **target must be spawed at the time of assignment**, even if the recipient can resolve it later. At the depawn/unload the solved value can become `null` again, and then resolve after return.
 
-## Séquencement des événements
+## Sequence of events
 
-`onClientConnectionState=Connected` (transport) → authentification → `onPlayerJoined`/réception de `PlayerID` → présence dans la scène → `onPlayerLoadedScene` → observations par identité. Il ne s'agit pas d'un ordre global immuable de tous les callbacks, mais de **conditions distinctes** ; `onPlayerJoinedScene` signale l'appartenance, pas la fin du chargement. Les callbacks avec `asServer` peuvent apparaître deux fois en host. Un abonnement après l'arrivée des joueurs doit lire `networkManager.players` car les événements passés ne sont pas rejoués.
+`onClientConnectionState=Connected` (transport) → authentication → `onPlayerJoined`/reception of `PlayerID` → presence in the scene → `onPlayerLoadedScene` → observations by identity. This is not an immutable global order of all callbacks, but ** distinct conditions**; `onPlayerJoinedScene` reports belonging, not the end of loading. Callbacks with `asServer` can appear twice in host. A subscription after the arrival of players must read `networkManager.players` because past events are not replayed.
 
 ## Tests
 
-Client rejoint en retard, premier join puis reconnexion via cookie, scène chargée après l'attribution `PlayerID`, cible dans une autre scène non chargée, déchargement/rechargement de cible, transfert d'owner, host sans double initialisation.
+Client joins late, first joins then reconnects via cookie, scene loaded after attribution `PlayerID`, target in another unloaded scene, target unloading/reloading, owner transfer, host without double initialization.
 
-**Statut** : exemples illustratifs non compilés avec Unity ici.
+**status**: illustrative examples not compiled with Unity here.

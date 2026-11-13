@@ -1,36 +1,36 @@
-# Décision exacte de Network Visibility (classique)
+# Classic Network Visibility decision order
 
-**Source officielle** : `systems-and-modules/network-manager/network-visibility/README.md`, `visibility-rules.md`, `using-the-visibility.md`, `whitelist-and-blacklist.md`.
+**Official sources** include `systems-and-modules/network-manager/network-visibility/README.md`, `visibility-rules.md`, `using-the-visibility.md` and `whitelist-and-blacklist.md`.
 
-## Décision serveur (pour une identité et un joueur)
+## Server decision for one identity and one player
 
-Suivre cet ordre, **la première condition applicable l'emporte** :
+The first matching condition wins.
 
-1. Parent invisible au joueur → **masqué**.
-2. Joueur en whitelist de l'identité → **visible**.
-3. Joueur en blacklist → **masqué**.
-4. Aucun rule-set applicable, ni global ni override → **visible**.
-5. Joueur propriétaire de l'identité → **visible**.
-6. Une règle du rule-set retourne oui → **visible** ; sinon masqué. Les règles se combinent en **OU**, pas en ET.
+1. A hidden parent hides the identity.
+2. The identity's whitelist makes it visible to the player.
+3. The blacklist hides it from the player.
+4. With neither a global rule set nor an override, the identity is visible.
+5. The owner sees the identity.
+6. A rule set combines its rules with **OR**. The identity is visible if any rule allows it.
 
-Les rule-sets **vides** masquent tout ce à quoi ils s'appliquent, sous réserve des exceptions ci-dessus. Les règles ne sont pas évaluées continuellement : déclencher une réévaluation via l'API documentée lorsque l'état des joueurs ou du monde change. Vérifier `EvaluateVisibility` et le point d'appel dans le code installé.
+An empty rule set hides the identities it applies to, subject to the earlier conditions. When player or world state changes, trigger reevaluation through the documented API. Check `EvaluateVisibility` and where to call it in the installed source.
 
-## Le piège du même GameObject
+## Multiple identities on one GameObject
 
-La visibilité est suivie **par composant réseau**. Le `GameObject` subsiste tant qu'au moins une `NetworkIdentity`/un `NetworkBehaviour` est observé. Un override de visibilité placé sur le deuxième composant ne s'applique pas rétroactivement à celui du dessus dans l'Inspector. Pour un objet caché entièrement, appliquer le rule-set au premier composant concerné et contrôler les overrides descendants (`Children Inherit`).
+Visibility applies per network component. The GameObject remains while any `NetworkIdentity` or `NetworkBehaviour` is observed. A visibility override on the second component does not apply to the first one in Inspector order. To hide the entire object, apply the rule set to the first relevant component and check descendant overrides and `Children Inherit`.
 
-Ne pas confondre cet interest management avec le `ownerOnly` d'un Sync Type, ni avec `PredictedVisibility`. Une `NetworkIdentity` **miroir PurrDiction >=1.4.0** n'est pas gouvernée par ces règles classiques.
+Treat classic visibility, Sync Type `ownerOnly` and `PredictedVisibility` as separate mechanisms. For a mirrored `NetworkIdentity` in PurrDiction >=1.4.0, use the predicted visibility rules.
 
-## Scénarios à prouver
+## Cases to verify
 
-| Cas | Attendu |
+| Case | Expected behavior |
 | --- | --- |
-| Aucun rule-set | Visible selon la politique par défaut |
-| Rule-set vide, joueur non owner | Masqué |
-| Une règle autorise, deux refusent | Visible (OU) |
-| Parent masqué, enfant whitelisté | Vérifier la priorité parent : masqué |
-| Whitelist et blacklist de la même identité | Whitelist prioritaire selon README |
-| Deux composants avec overrides différents | Objet présent tant qu'un composant visible |
-| Joueur rejoint ou change de zone | Nouvelle évaluation et RPC/sync ciblés |
+| No rule set | Visible under the default policy |
+| Empty rule set and player is not the owner | Hidden |
+| One rule allows and two deny | Visible (OR) |
+| Hidden Parent and whitelisted child | Hidden by parent priority |
+| Identity whitelist and blacklist both match | Whitelist wins according to the official README |
+| Two components have different overrides | Object remains while one component is visible |
+| Player joins or changes area | Reevaluation and targeted RPC or sync |
 
-**Attention** : les exceptions liées au parent/aux observers doivent être vérifiées dans le code du package si les versions diffèrent des docs `main`.
+Check parent and observer exceptions in installed package source when it differs from the docs on `main`.

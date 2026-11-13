@@ -1,19 +1,19 @@
 # Matrice minimale de tests multijoueurs
 
-| Test | À vérifier |
+| Test | To be checked |
 | --- | --- |
-| Host seul | `OnSpawned` peut être invoqué pour les deux rôles : pas de double logique métier |
-| Deux clients + serveur dédié | Client owner/non owner, RPC envoyés à la bonne cible |
-| Client 2 rejoint tard | Spawning, état durable, visibilité et valeurs initiales corrects |
-| Déconnexion / reconnexion | Clean-up, identités et éventuelles cookies de reconnexion |
-| Client non autorisé | Impossible d'invoquer une action critique ou d'écrire un état non permis |
-| Despawn / changement de scène | Aucun objet fantôme ni événement dupliqué |
-| Build standalone | Même comportement hors Unity Editor, pas uniquement en host |
-| Latence/perte simulées | Pas d'hypothèse implicite d'ordre ou de fiabilité pour des canaux non fiables |
+| Host seul | `OnSpawned` can be invoked for both roles: no dual business logic |
+| Two clients + dedicated server | Client owner/non-owner, RPC sent to the right target |
+| Client 2 rejoint tard | Spawning, durable condition, visibility and correct initial values |
+| Logout / Reconnection | Clean-up, identities and possible reconnection cookies |
+| Unauthorised client | Unable to invoke critical action or write unauthorised state |
+| Despawn / change of scene | No ghost object or duplicate event |
+| Build standalone | Same behavior off Unity Editor, not just host |
+| Simulated latency/loss | No implicit assumption of order or reliability for unreliable channels |
 
-Toujours mentionner ce qui a été réellement testé et ce qui reste seulement
-proposé. Une compilation C# n'est pas une validation réseau.
+Always mention what has actually been tested and what remains only
+proposed. A C# compilation is not network validation.
 
-## Tests PurrDiction supplémentaires v0.3
+## Additional PurrDiction tests v0.3
 
-Pour tout `PredictedIdentity` / `PredictedModule` / rollback / prédiction, la matrice ci-dessus ne suffit pas : lire **`references/purrdiction-test-matrix.md`** (PD-01..PD-23). Rejouer les ticks, changer ownership, simuler pertes et RTT, pools et spawn/despawn, vérifier prédiction/reconciliation et mémoire, et contrôler les usages du site Web pour les versions installées.
+For all `PredictedIdentity` / `PredictedModule` / rollback / prediction, the above matrix is not enough: read **`references/purrdiction-test-matrix.md`** (PD-01..PD-23). Replay the ticks, change ownership, simulate losses and RTT, pools and spawn/despawn, check prediction/conciliation and memory, and control the use of the website for installed versions.

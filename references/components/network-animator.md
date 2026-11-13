@@ -7,16 +7,16 @@ Official: `plug-n-play-components/network-animator.md`.
 - Distinguish visual-only animations derived from synchronized state from authoritatively networked gameplay transitions. For PurrDiction, avoid classic NetworkAnimator as the source of predicted simulation; drive animator parameters via `UpdateView` from predicted view state.
 - Test 2 clients, late join for persistent parameters, event triggers while packet loss simulated, owner transfer, and ensure triggers do not repeat unexpectedly.
 
-## Exemple pédagogique (v0.6)
+## Pedagogical example (v0.6)
 
 ```csharp
 [SerializeField] private NetworkAnimator _networkAnimator;
 
 private void PlayAttackAnimation()
 {
-    // Cette méthode doit être appelée par le peer qui a l'autorité.
+    // Call this from the peer with authority.
     _networkAnimator.SetTrigger("Punch");
 }
 ```
 
-`Animator.SetTrigger("Punch")` seul n'est pas automatiquement répliqué. Le composant doit être sur le même GameObject que l'Animator et la permission d'émettre des changements dépend de son ownership/configuration. Voir également `assets/unity/ExampleNetworkAnimator.cs` (**non compilé**). Tester host, owner distant, late join et triggers rapprochés ; ne pas convertir sans raison toute animation en RPC manuel.
+`Animator.SetTrigger("Punch")` alone is not automatically replicated. The component must be on the same GameObject as the Animator and permission to issue changes depends on its ownership/configuration. See also `assets/unity/ExampleNetworkAnimator.cs` (**uncompiled**). Test host, remote owner, late join and close triggers; do not without reason convert any animation to manual RPC.

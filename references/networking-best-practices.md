@@ -1,43 +1,43 @@
-# PurrNet classique — contrat technique et anti-patterns
+# Classic PurrNet — technical and anti-pattern contract
 
-Sources vérifiées :
+Verified sources:
 - https://purrnet.dev/docs/systems-and-modules/network-modules/common-pitfalls
 - https://purrnet.dev/docs/systems-and-modules/network-manager/network-rules
 - https://purrnet.dev/docs/systems-and-modules/remote-procedure-call-rpc
 - https://purrnet.dev/docs/systems-and-modules/network-modules/sync-types/syncvar
 - https://purrnet.dev/docs/systems-and-modules/network-identity/spawning-and-despawning
 
-**Attention** : ces recommandations visent le modèle `NetworkIdentity` normal. Pour `PredictedIdentity`, lire `purrdiction-best-practices.md` avant d'utiliser un sync type ou un RPC.
+**Warning**: These recommendations are for the normal `NetworkIdentity` model. For `PredictedIdentity` read `purrdiction-best-practices.md` before using a type sync or RPC.
 
-## Modules : règles documentées obligatoires
+## Modules: mandatory documented rules
 
-1. `NetworkModule`/`SyncVar`/`SyncList`/`SyncDictionary`/etc. sont des **champs ou propriétés** de `NetworkIdentity`/`NetworkBehaviour` (ou des modules statiquement imbriqués) ; pas de `List<SyncVar<T>>`, tableaux de modules, instanciation dynamique comme technique de collection de modules.
-2. Valeur par défaut et initialisation via constructeur/déclaration ou `OnInitializeModules()` **avant attribution réseau** ; ne **jamais** remplacer un objet module après son spawn.
-3. Imbrication possible, mais **acyclique** (pas de module A→B→A). La sérialisation Inspector exige public ou `[SerializeField]` selon module.
-4. Événements `OnSpawned`, `OnOwnerChanged`, `OnDespawned` et abonnements/désabonnements respectent leur cycle ; vérifier signature exacte en package. Ne pas supposer un callback unique en host.
-5. `ownerAuth`, `ownerOnly`, intervalles, callbacks `onChanged`, sync types avancés : lire **chaque** page correspondante et ses restrictions, pas une généralisation naïve à tous les modules.
+1. `NetworkModule`/`SyncVar`/`SyncList`/`SyncDictionary`/etc. are **fields or properties** of `NetworkIdentity`/`NetworkBehaviour` (or statically interlocked modules); no `List<SyncVar<T>>`, module arrays, dynamic intanciation as a module collection technique.
+2. Set defaults in the constructor, declaration or `OnInitializeModules()` before network assignment. Keep the same module instance after spawn.
+3. Imbracation possible, but **acyclic** (no module A→B→A). Serialization Inspector requires public or `[SerializeField]` depending on module.
+4. Events `OnSpawned`, `OnOwnerChanged`, `OnDespawned` and subscriptions/unsubscribes follow their cycle; check exact package signature. Do not assume a unique host callback.
+5. `ownerAuth`, `ownerOnly`, intervals, callbacks `onChanged`, advanced sync types: read **each** corresponding page and its restrictions, not a naive generalization to all modules.
 
-## RPC / autorité / événements
+## RPC / authority / events
 
-- `[ServerRpc]`: requête client→serveur ; `[ObserversRpc]`: vers observateurs ; `[TargetRpc]`: vers `PlayerID` ciblé. Conditions (`RequireOwnership`, `RequireServer`, `RunLocally`, `BufferLast`, `Channel`, `CompressionLevel`, `MtuExceeded`, `Immediate`) varient par attribut ; vérifier signatures/version.
-- RPC **événement** non équivalent à état durable : pour late join, état persistant répliqué ou solution buffer adaptée. Ne pas supposer que `BufferLast` reconstruit tout l'historique.
-- `Network Rules` contrôlent spawn, despawn, propriété, visibilité, appel et autorisation de sync ; la permission d'appeler ne valide **pas** la distance d'interaction, l'argent, les dommages ni les cooldowns. Cas client-owner/non-owner/server/host/dedicated à tester.
-- Dedicated server ≠ host : pas de client local ; un `[ObserversRpc]` sans `RunLocally` ne lance pas automatiquement son corps sur le serveur. Pour initialisation serveur, préférer branche serveur dédiée ou `RunLocally` justifié ; documenter les risques de double exécution host.
+- `[ServerRpc]`: client request→server; `[ObserversRpc]`: to observers; `[TargetRpc]`: to targeted `PlayerID`. Conditions (`RequireOwnership`, `RequireServer`, `RunLocally`, `BufferLast`, `Channel`, `CompressionLevel`, `MtuExceeded`, `Immediate`) vary by attribute; check signatures/version.
+- RPC ** event** non-sustainable equivalent: for late join, persistent replicated state or suitable buffer solution. Do not assume that `BufferLast` reconstructs the entire history.
+- `Network Rules` control spawn, despawn, property, visibility, call and sync permission; permission to call does not validate **** the interaction distance, money, damage or cooldowns. Client-owner/non-owner/server/host/dedicated case to test.
+- Dedicated server 的 host: no local client; a `[ObserversRpc]` without `RunLocally` does not automatically launch its body on the server. For server initialization, prefer dedicated server branch or `RunLocally` justified; document the risks of dual execution host.
 
-## Spawn, scene, visibility et références
+## Spawn, scene, visibility and references
 
-- `Instantiate()` / `Destroy()` suivent les règles PurrNet pour objets avec `NetworkIdentity`, network prefab/scene et droits ; vérifier `NetworkManager`/Network Prefabs et visibilité avant de diagnostiquer.
-- Les `NetworkId` ou types supportés servent de références répliquées lorsqu'un GameObject/Transform n'est pas packable tel quel ; inspecter BitPacker réel.
-- Scene Management, Addressables, network visibility (distance/whitelist), owner-only data, scene-scoped assets, pooling et reconnection ont des pages distinctes. Vérifier chaque sous-système utilisé plutôt que supposer un comportement identique au modèle NGO/Mirror.
-- Tester scene load/unload, joueur rejoignant tard, déconnexion/reconnexion et identités dormantes ; subscriptions propres.
+- `Instantiate()` / `Destroy()` follow PurrNet rules for objects with `NetworkIdentity`, network prefab/scene and rights; check `NetworkManager`/Network Prefabs and visibility before diagnosis.
+- Supported `NetworkId` or types serve as replicated references when a GameObject/Transform is not packageable as it is; inspect BitPacker real.
+- Scene Management, Addressables, network visibility (distance/whitelist), owner-only data, scene-scoped assets, pooling and reconnection have separate pages. Check each subsystem used instead of assuming behavior identical to the NGO/Mirror model.
+- Tester scene load/unload, player joining late, disconnection/reconnection and sleeping identities; own subscriptions.
 
-## Transport, sécurité et performance
+## Transport, safety and performance
 
-- Vérifier protocole réel (UDP / WebTransport WS/WSS / Steam / composite), ports internes/externes, scénarios WebGL et réseau local. `StartClient` peut rester initialement Disconnected avant de passer Connecting ; éviter les retries instantanés (cf. Edgegap).
-- Pas de secrets côté client ou dans repo ; authentification, rate limiting et validation d'actions server. `Unsafe`/`Everyone` = tolérance prototypage, non validation de sécurité.
-- Profiling/BitPacker/Compression/MTU : limiter messages répétés et payloads ; choisir channel selon sémantique, ne pas optimiser sans mesures.
-- Respecter les frontières PurrDiction : modules/objets `NetworkIdentity` peuvent exister pour chat/UI autour d'un prefab prédit sur versions compatibles, **pas** pour son état réconcilié.
+- Verify real protocol (UDP / WebTransport WS/WSS / Steam / composite), internal/external ports, WebGL scenarios and local network. `StartClient` can initially remain Disconnected before switching Connecting; avoid instant retrieving (see Edgegap).
+- No secrets in clients or in the repository; authentication, rate limiting and validation of server actions. `Unsafe`/`Everyone` = prototyping tolerance, not security validation.
+- Profile/BitPacker/Compression/MTU: limit repeated messages and payloads; choose channel according to semantics, not optimize without measurements.
+- Respecting the PurrDiction borders: `NetworkIdentity` modules/objects may exist for chat/IU around a prefab predicted on compatible versions, **not** for its reconciled state.
 
-## Revue avant PR
+## Review before PR
 
-Pour chaque script : package exact + classe parent + côté exécution + autorité du write + type état/événement + régime late join + ownership + serialized references + test 2 clients + config inspector + version source.
+For each script: exact package + parent class + execution side + write authority + state/event type + late join regime + ownership + serialized references + test 2 clients + config inspector + source version.

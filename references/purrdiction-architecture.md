@@ -1,55 +1,55 @@
-# PurrDiction — architecture, cycles, choix et incompatibilités de version
+# PurrDiction — architecture, cycles, choice and version incompatibilities
 
-S'appuyer sur **l'ensemble** des pages `client-side-prediction/` dans la copie synchronisée. Source du chemin : https://purrnet.dev/docs/client-side-prediction . Ce document développe les points critiques, pas toute la doc.
+Rely on **the set** of the `client-side-prediction/` pages in the synchronized copy. Path Source: https://purrnet.dev/docs/client-side-prediction . This document develops the critical points, not the entire doc.
 
-## Cycle déterminant
+## Determining cycle
 
-1. Entrée : le contrôleur recueille input dans `GetFinalInput`, capte les fronts entre ticks dans `UpdateInput`, vérifie/normalise par `SanitizeInput`. Les peers et le serveur rejouent des **INPUT historiques**, pas l'Input System live.
-2. Tick : PurrDiction sauvegarde avant simulation, exécute `Simulate`, physiques, `LateSimulate`, snapshot puis réseau. Les callbacks peuvent se réexécuter.
-3. Réconciliation : réception d'état vérifié, rollback, replay de ticks non vérifiés, correction des composants Unity avec bridge ou composants prédits intégrés.
-4. Frame : `UpdateView(viewState, verified)` pour visuels ; `LateUpdateView` pour caméra, IK ou composants dépendant d'autres views. `ResetInterpolation` pour téléportations et erreurs trop importantes.
+1. Input: The controller collects input in `GetFinalInput`, captures the fronts between ticks in `UpdateInput`, checks/normalizes by `SanitizeInput`. Peers and the server replays historical **INPUT**, not the Input System live.
+2. Tick: PurrDiction backup before simulation, executes `Simulate`, physics, `LateSimulate`, snapshot and then network. Callbacks can run again.
+3. Reconciliation: verified status reception, rollback, unverified tick replay, correction of Unity components with built-in bridge or predicted components.
+4. Frame: `UpdateView(viewState, verified)` for visuals; `LateUpdateView` for camera, IK or components dependent on other views. `ResetInterpolation` for teleports and errors too big.
 
 Sources : `flow.md`, `input-handling.md`, `state-handling.md`, `views-and-interpolation.md`.
 
-## DATA et types
+## DATA and types
 
-- `PredictedIdentity<INPUT, STATE>` vs `PredictedIdentity<STATE>` selon nécessité d'input. `STATE` doit couvrir toutes les décisions futures. `IPredictedData<STATE>`, math/packing auto ou custom selon version.
-- `PredictedModule<STATE>` pour état modulaire, mais coût de snapshots/CPU/traffic additionnel. **Modules statiques créés dans même ordre sur tous les pairs** ; jamais conditionnés à `isServer` ou `isOwner`, sinon `PredictedModuleRosterMismatchException` et réplication suspendue. **Modules dynamiques** pendant simulation, recréables par constructeur public `(PredictedIdentity, autres paramètres optionnels)` ; configuration influant gameplay doit appartenir à l'état et non à ces paramètres.
-- `DeterministicIdentity` pour bit-à-bit strict avec `sfloat`, policies/desync séparées ; `SimulationStart` sur la timeline (pas mutations dans Awake). Ne pas confondre avec le rollback physique Unity.
+- `PredictedIdentity<INPUT, STATE>` vs `PredictedIdentity<STATE>` depending on input requirement. `STATE` should cover all future decisions. `IPredictedData<STATE>`, math/packing auto or custom depending on version.
+- `PredictedModule<STATE>` for modular state, but additional snapshot/CPU/traffic cost. **Static models created in the same order on all peers**; never conditioned to `isServer` or `isOwner`, otherwise `PredictedModuleRosterMismatchException` and suspended replication. **Dynamic models** during simulation, re-createable by public constructor `(PredictedIdentity, other optional parameters)`; influent gameplay configuration must belong to the state and not to these parameters.
+- `DeterministicIdentity` for strict bit-to-bit with `sfloat`, separate policies/desync; `SimulationStart` on the timeline (not mutations in Awake). Do not confuse with physical rollback Unity.
 
 Sources : `predicted-identities.md`, `predicted-modules/README.md`, `deterministic-identity.md`.
 
-## Politiques (vérifier la version)
+## Policies (check version)
 
 | Policy | Timelines | Recommandation |
 | --- | --- | --- |
-| FullPrediction | tick futur local + rollback des vérifiés | interactions critiques exactes |
-| PredictedIfOwned | full owner / relay non-owner | acteurs contrôlés |
-| ServerRelay | ticks vérifiés, derrière la latence | objets pilotés serveur |
-| SoftCorrection | correction convergente sans replay du vivant | prop/cosmétique *si supporté* |
-| PredictedIfOwnedWithSoftFallback | owner full / autres soft sinon relay | selon version/composant |
+| FullPrediction | local future tick + checked rollback | interactions critiques exactes |
+| PredictedIfOwned | full owner / relay non-owner | Controlled actors |
+| ServerRelay | ticks checked, behind latency | server controlled objects |
+| SoftCorrection | convergent correction without replay of the living | prop/cosmetic *if supported* |
+| PredictedIfOwnedWithSoftFallback | owner full / other soft otherwise relay | according to version/component |
 
-Ne pas utiliser `SoftCorrection` sur hit validation. Un fallback automatique sans erreur peut masquer une hypothèse erronée. `PredictionPolicyScope`, `SetPredictionPolicy`, `SetPredictionPolicyOverride`, `UsePredictionPolicyScope` ont des durées différentes ; tester transfert de propriété et pooling.
+Do not use `SoftCorrection` on hit validation. An error-free automatic fallback can mask an erroneous hypothesis. `PredictionPolicyScope`, `SetPredictionPolicy`, `SetPredictionPolicyOverride`, `UsePredictionPolicyScope` have different durations; test ownership transfer and pooling.
 
 ## Spawn, hierarchy, references
 
-- `predictionManager.hierarchy.Create/Delete` et ID au lieu de `Instantiate/Destroy` en simulation. Pièces d'un prefab peuvent être parentes, enfants, déplacées ou supprimées ; topologie se restaure pendant replay. `TryCreateAndGet` n'assure une référence que dans le tick courant.
-- `PredictedObjectID` pour objet, `PredictedComponentID` pour identité spécifique ; lookup après rollback peut retourner `false`.
-- Mirroring de `NetworkIdentity` **>=1.4.0** : automatique dans prefab prédit, server-driven/verified, hors spawn et visibilité classiques PurrNet, ownership conforme à topologie prédite ; pour UI/chat/nom, pas gameplay prédictible. `PredictedIdentitySpawner` ancien est obsolète en >=1.4.0 ; sur version antérieure se référer à la page versionnée.
+- `predictionManager.hierarchy.Create/Delete` and ID instead of `Instantiate/Destroy` in simulation. Parts of a prefab can be parent, child, moved or deleted; topology is restored during replay. `TryCreateAndGet` only provides a reference in the current tick.
+- `PredictedObjectID` for object, `PredictedComponentID` for specific identity; lookup after rollback can return `false`.
+- `NetworkIdentity` Mirroring **>=1.4.0**: automatic in prefab predicted, server-driven/verified, out of spawn and classic visibility PurrNet, ownership according to predicted topology; for UI/chat/name, not predictable gameplay. `PredictedIdentitySpawner` old is obsolete in >=1.4.0; on earlier version refer to versioned page.
 
 Sources : `predicted-hierarchy.md`, `predicted-object-references.md`, `built-in-components/predicted-identity-spawner.md`.
 
 ## Physics, events, lag compensation
 
-- `PredictedTransform`, `PredictedRigidbody`, `PredictedRigidbody2D` : pipeline physique rollback et view ; ne pas superposer NetworkTransform sur le même transform.
-- `PredictedEvent` ou view verified pour effets uniques. Contacts/callbacks physiques temporaires ne pas conserver entre ticks.
-- Lag compensation avec `ColliderRollback`, `predictionManager.lagCompensation` et `lagCompensationTick` depuis `Simulate`, **>=1.4.0** selon doc consultée ; `rollbackTick` du networking traditionnel désigne autre chose. Max Lag Compensation Seconds borne l'offset client, serveur fait le hit test.
-- Pooled collections deep-copy, `Dispose`, `IDuplicate<T>` ; pas de double dispose.
+- `PredictedTransform`, `PredictedRigidbody`, `PredictedRigidbody2D`: Rollback physical pipeline and view; do not overlay NetworkTransform on the same transform.
+- `PredictedEvent` or view verified for unique effects. Temporary physical contacts/callbacks do not store between ticks.
+- Lag compensation with `ColliderRollback`, `predictionManager.lagCompensation` and `lagCompensationTick` from `Simulate`, **>=1.4.0** according to doc consulted; `rollbackTick` traditional networking means something else. Max Lag Compensation Seconds terminal the client offset, server does the hit test.
+- Pooled collections deep-copy, `Dispose`, `IDuplicate<T>`; no double has.
 
 Sources : `predicted-physics-callbacks.md`, `built-in-components/predicted-transform.md`, `built-in-components/predicted-rigidbody-2d-and-3d.md`, `lag-compensation.md`, `disposable-collections.md`.
 
-## Points d'attention d'implémentation
+## Implementation Attention Points
 
-- `PredictionManager` par scène, `PredictionPolicyScope` / configs par objet ; scènes/additive, visibilité, propriété, interpolation et det. exigeant vérification contextuelle.
-- Input réseau de petite taille, front d'action consommé une fois, extrapolation prudente. Ne pas forcer `Repeat Input Factor` énorme pour cacher les corrections.
-- Documentation `main` peut mentionner des systèmes plus récents que la version de package. Inspecter `package.json` exact (PurrDiction) et sources locales avant snippet ; ne pas « mettre à jour » un package automatiquement sans permission.
+- `PredictionManager` per scene, `PredictionPolicyScope` / configs per object; scenes/additive, visibility, property, interpolation and det. demanding contextual verification.
+- Small network input, once consumed action front, cautious extrapolation. Do not force `Repeat Input Factor` huge to hide corrections.
+- Documentation `main` may mention more recent systems than the package version. Inspect `package.json` exact (PurrDiction) and local sources before snippet; do not "update" a package automatically without permission.

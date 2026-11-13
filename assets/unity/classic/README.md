@@ -1,5 +1,5 @@
-# Exemples PurrNet classique
+# Examples PurrNet classic
 
-Les exemples `assets/unity/ExampleNetworkCounter.cs` et `ExampleWorldSeed.cs` sont **pédagogiques non compilés dans Unity**. Les copier après avoir vérifié la version des attributs et des namespaces dans le package du projet. Consulter `references/core/sync-types.md` et `rpc-and-broadcasts.md` avant toute modification.
+The examples `assets/unity/ExampleNetworkCounter.cs` and `ExampleWorldSeed.cs` are **pedagogical not compiled in Unity**. Copy them after checking the attribute and namespace version in the project package. See `references/core/sync-types.md` and `rpc-and-broadcasts.md` before any modification.
 
-L'agent ne doit pas générer de code prêt à l'emploi sans validation réelle de l'API. Utiliser la documentation officielle comme référence des extraits et indiquer D1/D2/D3/... explicitement.
+The agent must not generate a ready-to-use code without actual API validation. Use the official documentation as a reference to the extracts and indicate D1/D2/D3/... explicitly.

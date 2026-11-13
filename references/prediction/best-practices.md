@@ -1,20 +1,20 @@
-# Contrat obligatoire PurrDiction (BP-01 à BP-10)
+# Mandatory contract PurrDiction (BP-01 to BP-10)
 
-**Source** `client-side-prediction/best-practices.md` (clone local recommandé). **Lecture obligatoire** avec `references/purrdiction-best-practices.md` AVANT tout changement à la simulation. Ce document sert de routeur; la synthèse longue v0.3 reste normative dans la skill mais n'est pas une substitution à la doc du commit installé.
+**Source** `client-side-prediction/best-practices.md` (recommended local clone). **Required reading** with `references/purrdiction-best-practices.md` BEFORE any change to the simulation. This document serves as a router; the long synthesis v0.3 remains normative in the skill but is not a substitution for the doc of the installed commit.
 
-| BP | Exigence | Guide d'exécution / tests |
+| BP | Exigence | Implementation Guide / Tests |
 |---|---|---|
-| 01 | Tout état mutable affectant futur tick est dans STATE | `input-and-state.md`, `lifecycle-and-rollback.md` |
-| 02 | GetInitialState, GetUnityState, SetUnityState pour état Unity | `lifecycle-and-rollback.md` |
-| 03 | Simulate/LateSimulate rejouables, effets différés | `lifecycle-and-rollback.md` |
-| 04 | Pas de RPC/SyncVar/Instantiate/NetworkTransform au cœur du gameplay prédit | `hierarchy-and-parenting.md`, `visibility-and-interactions.md` |
-| 05 | Delta/tick/RNG prédits, pas Time/Random classiques | `deterministic-identity.md` |
-| 06 | Input capturé, sanitize, extrapolation edges effacés, serveur valide | `input-and-state.md`, `security.md` |
-| 07 | FullPrediction / PredictedIfOwned / ServerRelay / SoftCorrection selon rôle | `prediction-policies.md` |
-| 08 | Disposable buffers et snapshots copiés en profondeur | `memory-and-pooling.md` |
-| 09 | Références PredictedObjectID/PredictedComponentID stables | `hierarchy-and-parenting.md` |
-| 10 | Host, remote, dédié, pertes, rollback, pooling, teleports, late join | `references/purrdiction-test-matrix.md` |
+| 01 | Any mutable state affecting future tick is in STATE | `input-and-state.md`, `lifecycle-and-rollback.md` |
+| 02 | GetInitialState, GetUnityState, SetUnityState for state Unity | `lifecycle-and-rollback.md` |
+| 03 | Simulate/LateSimulate replayable, delayed effects | `lifecycle-and-rollback.md` |
+| 04 | No RPC/SyncVar/Instantiate/NetworkTransform at the heart of the predicted gameplay | `hierarchy-and-parenting.md`, `visibility-and-interactions.md` |
+| 05 | Delta/tick/RNG predicted, not Classic Time/Random | `deterministic-identity.md` |
+| 06 | Captured input, sanitize, deleted edge extrapolation, valid server | `input-and-state.md`, `security.md` |
+| 07 | FullPrediction / PredictedIfOwned / ServerRelay / SoftCorrection by Role | `prediction-policies.md` |
+| 08 | Available buffers and snapshots copied in depth | `memory-and-pooling.md` |
+| 09 | References PredictedObjectID/PredictedComponentID stable | `hierarchy-and-parenting.md` |
+| 10 | Host, remote, dedicated, loss, rollback, pooling, teleports, late join | `references/purrdiction-test-matrix.md` |
 
-**Nuance** : hors simulation, un RPC sur NetworkIdentity/mirror peut envoyer une demande au serveur. La création de predicted objects dans un tel ServerRpc est *server-driven* (latence) et ne doit pas être décrite comme prédite localement. Si version <1.4, vérifier bridge `PredictedIdentitySpawner` ; >=1.4 mirror automatique (voir source exacte).
+**Nuance**: Without simulation, a RPC on NetworkIdentity/mirror can send a request to the server. The creation of predicted objects in such a ServerRpc is *server-driven* (latency) and should not be described as predicted locally. If version <1.4, check bridge `PredictedIdentitySpawner`; >=1.4 automatic mirror (see exact source).
 
-Pour chaque réponse contenant du code de prédiction, produire BP-01...BP-10 : conforme prouvé / N/A motivé / non vérifié / défaut. Ne pas appeler le résultat « validé » si pas de compilation Unity ni de test rollback.
+For each response containing prediction code, produce BP-01...BP-10: proven conform / N/A motivated / unverified / default. Do not call the result "validated" if no Unity compilation or rollback test.

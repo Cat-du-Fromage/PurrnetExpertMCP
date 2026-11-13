@@ -1,30 +1,30 @@
-# Audit de profondeur fonctionnelle v0.6 et lacunes résiduelles
+# Functional depth audit v0.6 and residual deficiencies
 
-**Ce n'est pas la documentation officielle.** Sources des pages : https://purrnet.dev/docs et https://github.com/PurrNet/PurrDocs. Documenter la différence entre (a) une page présente dans le clone, (b) une route qui oblige à l'ouvrir, (c) un exemple illustratif, (d) un exemple réellement compilé/testé.
+**This is not official documentation.** Page Sources: https://purrnet.dev/docs and https://github.com/PurrNet/PurrDocs. Document the difference between (a) a page in the clone, (b) a route that requires it to be opened, (c) an illustrative example, (d) a truly compiled/tested example.
 
-| Famille PurrDocs | Statut dans v0.6 | Modules de lecture | Limites de preuve |
+| Famille PurrDocs | Status in v0.6 | Modules de lecture | Limitations of evidence |
 |---|---|---|---|
-| NetworkManager, auth et sessions | guides fonctionnels | `core/network-manager`, `authentication`, `connection-lifecycle` | tests auth en Unity non exécutés |
-| Ownership, Network Rules, Visibility | guides + scénarios | `core/ownership-and-rules`, `network-visibility`, `visibility-advanced` | pas de fixtures multi-observers vérifiées |
-| RPC, Broadcast et channels | guide + recette | `core/rpc-advanced`, `messaging-and-mtu` | codegen/MTU à mesurer par package |
-| Sync Types / Modules | guide + snippets | `core/sync-types`, `sync-recipes` | seulement exemples pédagogiques |
-| Transports / platforms | guides | `core/transports*` | Steam/EOS/WebGL non connectés ici |
-| Spawning, scenes, registries, Addressables | guide + procédures | `core/spawning-and-scenes`, `scene-playbook` | aucune scène Unity de validation |
-| Plug n Play components | 7 guides + selector | `components/` | quelques composants rares (NetworkBones) surtout indexés; pas de bench |
-| Serialization / profiling | guides + playbook | `core/serialization*`, `tools/diagnostics` | pas de validation IL2CPP/BitPacker |
-| PurrDiction INPUT/STATE, rollback, view | contrat BP + guide + recette | `prediction/*` | pas de compilation de contrôleur complet |
-| Prediction physics, hierarchy, modules, policies | guides et recettes ciblées | `prediction/*` | pas de simulation à jitter/latence |
-| Tools et addons | guides synthétiques | `addons/`, `tools/`, `build/` | limitations produit/tiers et dépendances évolutives |
-| Guides d'exemples, community guides, Made-with | clonés recherchables | `references/cache/official-docs` | non transformés en règles, ce ne sont pas des specs API |
+| NetworkManager, auth and sessions | guides fonctionnels | `core/network-manager`, `authentication`, `connection-lifecycle` | auth tests in Unity not performed |
+| Ownership, Network Rules, Visibility | guides + scenarios | `core/ownership-and-rules`, `network-visibility`, `visibility-advanced` | no multi-observation fixtures verified |
+| RPC, Broadcast and Channels | guide + recette | `core/rpc-advanced`, `messaging-and-mtu` | codegen/MTU to be measured by package |
+| Sync Types / Modules | guide + snippets | `core/sync-types`, `sync-recipes` | only educational examples |
+| Transports / platforms | guides | `core/transports*` | Steam/EOS/WebGL not connected here |
+| Spawning, scenes, registries, Addressables | guide + procedures | `core/spawning-and-scenes`, `scene-playbook` | no Unity validation scene |
+| Plug n Play components | 7 guides + selector | `components/` | some rare components (NetworkBones) mainly indexed; no Bench |
+| Serialization / profiling | guides + playbook | `core/serialization*`, `tools/diagnostics` | no IL2CPP/BitPacker validation |
+| PurrDiction INPUT/STATE, rollback, view | Best Practices, guides and recipes | `prediction/*` | no full controller compilation |
+| Prediction physics, hierarchy, modules, policies | Targeted guides and income | `prediction/*` | no jitter/latency simulation |
+| Tools and addons | synthetic guides | `addons/`, `tools/`, `build/` | product/third limitations and evolutionary dependencies |
+| Guides d'exemples, community guides, Made-with | Researchable clones | `references/cache/official-docs` | Untransformed into rules, these are not API specs |
 
-## Priorité en cas de nouvelle tâche
+## Priority in case of new task
 
-1. Identifier l'élément de l'inventaire officiel correspondant à la demande, **ne pas choisir une recette par habitude**.
-2. Lire le guide du pack **et** les pages officielles routées/versionnées, puis les dépendances proches.
-3. Si une fonctionnalité est uniquement « recherchable », consulter la page officielle et noter l'ajout à faire à la route, au lieu de l'ignorer.
-4. Vérifier la vraie signature dans le package Unity installé ; ne pas présenter le snippet de ce pack comme compilé.
-5. Pour une couverture plus approfondie, exécuter `doc_coverage_matrix.py` sur le clone réel et prioriser les `technical-searchable-not-mandatory` qui concernent les tâches du projet.
+1. Identify the item in the official inventory corresponding to the request, **do not choose a recipe by habit**.
+2. Read the guide to the package **and** the official pages routed/versioned, then the close dependencies.
+3. If a feature is only "searchable", see the official page and note the addition to the road, instead of ignoring it.
+4. Check the true signature in the installed Unity package; do not present the snippet of this pack as compiled.
+5. For further coverage, execute `doc_coverage_matrix.py` on the actual clone and prioritize the `technical-searchable-not-mandatory` that relate to the project tasks.
 
 ## Limitations structurantes
 
-Le déclenchement automatique dépend de l'agent et de son catalogue de skills. Le `description` frontmatter, les hooks de projet et `trigger_probe.py` fournissent des déclencheurs **meilleurs et testables localement**, mais aucune garantie absolue d'invocation. Les tests d'activation en situation avec agent restent à exécuter (voir `evals/AGENT_ACTIVATION_TEST_PLAN.md`).
+The automatic triggering depends on the agent and its skill catalog. The `description` frontmatter, project hooks and `trigger_probe.py` provide ** best and locally testable triggers**, but no absolute guarantee of invocation. Activation tests with agent remain to be performed (see `evals/AGENT_ACTIVATION_TEST_PLAN.md`).

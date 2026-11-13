@@ -1,57 +1,57 @@
-# Études de cas : symptôme → test qui départage les causes
+# Case studies: symptom → test that separates causes
 
-Chaque exemple est un **protocole**, non une déclaration de bug courant. Version officielle et signature locale restent obligatoires.
+Each example is a **protocol**, not a common bug report. Official version and local signature remain mandatory.
 
-## Cas A — « Mes RPC s'exécutent deux fois sur l'hôte »
+## Case A — "My RPC run twice on the host"
 
-**Archives** : Stray `QUICK_REFERENCE` note un fix `ObserversRpc(runLocally: true)` en v1.2.0 et changelog d'autres fixes RPC host.
+**Archives**: Stray `QUICK_REFERENCE` notes a fix `ObserversRpc(runLocally: true)` to v1.2.0 and changelog from other RPC hosts.
 
-- Trois hypothèses : (1) vieux bug sur package effectivement antérieur ; (2) code invoqué une fois pour client ET une fois serveur sur host ; (3) deux appels au RPC, ou deux NetworkManagers.
-- Tracer log à *l'invocation* et *à l'exécution*. Pour un `NetworkBehaviour` avec `OnSpawned(bool asServer)`, vérifier les deux chemins; tracer `runLocally` et destinataire; vérifier que les effets serveur nécessaires ne sont pas uniquement dans un ObserversRpc côté clients.
-- Test : même code en host + dedicated + deux clients. **Ne jamais** retirer `runLocally` sans vérifier si le dedicated dépend de la méthode : le monde pourrait devenir vide.
-- Validation : méthode appelée pour les bons destinataires; état authoritative ne dépend pas d'un client local.
+- Three hypotheses: (1) old bug on actually previous package; (2) code invoked once for client AND once server on host; (3) two calls to RPC, or two NetworkManagers.
+- Trace log to *invocation* and *at execution*. For a `NetworkBehaviour` with `OnSpawned(bool asServer)`, check both paths; trace `runLocally` and recipient; check that the required server effects are not only in a client-side ObserversRpc.
+- Test: same host code + dedicated + two clients. **Never** remove `runLocally` without checking whether the dedicated depends on the method: the world could become empty.
+- Validation: method called for good recipients; authoritative status does not depend on a local client.
 
-## Cas B — « Un nouveau client rejoint mais son inventaire est vide »
+## Case B — "A new client joins but his inventory is empty"
 
-**Archive** : note historique v1.5.0 SyncList late join, plus correctifs SyncVar/collections jusqu'à v1.20.0.
+**Archive**: historical note v1.5.0 SyncList late join, more corrective SyncVar/collections up to v1.20.0.
 
-- Capturer le contenu serveur **avant** le join, le propriétaire, `ownerOnly`, l'autorité d'écriture, les types sérialisés, l'existence de l'objet sur l'observer et le chargement de la scène.
-- Test discriminant : client propriétaire vs client non-owner; client arrivé avant/après spawn; `ownerOnly` doit cacher les données au non-owner ; `OnObserverAdded`/snapshot doivent servir le destinataire autorisé.
-- Pour changement d'ownership : l'ancien propriétaire peut **conserver localement la dernière valeur vue** — le secret doit être nettoyé avant transfert si besoin; ne présumer aucune purge automatique côté ancien owner.
-- Validation : inventaire correct pour nouveau propriétaire, pas de divulgation au tiers, pas de vieux état après pooling.
+- Capture the server content **before** the join, owner, `ownerOnly`, writing authority, serialized types, existence of the object on observation and loading of the scene.
+- Discriminant test: client owner vs client non-owner; client arrived before/after spawn; `ownerOnly` must hide the data from the non-owner; `OnObserverAdded`/snapshot must serve the authorized recipient.
+- For change of ownership: the former owner may **reserve the last value seen locally** — the secret must be cleaned before transfer if necessary; do not assume any automatic purging on the old owner side.
+- Validation: correct inventory for new owner, no disclosure to third party, no old condition after pooling.
 
-## Cas C — « Le player spawne dans une mauvaise scène / RPC reçu avant scène »
+## Case C — "The spawne player in a bad scene / RPC received before stage"
 
-**Archive** : spawner-scene v1.3.3, buffered RPC trop tôt v1.9.3, révision plus large 1.20.0.
+**Archive**: spawner-scene v1.3.3, buffered RPC too early v1.9.3, broader revision 1.20.0.
 
-- Séparer : appartenance scène (`onPlayerJoinedScene`), **scène chargée** (`onPlayerLoadedScene`), observation d'objet (`OnObserverAdded`) et première donnée de spawn.
-- Vérifier NetworkScenePrefabs et NetworkSceneAssets, scène d'instanciation, Build Settings, et registre global prioritaire.
-- Éviter un `WaitForSeconds` « magique » : préférer événement de readiness, un état durable ou l'inclusion des données dès le spawn via `OnSerialize`/`OnDeserialize` si l'API installée le permet.
-- Validation : deux clients ayant des scènes chargées dans des ordres différents, late join, unload/reload, client sans l'objet caché.
+- Separate: scene affiliation (`onPlayerJoinedScene`), **loaded scene** (`onPlayerLoadedScene`), object observation (`OnObserverAdded`) and first data from spawn.
+- Check NetworkScenePrefabs and NetworkSceneAssets, instantization scene, Build Settings, and global priority registry.
+- Avoiding a "magic" `WaitForSeconds`: prefer readiness event, a durable state or the inclusion of data from the spawn via `OnSerialize`/`OnDeserialize` if the installed API allows.
+- Validation: two clients with scenes loaded in different orders, late join, unload/reload, client without hidden object.
 
-## Cas D — « Mon joueur tremble : WebTransport, NetworkRigidbody, NetworkTransform »
+## Case D — "My player trembles: WebTransport, NetworkRigidbody, NetworkTransform"
 
-**Archive** : WebTransport/NetworkTransform fix 1.2.1; non-controller update 1.10.2; rework 1.20.0.
+**Archive**: WebTransport/NetworkTransform fix 1.2.1; non-controller update 1.10.2; rework 1.20.0.
 
-- Distinguer de la *prédiction* PurrDiction : si `PredictedTransform`, charger `prediction/best-practices.md`, pas uniquement `NetworkTransform` classique.
+- Distinguish from *prediction* PurrDiction: if `PredictedTransform`, load `prediction/best-practices.md`, not just `NetworkTransform` classic.
 - Mesurer : writer owner/server, double writer (`NetworkTransform`, Rigidbody/CharacterController), buffers/jitter, packet loss, transport WebSocket vs UDP, update phase, payload MTU.
-- Test : un objet qui bouge en ligne droite, puis changement de parent, teleport et changement owner ; comparer host, remote, WebGL.
-- Validation : taux de corrections/jumps, exactitude sur remote après late join et reconnexion; profiler enregistré.
+- Test: an object moving in a straight line, then changing parent, teleport and change owner; compare host, remote, WebGL.
+- Validation: correction rate/jumps, remote accuracy after late join and reconnection; profiler recorded.
 
-## Cas E — « Les nouveaux plugins/compilations ne marchent pas : Steam CS1061, GetClientPayload, IL2CPP »
+## Case E — "New plugins/compilations don't work: Steam CS1061, GetClientPayload, IL2CPP"
 
-**Archive** : FAQ propose un redémarrage pour SteamWorks CS1061; changelog 1.13.2 renomme un override d'auth et 1.19.1 note correctifs build.
+**Archive**: FAQ offers a restart for SteamWorks CS1061; changelog 1.13.2 renames an auth override and 1.19.1 notes build patches.
 
-- Capturer le **texte et la localisation** de l'erreur C#/ILPP, la version Unity, les asmdefs, packages, backend Mono/IL2CPP; ne pas choisir un remède par nom d'exception seul.
-- Dans un authenticator, `GetClientPayload` remplace un ancien typo `GetClientPlayload` à partir d'une révision historique : contrôler la signature de la classe réellement résolue.
-- Un redémarrage Unity/Hub peut rafraîchir l'import Steamworks, mais ne répare pas une API absente ni une version de package contradictoire.
-- Validation : compilation Editor + build target, chargement runtime, test de la fonction après compilation.
+- Capture **text and location** of error C#/ILPP, version Unity, asmdefs, packages, backend Mono/IL2CPP; do not choose a remedy by exception name alone.
+- In an authenticator, `GetClientPayload` replaces an old `GetClientPlayload` typo from a historical revision: control the signature of the really solved class.
+- A Unity/Hub restart can refresh the Steamworks import, but does not repair an absent API or an adversarial package version.
+- Validation: compilation Editor + build target, runtime loading, function test after compilation.
 
-## Cas F — « Une balle predicted apparaît puis disparaît »
+## Case F — "A predicted ball appears and then disappears"
 
-**Archive** : PurrDiction a des fixes de hierarchy, pooling et inputs dans la période v1.2.x–v1.3.x, mais ce n'est pas une explication automatique de tout despawn.
+**Archive**: PurrDiction has hierarchy, pooling and input fixeds in the v1.2.x–v1.3.x period, but this is not an automatic explanation of any despawn.
 
-- Vérifier que le spawn est demandé via `INPUT`, exécuté dans `Simulate` et confirmé par la **simulation serveur**; un clic Unity/UI hors simulation peut créer un objet purement spéculatif.
-- Assurer `STATE` restaurable, `PredictedObjectID`, `PredictedHierarchy`, extrapolation des one-shot, politique et trajectoire déterministe.
-- Vérifier les composants miroirs NetworkIdentity selon la version PurrDiction distincte de PurrNet.
-- Validation : host, client distant, pertes/jitter, late join, spawn/replay/delete, et collision pendant rollback.
+- Verify that the spawn is requested via `INPUT`, executed in `Simulate` and confirmed by **server simulation**; a click Unity/IU without simulation can create a purely speculative object.
+- Provide `STATE` restoreable, `PredictedObjectID`, `PredictedHierarchy`, one-shot extrapolation, policy and deterministic trajectory.
+- Check the NetworkIdentity mirror components according to the separate PurrDiction version of PurrNet.
+- Validation: host, remote client, loss/jitter, late join, spawn/replay/delete, and collision during rollback.

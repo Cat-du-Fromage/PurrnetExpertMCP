@@ -1,15 +1,15 @@
-# PurrDiction : commandes one-shot, extrapolation et effets rejouables
+# PurrDiction: one-shot commands, extrapolation and replayable effects
 
 **Sources** : `client-side-prediction/input-handling.md`, `best-practices.md`, `multi-identity-interactions.md`, `flow.md`, `security.md`.
 
-## Le risque concret
+## The concrete risk
 
-`Input.GetKeyDown` ne s'exécute que sur certaines frames Unity ; `GetFinalInput` ne s'exécute que par tick. Si l'input est lu uniquement dans `GetFinalInput`, une frappe entre deux ticks peut être perdue. À l'inverse, si `fire=true` est répété pendant l'extrapolation d'un paquet perdu, une action ponctuelle peut être jouée plusieurs fois.
+`Input.GetKeyDown` only runs on certain Unity frames; `GetFinalInput` only runs by tick. If the input is read only in `GetFinalInput`, a strike between two ticks can be lost. Conversely, if `fire=true` is repeated during the extrapolation of a lost packet, a one-time action can be played several times.
 
-## Schéma issu de la documentation officielle (illustratif)
+## Diagram from official documentation (illustrative)
 
 ```csharp
-// INPUT doit être un struct IPredictedData, avec Dispose.
+// INPUT must be an IPredictedData struct with Dispose.
 protected override void UpdateInput(ref PlayerInput input)
 {
     input.jump |= Input.GetKeyDown(KeyCode.Space);
@@ -33,23 +33,23 @@ protected override void ModifyExtrapolatedInput(ref PlayerInput input)
 }
 ```
 
-Il s'agit d'**overrides partiels**, pas d'une classe Unity autonome ou compilée : vérifier `PlayerInput`, la classe de base et les versions de PurrDiction.
+These partial overrides were not compiled in Unity. Verify `PlayerInput`, the base class and the installed PurrDiction version.
 
-## Une séquence de tir robuste
+## A Robust Fire Sequence
 
-1. Capture locale : `UpdateInput` peut accumuler le front, ou un compteur de commandes permet de distinguer deux tirs successifs sans booléen répété.
-2. `GetFinalInput` collecte les axes continus ; un input envoyé doit rester **compact et sérialisable**.
-3. `SanitizeInput` borne magnitude et valeurs non finies ; le serveur vérifie aussi cooldown, munitions, ownership et range **dans sa simulation**.
-4. `ModifyExtrapolatedInput` retire les one-shots sur inputs répétés ; ne pas supprimer la mutation STATE de `Simulate` pendant rollback.
-5. Créer un projectile par `PredictedHierarchy.Create` pendant le tick, avec une séquence stable si nécessaire.
-6. L'audio, le tracé ou un événement utilisateur utilisent `PredictedEvent`, `UpdateView` ou une vérification de vue conforme à la version. Les écouteurs doivent rester **présentation seulement**.
+1. Local capture: `UpdateInput` can capture the button edge, or a command counter can distinguish two successive shots without repeated boolean.
+2. `GetFinalInput` collects continuous axes; an input sent must remain **compact and serialisable**.
+3. `SanitizeInput` clamps magnitude and rejects non-finite values; the server also checks cooldown, ammunition, ownership and range **in its simulation**.
+4. `ModifyExtrapolatedInput` removes the one-shots on repeated inputs; do not remove the STATE mutation from `Simulate` during rollback.
+5. Create a projectile by `PredictedHierarchy.Create` during the tick, with a stable sequence if necessary.
+6. Play audio, trails and UI effects through `PredictedEvent`, `UpdateView` or a view guard verified for the installed version. Keep effects in presentation.
 
 ## Tests
 
-- Appuyer et relâcher entre deux ticks.
-- Perdre l'input du tick du tir : ni tir doublé ni tir ignoré indûment après réparation.
-- Conserver le bouton appuyé avec le facteur de répétition élevé.
-- Rejouer trois fois le tick d'une récompense : aucun RPC/FX/achievement supplémentaire.
-- Client malveillant envoie `move=(Infinity, NaN)` et `fire` à chaque tick ; pas de dégâts illégaux.
+- Press and release between two ticks.
+- Drop the input packet for a shot and verify that recovery neither duplicates nor incorrectly discards the shot.
+- Keep the button pressed with the high repeat factor.
+- Replay three times the reward tick: no RPC/FX/additional upgrade.
+- A malicious client sends `move=(Infinity, NaN)` and `fire` to each tick; no illegal damage.
 
-**Statut** : exemples partiels non compilés Unity dans ce pack.
+**Status**: partial examples not compiled in Unity in this pack.

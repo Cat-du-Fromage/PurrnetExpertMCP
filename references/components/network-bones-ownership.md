@@ -1,24 +1,24 @@
-# NetworkBones et NetworkOwnershipToggle — cas d'usage et contrôle
+# NetworkBones and NetworkOwnershipToggle — case of use and control
 
-**Sources officielles** :
+**Official sources**:
 - [Network Bones](https://purrnet.dev/docs/plug-n-play-components/network-bones)
 - [Network Ownership Toggle](https://purrnet.dev/docs/plug-n-play-components/network-ownership-toggle)
 - [Network Animator](https://purrnet.dev/docs/plug-n-play-components/network-animator)
 
-Ces composants ne sont **pas** interchangeables avec `NetworkTransform` / `NetworkAnimator` ni avec `PredictedTransform` en simulation PurrDiction. Lire les pages et inspecter leurs propriétés dans la version installée avant de produire du code.
+These components are **not** interchangeable with `NetworkTransform` / `NetworkAnimator` or with `PredictedTransform` simulation PurrDiction. Read the pages and inspect their properties in the installed version before producing code.
 
 ## NetworkBones
 
-Synchroniser une structure d'os ou de parties d'un personnage peut être utile pour le ragdoll, pose de membres et autres objets visuels articulés. Vérifier la hiérarchie, les références d'os, la fréquence, l'autorité, les conversions espace local/monde et l'interaction avec Animator/physics. Pour un personnage joueur non prédit, comparer au coût de transmettre uniquement les paramètres d'animation et reconstruire localement la pose ; ne pas synchroniser des dizaines d'os par défaut.
+Synchronizing a bone structure or parts of a character can be useful for ragdoll, members pose and other articulated visual objects. Check hierarchy, bone references, frequency, authority, local/world space conversions, and interaction with Animator/physics. For an unpredicted player character, compare the cost of transmitting only animation parameters and reconstructing the pose locally; do not synchronize dozens of bones by default.
 
-**Tests** : personnage maître + 2 observateurs, changement de pose, changement d'owner, sortie/entrée de visibilité, interpolation et bande passante. Si un composant animé pilote la même pose chez l'observateur, définir qui est le seul écrivain.
+**Tests**: master character + 2 observers, change of pose, change of owner, output/input of visibility, interpolation and bandwidth. If an animated component controls the same pose in the observer, define who is the only writer.
 
 ## NetworkOwnershipToggle
 
-Aide à activer/désactiver des éléments selon ownership. Toujours séparer **affichage local** (caméra, input) de **validation autoritaire** (inventaire, attaque, dégâts). Un GameObject ou composant désactivé pour un non-owner ne constitue pas une garantie de sécurité réseau.
+Helps to activate/disable items according to ownership. Always separate ** local display** (camera, input) from **authoritative validation** (inventory, attack, damage). A GameObject or component disabled for a non-owner does not constitute a network security guarantee.
 
-**Tests** : spawn sans owner, owner local, owner distant, transfert, host (server/client), dedicated; s'assurer que le serveur continue le traitement nécessaire quand aucun local player n'existe.
+**Tests**: spawn without owner, local owner, remote owner, transfer, host (server/client), dedicated; ensure that the server continues the necessary processing when no local player exists.
 
-## Deliverable attendu
+## Deliverable expected
 
-Nom exact du composant dans le package, réglages Inspector, quoi synchroniser, qui possède l'état, estimation bande passante, deux clients et late join. Ne pas inventer des champs/événements non lus dans le code source.
+Precise component name in the package, Inspector settings, what to sync, which has the state, bandwidth estimate, two clients and late join. Do not invent fields/events not read in the source code.

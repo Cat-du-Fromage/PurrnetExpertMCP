@@ -1,12 +1,12 @@
-# Transports, hébergement et diagnostic réseau
+# Transport, accommodation and network diagnosis
 
-**Sources officielles** : `systems-and-modules/transports/README.md`, `udp-transport.md`, `web-transport.md`, `steam-transport.md`, `purr-transport.md`, `composite-transport.md`, `local-transport.md`, `eos-transport.md`, `simulating-latency.md`; `guides/test-with-friends/`.
+**Official sources**: `systems-and-modules/transports/README.md`, `udp-transport.md`, `web-transport.md`, `steam-transport.md`, `purr-transport.md`, `composite-transport.md`, `local-transport.md`, `eos-transport.md`, `simulating-latency.md`; `guides/test-with-friends/`.
 
-- Distinguer transport sélectionné (UDP, WS/WSS, Steam, relay, composite, local), plateforme et contraintes du navigateur. **WebGL ne peut pas ouvrir de socket UDP**; choisir un transport Web compatible et une configuration TLS valide.
-- Ne pas présumer que les transports ont les mêmes propriétés `address`/`serverPort`, le même NAT traversal ou la même sécurité. PurrTransport relayer et relay tiers ont leurs limitations et coûts; vérifier la doc actuelle.
-- Inspecter adresse d'écoute serveur (souvent `0.0.0.0`), port interne, protocole, endpoint/port **externe** renvoyé par hébergeur; attention Firewall/NAT/IPv6.
-- Un serveur dédié est distinct d'un host joueur : éviter les initialisations seulement sur client, les appels camera/audio/UI, et observer RPC dont le corps doit aussi être exécuté sur le serveur.
-- Avant recommander une infrastructure, clarifier (si inconnu) plateforme, topologie, nombre joueurs, modèle d'autorité et matchmaking; pour Edgegap déléguer à `edgegap-purrnet` si installé.
+- Distinguish selected transport (UDP, WS/WSS, Steam, relay, composite, local), platform and browser constraints. **WebGL cannot open UDP socket**; choose a compatible web transport and a valid TLS configuration.
+- Do not assume that the transports have the same properties `address`/`serverPort`, the same cross NAT or the same security. PurrTransport relay and relay third parties have their limitations and costs; check the current doc.
+- Inspect server listening address (often `0.0.0.0`), internal port, protocol, endpoint/port **external** returned by host; Firewall/NAT/IPv6 attention.
+- A dedicated server is distinct from a host player: avoid initializations only on client, camera/audio/IU calls, and observe RPC whose body must also be executed on the server.
+- Before recommending an infrastructure, clarify (if unknown) platform, topology, number of players, authority model and matchmaking; for Edgegap delegate to `edgegap-purrnet` if installed.
 
 ## Diagnostic minimal
-Server started? port listen? authenticator accepted? `PlayerID` created? scene loaded? observer? state? Test loopback, LAN, réseaux différents, pertes simulées et headless; séparer ces phases dans les logs.
+Server started? port listen? authenticator accepted? `PlayerID` created? scene loaded? observe? state? Test loopback, LAN, different networks, simulated losses and headless; separate these phases in logs.

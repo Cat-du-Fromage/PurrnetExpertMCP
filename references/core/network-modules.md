@@ -1,13 +1,13 @@
 # Network Modules classiques
 
-**Sources officielles** : `systems-and-modules/network-modules/README.md`, `common-pitfalls.md`, `owner-only.md`, `sync-types/README.md`.
+**Official sources**: `systems-and-modules/network-modules/README.md`, `common-pitfalls.md`, `owner-only.md`, `sync-types/README.md`.
 
-- Les modules sont des **champs ou propriétés de NetworkIdentity** (ou d'un module imbriqué); pas de tableau/liste de modules, pas de création dynamique non déclarée.
-- `OnInitializeModules()` pour initialisation/reconfiguration avant assignation IDs et premier envoi. Ne jamais réassigner un module après son spawn.
-- Imbrication des modules autorisée en arbre, cycles interdits. `public`/`[SerializeField]` pour exposition Inspector selon type et version.
-- Examiner les callbacks propres à `NetworkModule` (`OnSpawned`, `OnOwnerChanged`, `OnDespawned`) et assurer l'abonnement/désabonnement des événements; ne pas supposer la même signature que `NetworkBehaviour`.
-- `ownerOnly` dans un custom module doit rester stable; changement à chaud n'efface pas l'état diffusé antérieurement.
-- **Ne pas confondre** avec `PredictedModule`, qui dispose de modules *dynamiques* réconciliés pendant la simulation et de règles de roster statique.
+- Modules are **fields or properties of NetworkIdentity** (or an embedded module); no array/module list, no undeclared dynamic creation.
+- `OnInitializeModules()` for initialization/reconfiguration before assigning IDs and first sending. Never reassign a module after its spawn.
+- Imbracation of authorized modules into shafts, cycles prohibited. `public`/`[SerializeField]` for exposure Inspector according to type and version.
+- Review `NetworkModule`-specific callbacks (`OnSpawned`, `OnOwnerChanged`, `OnDespawned`) and ensure event subscription/unsubscribe; do not assume the same signature as `NetworkBehaviour`.
+- `ownerOnly` in a custom module must remain stable; hot change does not erase the previously released state.
+- **Do not confuse** with `PredictedModule`, which has *dynamic* modules reconciled during simulation and static roster rules.
 
 ## Tests
-Module imbriqué, activation en host/dédié, sérialisation late join, ownership, pooling, tentative de réassignation après spawn et cas de structure interdite.
+Embedded module, host/dedie activation, late-join serialization, ownership, pooling, attempt to reassign after spawn and forbidden structure cases.

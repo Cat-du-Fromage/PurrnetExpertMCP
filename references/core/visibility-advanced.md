@@ -19,7 +19,7 @@ Therefore multiple rules are OR, not AND. A whitelist can override a blacklist w
 - Observers are tracked per network component, not only GameObject. A GameObject remains spawned while at least one component is visible. `OnObserverAdded/Removed` may fire per component.
 - Per-identity override applies downwards with **Children Inherit**; placing override on a lower component in the same GameObject does not override components above it. Put override on the top relevant network component to avoid unintended visibility.
 - Visibility is **not continuously recalculated**; ask for reevaluation when game state changes (see `using-the-visibility.md`). `CanSee` runs on server; prioritize cheap tests in custom rules.
-- Visibility is about which data is replicated, not a trusted authorization check. Use separate server validation to guard attack/trade/chat actions. OwnerOnly scopes module data, not spawned identity.
+- Visibility is about which data is replicated, not a trusted authority check. Use separate server validation to guard attack/trade/chat actions. OwnerOnly scopes module data, not spawned identity.
 - PurrDiction predicted visibility uses separate server controls (`PredictionManager.HideFrom/ShowTo`), not these ordinary Network Rules.
 
 Tests: 3 players, mixed owners, whitelists and blacklists, nested children, per-component override, scene loads, late join and re-evaluation after team change; capture observers/server logs to prove no private data escaped.

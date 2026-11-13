@@ -1,12 +1,12 @@
 # Performance, bande passante, profils de test
 
-**Sources officielles** : `systems-and-modules/bandwidth-profiler.md`, `readme/performance/`, `systems-and-modules/bitpacker-serialization/`, `plug-n-play-components/network-transform.md`, `network-transform/adaptive-sync.md`, `client-side-prediction/disposable-collections.md`.
+**Official sources**: `systems-and-modules/bandwidth-profiler.md`, `readme/performance/`, `systems-and-modules/bitpacker-serialization/`, `plug-n-play-components/network-transform.md`, `network-transform/adaptive-sync.md`, `client-side-prediction/disposable-collections.md`.
 
-- Mesurer avant d'optimiser : octets/s par catégorie/objet, nombre RPC, ticks, correction freq, taille de history, GC, CPU serveur et client. `NetworkTransform` est différent de `PredictedTransform`.
-- Réduire les messages à haute fréquence : choisir le bon Sync Type/SyncInput, intervalle/delta, une voie unreliable uniquement si perte acceptable, payloads compressibles et observer sets petits.
-- Utiliser visibility et ownerOnly pour **ne pas envoyer** les données non nécessaires. Vérifier fuite de valeurs privées lors des transferts d'owner.
-- En PurrDiction, les états volumineux sont dupliqués lors de reconciliation : `Disposable*`, `IDuplicate`, `Dispose`, policy adaptée et de vrais tests rollback.
-- Ne pas faire confiance à un benchmark ancien de Stray Help; comparer dans les conditions de build du projet.
+- Measure before optimizing: bytes/s by category/object, number RPC, ticks, freq correction, history size, GC, server CPU and client. `NetworkTransform` is different from `PredictedTransform`.
+- Reduce messages to high frequency: choose the right Sync Type/SyncInput, interval/delta, a path that can only be linked if acceptable loss, compressible payloads and small sets.
+- Use visibility and ownerOnly for **do not send** data not required. Check private values leak when transferring owner.
+- In PurrDiction, the bulky states are duplicated during reconciliation: `Disposable*`, `IDuplicate`, `Dispose`, adapted policy and real rollback tests.
+- Do not trust an old Stray Help benchmark; compare under project build conditions.
 
 ## Matrice
-2/4/8 clients selon cible, 60/120 ms ping, 0/1/5% pertes, jitter, tick 30/60, FPS 30/144, dédié headless, spikes d'entités, late joins. Reporter les mesures réellement observées, sans inventer de chiffres.
+2/4/8 clients according to target, 60/120 ms ping, 0/1/5% losses, jitter, tick 30/60, FPS 30/144, dedicated headsless, entity spikes, late joins. Report the measures actually observed, without inventing numbers.

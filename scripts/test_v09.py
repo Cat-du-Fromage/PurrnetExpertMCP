@@ -45,7 +45,7 @@ class V09Tests(unittest.TestCase):
             p=Path(td)
             (p/'SKILL.md').write_text((ROOT/'SKILL.md').read_text(encoding='utf-8'))
             errors=audit_skill_authoring.audit(p)['errors']
-            self.assertTrue(any('cassé' in e for e in errors))
+            self.assertTrue(any('Broken direct link' in e for e in errors))
 
     def test_eval_cases_have_assertions_and_context(self):
         self.assertGreaterEqual(len(self.cases),12)
@@ -81,7 +81,7 @@ class V09Tests(unittest.TestCase):
 
     def test_official_visibility_priority(self):
         doc=(ROOT/'references/core/visibility-priority.md').read_text()
-        for needle in ('whitelist','blacklist','Parent','OU','composant','réévaluation'):
+        for needle in ('whitelist','blacklist','Parent','OR','component','reevaluat'):
             self.assertIn(needle.lower(),doc.lower())
 
     def test_security_spawn_gate_refuses_all_by_default(self):
@@ -103,12 +103,12 @@ class V09Tests(unittest.TestCase):
         for path in ('core/spawn-security-and-persistence.md','core/player-identity-and-lazy-refs.md',
                      'prediction/one-shot-input-and-events.md','prediction/mirror-and-visibility.md'):
             txt=(ROOT/'references'/path).read_text(encoding='utf-8')
-            self.assertTrue(any(needle in txt.lower() for needle in ('non compil','non compilé','non compilés','pas de prefab unity compilé')),path)
+            self.assertTrue(any(needle in txt.lower() for needle in ('not compiled','uncompiled')),path)
 
     def test_document_version_not_hardcoded_as_latest(self):
         head=(ROOT/'SKILL.md').read_text()
         self.assertNotIn('PurrNet version latest: 1.25.0',head)
-        self.assertIn('package installé',head)
+        self.assertIn('installed packages',head)
 
 if __name__ == '__main__':
     unittest.main()

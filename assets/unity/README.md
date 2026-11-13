@@ -1,28 +1,28 @@
-# Patrons Unity C# — opt-in, pas une installation automatique
+# Patrons Unity C# — opt-in, not automatic installation
 
-Ces fichiers sont **des exemples autonomes écrits pour cette skill**. Ils ne sont **pas** des templates de déploiement Edgegap et n'ont **pas été compilés avec Unity** ici. Avant d'en faire des scripts du projet :
+These files are ** autonomous examples written for this skill**. They are **not** Edgegap deployment templates and have **not been compiled with Unity** here. Before making them project scripts:
 
-1. Vérifier la signature dans `Assets/PurrNet/Runtime/` ou `Packages/dev.purrnet.purrnet/` de la révision installée.
-2. Copier uniquement le fichier utile dans `Assets/` de ton projet Unity ; ajuster le namespace / `.asmdef`.
-3. Ajouter le script à un GameObject possédant/configuré avec une `NetworkIdentity` selon la documentation et les Network Rules. Vérifier le prefab et l'ownership dans Unity.
-4. Tester en host puis avec deux clients ; jamais déclarer prêt pour un jeu compétitif sans autorisation et rate-limit explicites.
+1. Check the `Assets/PurrNet/Runtime/` or `Packages/dev.purrnet.purrnet/` signature of the installed revision.
+2. Copy only the useful file to `Assets/` from your Unity project; adjust the namespace / `.asmdef`.
+3. Add the script to a GameObject with/configured with a `NetworkIdentity` according to documentation and Network Rules. Check for prefab and ownership in Unity.
+4. Test in host then with two clients; never declare ready for a competitive game without explicit permission and splendour.
 
 ## Patron 1 : ExampleNetworkCounter.cs
 
-Exemple minimal d'une **intention client** vers le serveur via `[ServerRpc]` puis d'un état durable `SyncVar<int>`. L'appel devrait provenir du bon propriétaire sous Network Rules strictes ; cette version démo n'est **pas** résistante au spam et **ne doit pas** remplacer les validations de gameplay.
+Minimum example of a ** client intention** to the server via `[ServerRpc]` and then a durable `SyncVar<int>` state. The call should come from the right owner under Network Rules strict; this demo version is **not** spam resistant and **does not** replace gameplay validations.
 
 ## Patron 2 : ExampleWorldSeed.cs
 
-Exemple d'initialisation du serveur et diffusion d'une graine avec `[ObserversRpc(runLocally: true, bufferLast: true)]`. Démontre la distinction host / dedicated et l'arrivée tardive. Pour un jeu réel, conserver les états déterminants côté serveur et utiliser le mécanisme de réplication approprié ; un seed reçu ne représente pas automatiquement l'état du monde complet.
+Example of server initialization and seed diffusion with `[ObserversRpc(runLocally: true, bufferLast: true)]`. Demonstrate host / dedicated distinction and late arrival. For a real game, keep server-side determinant states and use the appropriate replication mechanism; a received seed does not automatically represent the state of the entire world.
 
-Sources à contrôler :
+Sources to be checked:
 - https://github.com/PurrNet/PurrDocs/blob/main/systems-and-modules/remote-procedure-call-rpc/README.md
 - https://github.com/PurrNet/PurrDocs/blob/main/systems-and-modules/network-modules/sync-types/syncvar.md
 - https://github.com/PurrNet/PurrDocs/blob/main/systems-and-modules/network-identity/networkbehaviour.md
 
 ### PurrDiction v0.3
 
-**Aucun template C# PurrDiction n'est certifié ici.** Les signatures de prédiction (notamment modules/policies) évoluent ; lire `references/purrdiction-best-practices.md` et la source réellement installée avant de construire un exemple. Il est préférable de dériver un contrôleur du sample officiel du commit correspondant plutôt que fournir un faux exemple « prêt à compiler ».
+**No C# PurrDiction template is certified here.** Predictive signatures (including modules/policies) evolve; read `references/purrdiction-best-practices.md` and the source actually installed before building an example. It is preferable to derive a controller from the official sample of the corresponding commit rather than provide a false example "ready to compile".
 
 ## v0.6 additional examples (NOT Unity-compiled)
 

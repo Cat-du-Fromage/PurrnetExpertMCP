@@ -37,9 +37,7 @@ writing, refactoring or debugging any multiplayer/networked gameplay**, load
 "my shots don't sync", "remote inventory", "host works but client doesn't",
 "late join is broken", "desync", "rollback", "lag compensation", "lobby",
 "ownership", "scene loading" or "I need co-op / dedicated servers".
-French equivalents: « joueur qui tremble », « tirs désynchronisés », « réseau »,
-« multijoueur », « réplication », « synchronisation », « déplacement en ligne »,
-« autorité serveur », « rejoindre une partie », « scènes réseau ».
+Apply the same triggers when users describe these symptoms in another language.
 For symptoms that resemble known historical bugs (duplicate host RPC, late-join empty
 SyncList, SyncVar null, ILPP build crash, SteamWorks errors, WebGL jitter), read
 `references/historical/triage-playbook.md` from the installed skill and run

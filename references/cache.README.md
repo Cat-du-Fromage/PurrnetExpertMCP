@@ -1,15 +1,15 @@
-# Documentation officielle PurrDocs (cache optionnel)
+# Official documentation PurrDocs (optional cache)
 
-Ce dossier de cache **n'est pas inclus dans l'archive**. Pour une copie Markdown complète utilisable hors ligne, exécuter :
+This cache folder ** is not included in the archive**. For a complete Markdown copy that can be used offline, run:
 
 ```bash
 python scripts/sync_sources.py
 python scripts/docs_catalog.py coverage
 ```
 
-Le script clone **tout** le dépôt `PurrNet/PurrDocs` sous `references/cache/official-docs/` et crée un `docs-index.json` indiquant le commit exact. Les synthèses originales dans `references/*.md` restent disponibles même sans synchronisation. Ne pas republier ce cache sans vérifier les droits.
+The script clones **all** the `PurrNet/PurrDocs` repository on `references/cache/official-docs/` and creates a `docs-index.json` indicating the exact commit. The original syntheses in `references/*.md` remain available even without syncing. Do not republish this cache without checking the rights.
 
-Définir `PURRNET_DOCS_DIR` sur le chemin absolu du clone permet de partager le même cache entre les copies installées de la skill et le MCP. Le serveur construit sa base SQLite à côté de l’inventaire avec `uv run purrnet-expert-cache index` depuis le dépôt. Les scripts de la skill lisent directement le Markdown.
+Set `PURRNET_DOCS_DIR` on the absolute path of the clone allows you to share the same cache between the installed copies of the skill and the MCP. The server builds its SQLite database next to the inventory with `uv run purrnet-expert-cache index` from the repository. The skills scripts read the Markdown directly.
 
 
 ## Archive Stray Help (opt-in, distincte de PurrDocs)
@@ -19,4 +19,4 @@ python scripts/sync_stray_archive.py
 python scripts/search_stray_archive.py 'NetworkTransform' --limit 8
 ```
 
-Ce script télécharge localement **le commit historique exact** de `nmban/Purrnet-Stray_Help`, sans écraser les fichiers et sans le republier. Les réponses Discord sont historiques, non normatives et potentiellement sensibles ; consulter uniquement quelques extraits utiles au diagnostic. Le dossier `references/cache/` est ignoré par Git et **exclu de tous les ZIP** de la skill.
+This script downloads locally **the exact historical commit** from `nmban/Purrnet-Stray_Help`, without overwriting the files and without republishing it. Discord responses are historical, non-normative and potentially sensitive; see only a few extracts useful for diagnosis. The `references/cache/` folder is ignored by Git and **excludes all ZIP** from the skill.

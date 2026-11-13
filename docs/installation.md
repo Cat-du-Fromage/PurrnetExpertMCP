@@ -1,8 +1,8 @@
-# Installation locale
+# Local installation
 
-Prérequis pour le serveur et la CI locale. Python 3.11 ou supérieur avec SQLite FTS5, Git et uv. Lancez `uv sync --locked` depuis le dépôt pour créer l’environnement à partir de `uv.lock`. Les configurations ci-dessous réutilisent cet environnement avec `--no-sync`.
+Use Git, uv and Python 3.11 or later with SQLite FTS5. Run `uv sync --locked` in this repository to install from `uv.lock`. The configurations below reuse that environment with `--no-sync`.
 
-## Synchronisation explicite
+## Synchronize documentation
 
 ```sh
 uv run --no-sync python scripts/sync_sources.py
@@ -10,22 +10,22 @@ uv run --no-sync purrnet-expert-cache index
 uv run --no-sync purrnet-expert-cache status --verify
 ```
 
-Pour mettre à jour PurrDocs, relancez le script avec `--refresh`, puis l’indexation. Pour reproduire un instantané, utilisez `--commit <SHA complet>` avant d’indexer. Le script conserve l’inventaire du commit précédent dans `docs-index.previous.json`. L’index existant reste lisible pendant une mise à jour et après un échec de reconstruction.
+To update PurrDocs, rerun the sync script with `--refresh`, then rebuild the index. To reproduce a snapshot, pass `--commit <FULL_SHA>` before indexing. The script retains the previous commit's inventory in `docs-index.previous.json`. The existing index stays readable during updates and after a failed rebuild.
 
-Le cache par défaut est `references/cache/official-docs` dans ce dépôt. Pour partager un autre emplacement avec la skill, définissez `PURRNET_DOCS_DIR` sur le chemin absolu du clone dans l’environnement du serveur et dans celui des scripts. Utilisez un répertoire parent dédié, car celui-ci contient aussi `docs-index.json` et `purrdocs.sqlite3`. Les scripts de la skill peuvent consulter ce clone sans installer le serveur. L’état `stale` indique un changement d’inventaire depuis l’indexation. `status --verify` vérifie également les empreintes sur disque.
+The default checkout is `references/cache/official-docs` in this repository. To share another checkout between the skill and server, set `PURRNET_DOCS_DIR` to its absolute path in both environments. Use a dedicated parent directory for the checkout, `docs-index.json` and `purrdocs.sqlite3`. The skill scripts can read the checkout directly. A `stale` status indicates that the inventory has changed since indexing. `status --verify` also checks file hashes.
 
-## Installer la skill dans un projet Unity
+## Install the skill in a Unity project
 
 ```sh
 uv run --no-sync python scripts/install_project.py "/absolute/path/to/UnityProject" --target both
 uv run --no-sync python scripts/install_project.py "/absolute/path/to/UnityProject" --target both --apply
 ```
 
-La première commande affiche les modifications prévues. La seconde publie la skill dans `.agents/skills/purrnet-expert` pour Codex et `.claude/skills/purrnet-expert` pour Claude Code. Elle ajoute un bloc délimité dans `AGENTS.md` et `CLAUDE.md`. `--skip-hooks` installe uniquement la skill et `--upgrade` sauvegarde l’installation précédente. Dans une session sans MCP, la skill utilise le routeur, le catalogue PurrDocs, la recherche C# et le vérificateur de versions existants.
+The first command previews changes. The second installs the skill in `.agents/skills/purrnet-expert` for Codex and `.claude/skills/purrnet-expert` for Claude Code. It adds a delimited activation block to `AGENTS.md` and `CLAUDE.md`. Use `--skip-hooks` to install only the skill and `--upgrade` to back up and replace the previous installation. Without the MCP server, the skill uses its router, PurrDocs catalog, C# search and version checker.
 
 ## Codex
 
-Ajoutez une entrée au fichier `~/.codex/config.toml`. Remplacez les deux chemins et utilisez le chemin absolu de `uv` si le client ne le trouve pas.
+Add this entry to `~/.codex/config.toml`. Replace the paths and use the absolute path to `uv` if Codex cannot locate it.
 
 ```toml
 [mcp_servers.purrnet-expert]
@@ -36,13 +36,13 @@ args = ["--directory", "/absolute/path/to/PurrnetExpertMCP", "run", "--no-sync",
 PURRNET_PROJECT_ROOTS = "/absolute/path/to/UnityProject"
 ```
 
-Relancez la session et vérifiez l’entrée avec `codex mcp list`. [Documentation officielle Codex](https://developers.openai.com/codex/mcp).
+Restart the session and verify the entry with `codex mcp list`. [Codex documentation](https://developers.openai.com/codex/mcp).
 
 ## Claude Code
 
-Ajoutez l’entrée de [claude.mcp.example.json](claude.mcp.example.json) sous `mcpServers` dans le fichier `.mcp.json` à la racine du projet Unity. Remplacez les chemins, ouvrez le projet dans Claude Code et vérifiez le serveur dans `/mcp`. Sous Windows, les chemins JSON acceptent les barres obliques ou des contre-obliques échappées. [Documentation officielle Claude Code](https://code.claude.com/docs/en/mcp).
+Add the entry from [claude.mcp.example.json](claude.mcp.example.json) under `mcpServers` in the Unity project's `.mcp.json`. Replace the paths, open the project in Claude Code and check the server in `/mcp`. Windows JSON paths accept forward slashes or escaped backslashes. [Claude Code documentation](https://code.claude.com/docs/en/mcp).
 
-`PURRNET_PROJECT_ROOTS` limite les projets consultables. Pour plusieurs racines, utilisez le séparateur de chemins du système, `;` sous Windows et `:` sous Linux/macOS. Les appels MCP prennent un chemin absolu du projet.
+`PURRNET_PROJECT_ROOTS` limits which projects the server can inspect. Separate multiple roots with the system's path separator, `;` on Windows and `:` on Linux/macOS. Pass absolute project paths to MCP tools.
 
 ## Tests
 
@@ -52,4 +52,4 @@ uv run --no-sync python -X utf8 -m unittest discover -s scripts -p "test*.py" -v
 uv run --no-sync python -X utf8 scripts/validate_skill.py
 ```
 
-Le contrôle `validate_skill.py --release` s’applique à un arbre destiné à être distribué. La CI l’exécute sur un checkout sans cache.
+Use `validate_skill.py --release` to audit a distribution tree. CI runs it on a clean checkout without the documentation cache.

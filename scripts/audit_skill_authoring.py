@@ -25,35 +25,35 @@ def audit(root: Path) -> dict:
     data = path.read_text(encoding='utf-8')
     match = re.match(r'\A---\s*\n(.*?)\n---\s*\n', data, re.S)
     if not match:
-        return {'errors': ['frontmatter YAML absent ou mal formé'], 'warnings': [], 'checks': {}}
+        return {'errors': ['YAML frontmatter missing or invalid'], 'warnings': [], 'checks': {}}
     fm, body = match.group(1), data[match.end():]
     n = re.search(r'^name:\s*([\w-]+)\s*$', fm, re.M)
     d = re.search(r'^description:\s*(.+)\s*$', fm, re.M)
     name = n.group(1) if n else ''
     if not name or len(name) > 64 or not NAME.fullmatch(name):
-        errors.append('Nom Agent Skills non conforme (minuscules/tirets, 64 caractères max)')
+        errors.append('Invalid Agent Skills name (lowercase letters, digits and hyphens, 64 characters maximum)')
     desc = ''
     if d:
         raw = d.group(1).strip()
         try:
             desc = json.loads(raw) if raw.startswith('"') else raw.strip("'")
         except json.JSONDecodeError:
-            errors.append('description YAML double-quoted invalide')
+            errors.append('Invalid double-quoted YAML description')
     if not desc or len(desc) > 1024:
-        errors.append('description absente ou trop longue (maximum 1024 caractères)')
+        errors.append('Description missing or longer than 1024 characters')
     if re.search(r'(?i)\b(?:I can|you can|je peux|tu peux|vous pouvez)\b', desc):
-        errors.append('description non rédigée à la troisième personne')
+        errors.append('Description must use the third person')
     if not re.search(r'\b(?:Use when|Used when|Triggered by|Use for)\b', desc):
-        warnings.append('description : déclencheurs/conditions d’usage peu explicites')
+        warnings.append('Description needs clearer activation conditions')
     if not any(term in desc.lower() for term in ('purrnet', 'purrdiction', 'networktransform')):
-        errors.append('description sans signal technique PurrNet/PurrDiction')
+        errors.append('Description lacks a PurrNet or PurrDiction term')
     if len(body.splitlines()) >= 500:
-        errors.append('SKILL.md atteint >=500 lignes : subdiviser')
+        errors.append('Split SKILL.md into focused references before it reaches 500 lines')
 
     links = sorted(set(MD_LINK.findall(body)))
     for p in links:
         if not (root / p).is_file():
-            errors.append(f'Lien direct SKILL.md cassé : {p}')
+            errors.append(f'Broken direct link in SKILL.md: {p}')
     expected = ('references/purrdiction-best-practices.md', 'references/workflows/feature.md',
                 'references/workflows/bug.md', 'references/workflows/dedicated.md',
                 'references/core/spawn-security-and-persistence.md',
@@ -61,7 +61,7 @@ def audit(root: Path) -> dict:
                 'references/anthropic-skill-authoring.md')
     for p in expected:
         if p not in links:
-            errors.append(f'Guide critique non directement lié depuis SKILL.md : {p}')
+            errors.append(f'SKILL.md needs a direct link to: {p}')
 
     long_refs = []
     for f in (root / 'references').rglob('*.md'):
@@ -71,10 +71,10 @@ def audit(root: Path) -> dict:
         if len(lines) > 100:
             long_refs.append(f.relative_to(root).as_posix())
             if not any('Table des matières' in ln or 'Contents' in ln or 'Sommaire' in ln for ln in lines[:24]):
-                warnings.append(f'Référence >100 lignes sans sommaire : {f.relative_to(root)}')
+                warnings.append(f'Reference exceeds 100 lines and lacks a table of contents: {f.relative_to(root)}')
     route = root / 'references/task-routes.json'
     if not route.exists():
-        errors.append('Fichier de routage absent')
+        errors.append('Route file missing')
     else:
         try:
             rules = json.loads(route.read_text(encoding='utf-8'))['rules']
@@ -83,12 +83,12 @@ def audit(root: Path) -> dict:
                       'core/visibility-priority.md', 'core/collider-rollback-classic.md',
                       'prediction/mirror-and-visibility.md', 'prediction/one-shot-input-and-events.md'):
                 if p not in routed:
-                    errors.append('Guide v0.9 non routé : ' + p)
+                    errors.append('No route for v0.9 guide: ' + p)
         except (ValueError, KeyError, TypeError) as exc:
-            errors.append(f'Routes invalides: {exc}')
+            errors.append(f'Invalid routes: {exc}')
 
     # Make visibility of a non-performed agent evaluation part of static audit output.
-    warnings.append('Non vérifié : activation spontanée Haiku/Sonnet/Opus, compilation Unity et tests E2E')
+    warnings.append('Unverified: spontaneous Haiku/Sonnet/Opus activation, Unity compilation and end-to-end tests')
     return {'errors': errors, 'warnings': warnings,
             'checks': {'skill_lines': len(body.splitlines()), 'description_chars': len(desc),
                        'direct_reference_links': len(links), 'long_references': long_refs}}

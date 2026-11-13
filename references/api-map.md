@@ -1,25 +1,25 @@
-# Carte des concepts et API — points d'entrée vérifiés
+# Concepts and API map — ports of entry verified
 
-Ceci est un **annuaire de concepts**, pas un remplacement des signatures de la
-version installée. Liens : `source-map.md`.
+This is a ** concept directory**, not a replacement of signatures of the
+installed version. Links: `source-map.md`.
 
-| Besoin | PurrNet | Point de vérification |
+| Need | PurrNet | Verification point |
 | --- | --- | --- |
-| Entrée réseau | `NetworkManager`, transports, Network Prefabs, Network Rules | `systems-and-modules/network-manager/` |
-| Script lié au réseau | `NetworkBehaviour`, `NetworkIdentity` | `systems-and-modules/network-identity/` |
-| Côté serveur/client/host | `OnSpawned(bool asServer)` | `networkbehaviour.md` + source exact |
-| Appel client → serveur | `[ServerRpc]` | `remote-procedure-call-rpc/README.md` |
-| Appel vers observateurs | `[ObserversRpc]` | même page |
-| Appel ciblé | `[TargetRpc]`, `PlayerID` | même page |
-| État synchronisé | `SyncVar<T>`, `.value`, `.onChanged` | `sync-types/syncvar.md` |
+| Network input | `NetworkManager`, transports, Network Prefabs, Network Rules | `systems-and-modules/network-manager/` |
+| Network Script | `NetworkBehaviour`, `NetworkIdentity` | `systems-and-modules/network-identity/` |
+| Server/client/host side | `OnSpawned(bool asServer)` | `networkbehaviour.md` + source exact |
+| Client to server call | `[ServerRpc]` | `remote-procedure-call-rpc/README.md` |
+| Call to observers | `[ObserversRpc]` | same page |
+| Targeted call | `[TargetRpc]`, `PlayerID` | same page |
+| Synchronised status | `SyncVar<T>`, `.value`, `.onChanged` | `sync-types/syncvar.md` |
 | Listes / dictionnaires | `SyncList`, `SyncDictionary` | `network-modules/sync-types/` |
 | Spawning | `Instantiate`, `Destroy`, Network Identity/Prefabs | `spawning-and-despawning/README.md` |
-| Sécurité | `Network Rules`, `ServerStrict`, `ServerOwner`, `Unsafe` | `network-rules.md` |
-| Mouvement / prediction | `PurrDiction` (package complémentaire) | `client-side-prediction/` |
+| Security | `Network Rules`, `ServerStrict`, `ServerOwner`, `Unsafe` | `network-rules.md` |
+| Mouvement / prediction | `PurrDiction` (additional package) | `client-side-prediction/` |
 
-## Mini-extrait conceptuel de la documentation officielle
+## Mini-conceptual extract from official documentation
 
-À adapter aux règles d'autorité et à la révision locale :
+To be adapted to the rules of authority and local revision:
 
 ```csharp
 using PurrNet;
@@ -35,32 +35,32 @@ public class ExampleRpc : NetworkBehaviour
     [ObserversRpc]
     private void NotifyObservers()
     {
-        // Effet visuel côté observateurs.
+        // Play the visual effect on observing clients.
     }
 }
 ```
 
-Source de référence des attributs :
+Attribute reference source:
 https://github.com/PurrNet/PurrDocs/blob/main/systems-and-modules/remote-procedure-call-rpc/README.md
 
-**Ne pas** dire que ce code a été compilé. `ServerRpc` dépend de l'objet
-spawné, des règles réseau et de l'autorisation du client appelant.
+**Do not** say this code has been compiled. `ServerRpc` depends on the object
+Check that the object has spawned and that the Network Rules authorize the calling client.
 
 ## Alerte migrateur
 
-- Mirror : ne pas utiliser automatiquement `[Command]` / `NetworkServer.Spawn()`.
-- Unity Netcode for GameObjects : ne pas substituer `NetworkVariable<T>` ou
-  `ServerRpcParams` sans confirmation explicite.
-- FishNet : ne pas transposer des méthodes d'ownership ou des hooks portant
-  un nom similaire sans vérification dans PurrNet.
+- Mirror: Do not automatically use `[Command]` / `NetworkServer.Spawn()`.
+- Unity Netcode for GameObjects: do not substitute `NetworkVariable<T>` or
+  `ServerRpcParams` without explicit confirmation.
+- FishNet: Do not transpose ownership methods or hooks carrying
+  a similar name without verification in PurrNet.
 
 ## Conseils de synchronisation
 
-- Une modification du gameplay critique doit avoir une autorité claire.
-- L'interface utilisateur peut réagir à l'état répliqué ; l'UI n'est pas la
-  source de vérité métier.
-- Documenter le comportement lors d'un late join et après reconnexion.
-- Séparer les appels ponctuels (RPC) de l'état durable (SyncVar ou autre
-  mécanisme adapté).
-- Ne pas synchroniser en boucle des `Transform`/`GameObject` à travers des
-  sérialiseurs non vérifiés.
+- A change to the critical gameplay must have clear authority.
+- The user interface can react to the replicated state; the IU is not the
+  a source of professional truth.
+- Document behavior during late join and after reconnexion.
+- Separate one-time calls (RPC) from durable (SyncVar or other)
+  adapted mechanism).
+- Do not loop sync `Transform`/`GameObject` through the
+  unverified serializers.

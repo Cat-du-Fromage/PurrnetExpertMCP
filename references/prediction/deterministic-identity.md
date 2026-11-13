@@ -1,13 +1,13 @@
-# DeterministicIdentity, math et désynchronisation
+# DeterministicIdentity, Math and Desynchronization
 
 **Sources** `client-side-prediction/deterministic-identity.md`, `flow.md`, `best-practices.md`.
 
-- `DeterministicIdentity<STATE>` / `<INPUT,STATE>` pour simulation strictement bit-stable; callback `Simulate` avec **`sfloat delta`**, math déterministe `sfloat` / `FP`, pas du float Unity non déterministe pour les calculs décisifs.
-- `STATE` doit être complet et les opérations math (`IMath<T>`) compatibles avec interpolation. Pas de mutations d'état depuis Awake/LateAwake, mais pendant timeline simulée (`SimulationStart`, `Simulate`, events qui proviennent de simulation).
-- Un modèle déterministe n'envoie pas de snapshot complet chaque tick dans le même sens qu'une identité prédite non déterministe; des checks de hash permettent de détecter les désaccords.
-- **Desync Policy** : `Ignore` (pas de checks), `Report` (événements de diagnostic), `Resync` (rebase complet client), `Correct` (corrige l'identité). Vérifier API et compatibilité version; définir le compromis CPU/bande passante et fréquence (`Desync Check Interval`).
-- Une policy `SoftCorrection` n'est pas supportée par deterministic identities; l'effet client retombe à ServerRelay. Ne pas interpréter ce fallback comme validant le comportement voulu.
-- Désynchronisation ne se corrige pas en ajoutant de `Time.deltaTime`, du RPC replayé ou de physics Unity arbitraire; identifier le premier tick divergent.
+- `DeterministicIdentity<STATE>` / `<INPUT,STATE>` for strictly bit-stable simulation; callback `Simulate` with **`sfloat delta`**, deterministic math `sfloat` / `FP`, not non-deterministic Unity float for decisive calculations.
+- `STATE` must be complete and math operations (`IMath<T>`) compatible with interpolation. No state mutations from Awake/LateAwake, but during simulated timeline (`SimulationStart`, `Simulate`, events from simulation).
+- A deterministic model does not send a complete snapshot of each tick in the same direction as a predicted non-deterministic identity; hash checks allow for the detection of disagreements.
+- **Desync Policy**: `Ignore` (no checks), `Report` (diagnostic events), `Resync` (full client database), `Correct` (identification corrects). Check API and version compatibility; set the CPU/bandwidth compromise and frequency (`Desync Check Interval`).
+- A `SoftCorrection` policy is not supported by deterministic identities; the client effect falls to ServerRelay. Do not interpret this fallback as validating the desired behavior.
+- Desynchronization is not corrected by adding `Time.deltaTime`, replayed RPC or arbitrary Unity physics; identify the first divergent tick.
 
 ## Tests
-Windows/Linux builds, ordre de construction statique, payload perdu / full frame rebase, 0/1/5% pertes, rejoin, divergence artificielle et réaction effective Report/Correct/Resync.
+Windows/Linux buildings, static construction order, lost payload / full frame rebase, 0/1/5% losses, join, artificial divergence and effective reaction Report/Correct/Resync.

@@ -1,27 +1,27 @@
-# Workflow D — Gameplay prédit et PurrDiction
+# Workflow D — Predicted gameplay with PurrDiction
 
-**Précondition** : vérifier `dev.purrnet.purrdiction` séparément de `dev.purrnet.purrnet` et lire obligatoirement `references/purrdiction-best-practices.md` (BP-01 à BP-10). Ouvrir docs `client-side-prediction/{best-practices,input-handling,state-handling,flow,prediction-policies,views-and-interpolation}.md` selon les tâches ; API et version dans le package local.
+**Condition**: check `dev.purrnet.purrdiction` separately from `dev.purrnet.purrnet` and read `references/purrdiction-best-practices.md` (BP-01 to BP-10). Open docs `client-side-prediction/{best-practices,input-handling,state-handling,flow,prediction-policies,views-and-interpolation}.md` according to the tasks; API and version in the local package.
 
-## Phase P0 — Séparer entrée, simulation, état et vue
+## Phase P0 — Separate input, simulation, state and view
 
-- INPUT `IPredictedData` : `GetFinalInput` par tick ; `UpdateInput` pour fronts (`GetKeyDown`), `SanitizeInput` sur serveur + client, `ModifyExtrapolatedInput` pour événements ponctuels. Ne pas lire les composants d'Input au milieu du replay.
-- STATE `IPredictedData<T>` : tout état mutable qui influence la simulation. `GetInitialState`, `GetUnityState` et `SetUnityState` pour les composants Unity à restaurer.
-- `Simulate`/`LateSimulate` : purs du point de vue des effets non rejouables ; pas de RPC, analytics, audio, particules/Instantiate standard, Time/Random Unity direct.
-- View : `UpdateView`, `LateUpdateView`, `PredictedEvent` selon nature de la présentation, vérifier apparition des événements sur timeline vérifiée.
+- INPUT `IPredictedData`: `GetFinalInput` by tick; `UpdateInput` for button edges (`GetKeyDown`), `SanitizeInput` on server + client, `ModifyExtrapolatedInput` for one-time events. Do not read Input components in the middle of the replay.
+- STATE `IPredictedData<T>`: any mutable state that influences simulation. `GetInitialState`, `GetUnityState` and `SetUnityState` for Unity components to restore.
+- `Simulate`/`LateSimulate`: keep ordinary RPCs, analytics, audio, particles and standard Instantiate outside replay. Use predicted time and randomness.
+- View: `UpdateView`, `LateUpdateView`, `PredictedEvent` depending on the nature of the presentation, verify when effects run on the confirmed timeline.
 
-## Phase P1 — Topologie et politiques
+## Phase P1 — Topology and Policy
 
-Choisir `PredictedIdentity<STATE>` / `<INPUT,STATE>` / `StatelessPredictedIdentity` / `PredictedModule` / `DeterministicIdentity` selon besoin. Instances via `PredictedHierarchy.Create/Delete`, références `PredictedObjectID`, `PredictedParent` et règles de visibilité prédites. Sélectionner FullPrediction / PredictedIfOwned / ServerRelay / SoftCorrection ; justifier owner, bots, interactions historiques et coût de replays. Les composants NetworkIdentity miroirs dépendent de la version ; ne pas conclure à une incompatibilité absolue.
+Choose `PredictedIdentity<STATE>` / `<INPUT,STATE>` / `StatelessPredictedIdentity` / `PredictedModule` / `DeterministicIdentity` as required. Instances via `PredictedHierarchy.Create/Delete`, `PredictedObjectID` references, `PredictedParent` and predicted visibility rules. Select FullPrediction / PredictedIfOwned / ServerRelay / SoftCorrection; account for ownership, bots, interactions with historical state and replay cost. NetworkIdentity components are version dependent; do not conclude that there is absolute incompatibility.
 
-## Phase P2 — Intégration minimale
+## Phase P2 — Minimum integration
 
-Éviter le double writer `NetworkTransform` et `PredictedTransform`, les collections non disposées, les modules statiques créés de façon conditionnelle par peer, les références directes à des objets recréés en rollback. Voir `references/prediction/real-world-recipes.md`, `prediction/predicted-modules.md`, `prediction/physics-and-collisions.md`.
+Avoid competing writers `NetworkTransform` and `PredictedTransform`, undisposed collections, static modules created conditionally by peer, direct references to objects recreated during rollback. See `references/prediction/real-world-recipes.md`, `prediction/predicted-modules.md`, `prediction/physics-and-collisions.md`.
 
-## Phase P3 — Prouver
+## Phase P3 — Verify
 
-- **Prouver la compilation et les Inspector settings** PredictionManager, providers physics, predicted prefabs, tick.
-- Test A : input 1 tick, état client vs serveur, corrected state, visibilité sans double effet audio/UI.
-- Test B : latence et perte de paquets, replay, extrapolation d'input ponctuel non répétée.
-- Test C : projectile / spawn, ownership change, parentage, suppression, pooling, late join.
-- Test D : policy fallback/soft correction, out-of-order, fréquence de tick et FPS différents.
-- Statuer chaque BP-01..BP-10 : OK démontré / N/A justifié / défaut / non vérifié. Si aucun Unity accessible, s'arrêter au niveau de preuve D2 au maximum.
+- **Prove compilation and Inspector settings** PredictionManager, physics providers, predicted prefabs, tick.
+- Test A: one-tick input, client/server state, correction and visibility without duplicate audio or UI effects.
+- Test B: latency and packet loss, replay, one-shot input stays cleared in extrapolation.
+- Test C : projectile / spawn, ownership change, parenting, deletion, pooling, late join.
+- Test D: policy fallback/soft correction, out-of-order, tick frequency and different FPS.
+- For BP-01 through BP-10, record verified, justified N/A, failed or unverified. Without Unity access, the maximum evidence level is D2.

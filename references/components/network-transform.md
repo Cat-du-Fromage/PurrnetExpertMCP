@@ -15,6 +15,6 @@ Official: `plug-n-play-components/network-transform.md` and `plug-n-play-compone
 
 ## Verify
 1. Host, remote 2 clients, late join: pose and parent agree.
-2. Authority: non-controller cannot drive authoritative pose through this component.
+2. Authority: non-controller cannot drive authorizing pose through this component.
 3. 100ms latency + jitter/loss: motion fluid, no stale drift, buffer latency acceptable.
 4. Compare adaptive sync on/off in bandwidth profiler and report numbers.

@@ -1,32 +1,32 @@
-# Collider Rollback classique versus Lag Compensation de PurrDiction
+# Collider Rollback classic versus Lag Compensation from PurrDiction
 
-**Sources** : `systems-and-modules/collider-rollback.md` et `client-side-prediction/lag-compensation.md`, `client-side-prediction/security.md`.
+**Sources**: `systems-and-modules/collider-rollback.md` and `client-side-prediction/lag-compensation.md`, `client-side-prediction/security.md`.
 
-## Choisir sans mélanger les timelines
+## Choose without mixing the timelines
 
-| Architecture de gameplay | Mécanisme | Où résoudre l'impact ? |
+| Architecture de gameplay | Mechanism | Where to solve the impact? |
 | --- | --- | --- |
-| `NetworkIdentity` classique + déplacement autoritaire serveur | `ColliderRollback` et contrôle serveur du tick/latence | Sur le serveur, après vérification de la demande |
-| `PredictedIdentity` sous PurrDiction | `predictionManager.lagCompensation`, `lagCompensationTick` durant `Simulate` | Timeline prédite, résultat serveur autoritaire |
-| Mouvement entièrement owner-auth et non validé | Aucun ne garantit l'anti-cheat à lui seul | Revoir l'autorité avant de traiter le hit |
+| `NetworkIdentity` Classic + Authoritative Server Move | `ColliderRollback` and Tick/Latency Server Control | On the server, after checking the request |
+| `PredictedIdentity` with PurrDiction | `predictionManager.lagCompensation`, `lagCompensationTick` during `Simulate` | Predicted timeline, authoritative server result |
+| Totally own-auth and not validated | None guarantees the anti-cheat alone | Review the authority before dealing with the hit |
 
-## Workflow classique de tir à hit validation
+## Classic hit-validation fireworkflow
 
-1. Activer le composant `ColliderRollback` sur les colliders concernés et paramétrer l'historique selon les docs et le package.
-2. Le client transmet une **intention de tir** (direction et tick/latence), jamais une décision « j'ai touché X » acceptée directement.
-3. Le serveur vérifie `RPCInfo.sender`/owner, munitions, cooldown, tick ancien borné et origine plausible.
-4. Le serveur effectue le test via `ColliderRollback` de sa version. Ne pas importer une signature ancienne copiée d'un message Discord.
-5. Les dégâts sont calculés et appliqués côté serveur. L'impact visuel se diffuse sans confondre feedback et décision.
+1. Enable the `ColliderRollback` component on the affected colliders and set the history according to the docs and package.
+2. The client transmits a **shooting intent** (direction and tick/latency), never a "I touched X" decision accepted directly.
+3. The server checks `RPCInfo.sender`/owner, ammunition, cooldown, old bounded tick and plausible origin.
+4. The server performs the test via `ColliderRollback` of its version. Do not import an old signed copy of a Discord message.
+5. The damage is calculated and applied on the server side. Visual impact is diffused without confusing feedback and decision.
 
 ## Anti-patterns
 
-- Comparer deux positions rendues localement et annoncer un hit validé.
-- Faire deux rollback simultanés (ColliderRollback classique et lagCompensation PurrDiction) pour un même acteur sans plan de conversion.
-- Faire confiance à un tick arbitrairement ancien transmis par client : fenêtre de compensation bornée.
-- Appliquer les dégâts dans un RPC d'observateurs pour que « tous voient pareil ».
+- Compare two locally rendered positions and announce a validated hit.
+- Make two simultaneous rollbacks (ColliderRollback Classic and LagCompensation PurrDiction) for the same actor without a conversion plan.
+- Trust an arbitrarily old tick transmitted by client: limited clearing window.
+- Apply the damage to an observer RPC so that "all see the same".
 
-## Scénarios
+## Scenarios
 
-Un tir valide à 100 ms, un tir au-delà de la fenêtre permise, un joueur caché, un joueur changeant de scène, un propriétaire malicieux et un hit en présence de perte de paquets. Mesurer l'écart entre rendu client et verdict serveur.
+A valid 100 ms shot, a shot beyond the allowed window, a hidden player, a changing stage player, a malicious owner and a hit in the presence of loss of packages. Measure the gap between rendered client and verdict server.
 
-**Statut** : guide de décision ; aucun code de raycast complet n'est garanti compilable sans vérifier la version installée.
+**status**: decision guide; no complete scratchcast code is guaranteed compileable without checking the installed version.

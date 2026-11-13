@@ -1,50 +1,50 @@
-# Contrat d'acceptation par preuves — PurrNet Expert
+# Agreement of acceptance by evidence — PurrNet Expert
 
-**Une validation doit être un résultat observé.** Les scripts Python, logs d'analyse et signatures ne remplacent ni la compilation, ni un test multijoueur. Respecter les dépendances : ne jamais déclarer D4 « clients jouent » sans log/observation D3 « build compilé » sur la même révision.
+**A validation must be an observed result.** Python scripts, parsing logs and signatures do not replace the compilation or multiplayer test. Respect dependencies: never declare D4 "clients play" without log/observation D3 "build compiled" on the same revision.
 
-## Niveaux de preuve
+## Levels of evidence
 
-| Gate | Ce qui doit être prouvé | Preuve admissible | Piège à éviter |
+| Gate | What needs to be proven | Eligible evidence | Trap to avoid |
 |---|---|---|---|
-| D0 | Hypothèse et plan | Fichiers/symptômes, reproduction projet | « probablement corrigé » présenté comme résultat |
-| D1 | Documentation officielle consultée | URL+section+révision/branche, version gate | Archive Discord historique prise pour API courante |
-| D2 | API exacte présente | Chemin package source/commit, signature, paramètres, namespaces | grep sur un commentaire uniquement |
-| D3 | Compilation Unity | commande Editor/Unity, exit code, log + plateforme/Unity version | Python `py_compile` présenté comme build C# |
-| D4 | Jeu sur 2 clients | 2 processus/builds, logs serveur et client, action gameplay observée | « connected » sans monde/autorité |
-| D5 | Serveur dédié réel | build server sans client local, 2 clients, logs world init + interaction | réussite en host seulement |
-| D6 | Résilience et sécurité | perte/jitter, late join, reconnect, owner transfer, tests d'inputs malveillants | aucune preuve, labels « production ready » |
+| D0 | Assumption and plan | Files/symptoms, reproduction project | "probably corrected" as a result |
+| D1 | Official documentation consulted | URL+section+revision/branche, gate version | Archive Historical Discord taken for current API |
+| D2 | Exact API present | Path source/commit package, signature, parameters, namespaces | grep on a comment only |
+| D3 | Compilation Unity | commande Editor/Unity, exit code, log + plateforme/Unity version | Python `py_compile` presented as building C# |
+| D4 | Game of 2 clients | 2 processes/builds, server and client logs, observed gameplay action | Connected without world/authority |
+| D5 | Real dedicated server | build server without local client, 2 clients, logs world init + interaction | success in host only |
+| D6 | Resilience and security | perte/jitter, late join, reconnect, owner transfer, tests d'inputs malveillants | no proof, "production ready" labels |
 
-## Mini-contrat de tâche avant modification
+## Mini task contract before modification
 
 ```
-FONCTION       : exemple « deux clients tirent et voient l'impact »
-PROJECT        : chemin/version Unity, commit packages, scène
-AUTHORITY      : owner input -> server valide -> état -> observers
-CHANGEMENTS    : fichiers touchés et justification
-RISQUES        : RPC/host/dedicated/late join/prediction/MTU
-GATES CIBLÉES  : D1,D2,D3,D4,D5,D6 (selon intention)
+FEATURE        : both clients can fire and see the impact
+PROJECT        : Unity path and version, package commits, scene
+AUTHORITY      : owner input -> server validation -> state -> observers
+CHANGES        : files changed and rationale
+RISKS          : RPC/host/dedicated/late join/prediction/MTU
+REQUIRED GATES : D1 through D6 as applicable
 ```
 
-## Sortie à remettre
+## Output to be delivered
 
-- Modifications par chemin ; scripts/Inspector/assemblies nécessaires ; comportement ancien préservé.
-- Version PurrNet et addons, références officielles précises, API réellement vérifiées.
-- Tableau des gates **réussies / échouées / non exécutées / non applicables** + preuve (commandes, logs, procédure manuelle).
-- Cas testés : host, deux clients distants, dédié, late join, permissions, transport, prédiction selon portée.
-- Problèmes ouverts avec diagnostic reproductible ; ne jamais masquer l'absence de Unity/cloud.
+- Changes by path; scripts/Inspector/assembly required; old behavior preserved.
+- PurrNet version and addons, accurate official references, API actually verified.
+- Table of gates **successes / failed / not executed / not applicable** + proof (commands, logs, manual procedure).
+- Cases tested: host, two remote clients, dedicated, late join, permissions, transport, prediction according to range.
+- Open problems with reproducible diagnosis; never hide the absence of Unity/cloud.
 
 ## Manifeste machine-readable (optionnel)
 
-Pour enregistrer les résultats **observés**, utiliser `assets/validation/evidence.example.json` et lancer :
+To save **observed** results, use `assets/validation/evidence.example.json` and launch:
 
 ```bash
 python scripts/check_evidence.py evidence.json --project <PROJECT>
 ```
 
-Le contrôle rejette les statuts « pass » sans chemins de preuve lisibles, et les gates de haut niveau sans gates inférieures ; il ne juge ni la vérité des logs, ni la sémantique Unity. Ne pas le présenter comme un test E2E. Remplir les valeurs uniquement après avoir exécuté les étapes.
+Control rejects "pass" statuses without legible proof paths, and high-level gates without lower gates; it does not judge the truth of logs, nor the Unity semantics. Do not present it as an E2E test. Fill the values only after completing the steps.
 
-Pour lancer une compilation/import Unity en batch de façon **explicite** : `python scripts/unity_compile_check.py <PROJECT> --unity-exe <UNITY_EXE> --log-file <LOG> --run`. Sans `--run`, la commande ne fait qu’afficher son plan. Un retour `0` sans erreurs de compilateur valide l’import des scripts, **pas** la construction d’un client ou serveur dédié.
+To launch a Unity compilation/import in batch **explicitly**: `python scripts/unity_compile_check.py <PROJECT> --unity-exe <UNITY_EXE> --log-file <LOG> --run`. Without `--run`, the command simply displays its plan. A `0` return without compiler errors validates the import of scripts, **not** building a dedicated client or server.
 
 ## Edgegap
 
-La skill Edgegap dispose d'exemples et d'une validation annoncée sur son Incremental sample. Sa preuve porte sur **son projet test**, pas sur ce projet utilisateur et pas sur `assets/unity` du présent pack. Ne pas utiliser ses identifiants/tokens dans ce manifeste. En cloud, consigner identifiant d'allocation non sensible, version de build, résultats direct/matchmaker/autostop, coûts/ressources arrêtés.
+The Edgegap skill has examples and an announced validation on its Incremental sample. Its proof is about **its test project**, not about this user project and not about `assets/unity` of this package. Do not use its identifiers/tokens in this manifest. In cloud, record non-sensitive allocation identifier, build version, direct/matchmaker/autostop results, costs/resources stopped.

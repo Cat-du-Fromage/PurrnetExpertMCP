@@ -1,13 +1,13 @@
-# Autorité, ownership et Network Rules
+# Authority, ownership and Network Rules
 
-**Source officielle** : `systems-and-modules/network-manager/network-rules.md`, `systems-and-modules/network-identity/ownership.md`, `network-identity/spawning-and-despawning/client-spawning-validation.md`, `terminology/server-auth-safe.md`, `terminology/client-auth-everyone-unsafe.md`.
+**Official source**: `systems-and-modules/network-manager/network-rules.md`, `systems-and-modules/network-identity/ownership.md`, `network-identity/spawning-and-despawning/client-spawning-validation.md`, `terminology/server-auth-safe.md`, `terminology/client-auth-everyone-unsafe.md`.
 
-- Chaque mécanisme doit définir initiateur, acteur autorisé, validation, données autoritaires et récepteurs. Être owner n'implique pas être autorisé à faire *toutes* les opérations sur les enfants/identités.
-- `Network Rules` influencent spawn, despawn, ownership, RPC et synchronisation. Une règle `Everyone` ou `Unsafe` accélère le prototypage mais ne garantit **aucune protection anti-triche**; pour une économie/PvP, utiliser validation serveur et permissions restrictives.
-- `ServerRpc(RequireOwnership: false)` ouvre plus largement les appels; valider explicitement auteur et conditions. Les options `RequireOwnership` et `RunLocally` peuvent surcharger les rules : vérifier l'attribut réellement installé.
-- Spawns client possibles selon rules : vérifier et rejeter préfabs/positions/ownership illégitimes via la validation de spawning; ne pas faire confiance à un `NetworkIdentity` transmis par le client.
-- Changement d'owner : traiter initialisation, observateurs, données `ownerOnly`, nettoyage et persistance côté serveur. Pour `ownerOnly` voir `sync-types.md` : l'ancien owner conserve localement sa dernière valeur.
-- Les policies PurrDiction règlent **la timeline client**, pas l'autorité serveur; ne pas les confondre avec `Network Rules`.
+- Each mechanism must define initiator, authorized actor, validation, authoritative data and receivers. Being owner does not imply being allowed to do *all* transactions on children/identities.
+- `Network Rules` influence spawn, despawn, ownership, RPC and synchronization. A `Everyone` or `Unsafe` rule accelerates prototyping but does not guarantee ** any anti-triche protection**; for economy/PvP, use server validation and restrictive permissions.
+- `ServerRpc(RequireOwnership: false)` opens calls more widely; explicitly validate author and conditions. `RequireOwnership` and `RunLocally` options can overload rules: check the attribute actually installed.
+- Spawns possible client according to rules: check and reject illegitimate prefabs/positions/ownership via the validation of spawning; do not trust a `NetworkIdentity` transmitted by the client.
+- Change of ownership: processing initialization, observers, `ownerOnly` data, server-side cleaning and persistence. For `ownerOnly` see `sync-types.md`: the old owner retains its last value locally.
+- PurrDiction policies regulate ** client timeline**, not the server authority; do not confuse them with `Network Rules`.
 
 ## Revue hostile
-Client non owner appelle RPC, falsifie paramètre, tente achat négatif, spawn un prefab non permis, spamme plusieurs fois le même message. Vérifier serveur dédié et hôte.
+Non-owner client calls RPC, falsifies parameter, attempts to purchase negative, spawn a prefab not allowed, spammes several times the same message. Check dedicated server and host.

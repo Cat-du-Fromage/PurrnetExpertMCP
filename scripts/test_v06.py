@@ -27,9 +27,10 @@ class ActivationTests(unittest.TestCase):
         self.assertEqual(name,"purrnet-expert")
         self.assertTrue(1<=len(desc)<=1024,(len(desc),desc))
         self.assertIn('Unity',desc);self.assertIn('PurrNet',desc)
-        self.assertIn('automatically',desc)
+        self.assertIn('In a PurrNet project',desc)
+        self.assertIn('late join',desc)
         self.assertTrue('Do NOT' in desc or 'Excludes' in desc, 'Trigger description must explicitly exclude unrelated projects')
-        self.assertIn('0.6.0',s)
+        self.assertIn('get_purrnet_project_context',s)
 
     def test_activation_case_matrix(self):
         data=json.loads((ROOT/'evals/activation-cases.json').read_text())

@@ -1,15 +1,15 @@
-# Spawning client, validation serveur et objets persistants
+# Spawning client, server validation and persistent objects
 
-**Source officielle** : `systems-and-modules/network-identity/spawning-and-despawning/client-spawning-validation.md`, `systems-and-modules/network-identity/dont-destroy-on-load.md`, `systems-and-modules/network-manager/network-rules.md`.
+**Official source**: `systems-and-modules/network-identity/spawning-and-despawning/client-spawning-validation.md`, `systems-and-modules/network-identity/dont-destroy-on-load.md`, `systems-and-modules/network-manager/network-rules.md`.
 
-## Quand l'utiliser et quand l'éviter
+## When to use and when to avoid it
 
-- Si les règles autorisent le spawn client, **enregistrer un validateur serveur** pour les prefabs, quotas et permissions. Ne pas considérer le fait qu'un objet soit observé comme une preuve d'autorisation.
-- Si seuls les serveurs spawnenent, garder la validation d'intention côté serveur (RPC, commande, INPUT) ; ne pas ajouter un validateur de spawn client inutile.
-- `SpawnPacket` peut représenter une **création partielle** d'identités : `TryGetRawPrefab` confirme la création simple avant de donner le prefab. Rejeter ou traiter explicitement les packets partiels selon la conception ; ne pas les interpréter comme un simple prefab garanti.
-- Les `Network Rules` ont plusieurs presets : `Unsafe` est utile pour prototypes **non fiables**, `ServerStrict` pour serveur autoritaire, `ServerOwner` comme compromis. Les noms exacts doivent être vérifiés dans le package installé.
+- If the rules allow the Spawn client, **record a server validator** for prefabs, quotas and permissions. Do not consider the fact that an object is observed as proof of authorization.
+- If only the servers are spawning, keep the Intent validation on the server side (RPC, command, INPUT); do not add a useless client spawn validator.
+- `SpawnPacket` can represent a **partial creation** of identities: `TryGetRawPrefab` confirms simple creation before giving the prefab. Reject or explicitly treat partial packages according to design; do not interpret them as a simple guaranteed prefab.
+- The `Network Rules` have several presets: `Unsafe` is useful for prototypes **unreliable**, `ServerStrict` for authoritative server, `ServerOwner` as compromise. The exact names must be checked in the installed package.
 
-## Exemple officiel adapté — validateur minimal, PAS production
+## Official example adapted — minimum validator, NOT production
 
 ```csharp
 using PurrNet;
@@ -37,27 +37,26 @@ public sealed class BasicSpawnGate : MonoBehaviour
         if (!packet.TryGetRawPrefab(manager, out var prefab))
             return false;
 
-        // Démo : NE PAS retourner true sans vérifier la whitelist, le quota,
-        // les droits de ce player, la scène et les règles du jeu.
+        // Check the allowlist, quota, player permissions, scene and gameplay rules before accepting a spawn.
         return false;
     }
 }
 ```
 
-**Important** : c'est un *squelette de signature*, pas une solution prêt-à-coller : aucun spawn client ne passe tant que la politique de permissions n'est pas implémentée. Il faut vérifier dans Unity que `onClientSpawnValidate` existe sur la version réellement installée. Les exemples de la documentation officielle autorisent tout prefab simple : cela n'est pas une politique de sécurité suffisante.
+**Important**: it is a *signature sketch*, not a ready-to-paste solution: no client spawn passes until the permission policy is implemented. You must verify in Unity that `onClientSpawnValidate` exists on the version actually installed. Examples of the official documentation allow any simple prefab: this is not a sufficient security policy.
 
-## `DontDestroyOnLoad` et « Not Spawned »
+## `DontDestroyOnLoad` and Not Spawned
 
-- Un `NetworkIdentity` déplacé dans la scène DDOL doit y être déplacé **avant le démarrage du réseau**, par exemple pendant `Awake` selon la doc.
-- Si le `NetworkManager` ne réside pas lui-même dans la scène DDOL, activer `NetworkRules.alwaysIncludeDontDestroyOnLoadScene` dans les règles de scène. Sinon l'objet persistant peut afficher **Not Spawned**.
-- Une suppression de scène additive et une reconnexion exigent des tests spécifiques : ne pas dupliquer un NetworkManager et ne pas persister deux copies d'une même identité.
+- A `NetworkIdentity` moved to the DDOL scene must be moved there **before starting the network**, for example during `Awake` according to the doc.
+- If the `NetworkManager` does not reside itself in the DDOL scene, activate `NetworkRules.alwaysIncludeDontDestroyOnLoadScene` in the stage rules. Otherwise the persistent object can display **Not Spawned**.
+- Additive scene deletion and reconnection require specific tests: do not duplicate a NetworkManager and do not persist two copies of the same identity.
 
 ## Validation observable
 
-1. Client autorisé : prefab inscrit et quota valide ; les deux clients voient l'objet.
-2. Client non autorisé : le serveur refuse le paquet, l'objet localement spéculatif disparaît, aucune donnée persistante ne fuit.
-3. Spawn partiel : comportement explicitement conçu (refus ou traitement), sans crash.
-4. Changement de scène : identité DDOL toujours `spawned`, pas de doublon ; test inverse avec la règle DDOL désactivée.
-5. Reconnect/late join : état durable et observations corrects.
+1. Authorized client: registered prefab and valid quota; both clients see the object.
+2. Unauthorized client: the server refuses the package, the locally speculative object disappears, no persistent data leaks.
+3. Partial Spawn: explicitly designed behavior (refusal or treatment), without crash.
+4. Change of scene: DDOL identity always `spawned`, no duplicate; reverse test with DDOL rule disabled.
+5. Reconnect/late join: durable condition and correct observations.
 
-**Statut de compilation** : exemple adapté de la doc, non compilé avec Unity dans ce pack.
+**Compilation status**: adapted example of the doc, not compiled with Unity in this pack.

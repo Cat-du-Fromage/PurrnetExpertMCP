@@ -163,7 +163,7 @@ class V08Tests(unittest.TestCase):
             root=Path(td);(root/'Assets').mkdir();(root/'ProjectSettings').mkdir()
             fake=root/'mock-editor'
             fake.touch()
-            log = root / 'out.log'
+            log = (root / 'out.log').resolve()
 
             def run_editor(command, **kwargs):
                 self.assertEqual(command[command.index('-logFile') + 1], str(log))

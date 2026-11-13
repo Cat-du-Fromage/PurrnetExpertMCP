@@ -160,7 +160,7 @@
     "scripts/test_v05.py": "7eb766d0d4696ef5e5679f87301edd78b2e8f0a3343ebba09127a26082f1f40d",
     "scripts/test_v06.py": "bc932c8f30a5155d64ebb460ef5864d24ae8c30c12ac61b8743f75eca92c5428",
     "scripts/test_v07.py": "de1d21dcfc5d7c42232ccf9bed17178c987a70b65f9a6a647c4c6bc9b69ac82f",
-    "scripts/test_v08.py": "4f0414db85a09fe5f000eacefc27c0b6ab65a3cfd02bc4c073e0c94993b2795c",
+    "scripts/test_v08.py": "971fc7536ccd6975240c8349b3992444849d2ff6afd96fda6ab8e0b4343672c5",
     "scripts/test_v09.py": "ebd8307bb134471fd8c4c8e6dedc0955dd2cbb51364f3717df996b26cccb2dba",
     "scripts/trigger_probe.py": "fa3ecfb54d74b66eb62ade75b23927568c43dd00d5ac51d3201d0ade826a6260",
     "scripts/unity_compile_check.py": "8914b27d262bf642bd0e9fe6419c99efcd100ff1a6772ac59fe22fbf8eb1a4fe",

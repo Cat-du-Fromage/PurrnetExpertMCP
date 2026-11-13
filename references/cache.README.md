@@ -9,6 +9,8 @@ python scripts/docs_catalog.py coverage
 
 Le script clone **tout** le dépôt `PurrNet/PurrDocs` sous `references/cache/official-docs/` et crée un `docs-index.json` indiquant le commit exact. Les synthèses originales dans `references/*.md` restent disponibles même sans synchronisation. Ne pas republier ce cache sans vérifier les droits.
 
+Définir `PURRNET_DOCS_DIR` sur le chemin absolu du clone permet de partager le même cache entre les copies installées de la skill et le MCP. Le serveur construit sa base SQLite à côté de l’inventaire avec `uv run purrnet-expert-cache index` depuis le dépôt. Les scripts de la skill lisent directement le Markdown.
+
 
 ## Archive Stray Help (opt-in, distincte de PurrDocs)
 

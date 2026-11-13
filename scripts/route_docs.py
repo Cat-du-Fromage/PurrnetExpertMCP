@@ -12,9 +12,11 @@ from pathlib import Path
 import re
 import unicodedata
 
+from purrnet_common import docs_checkout
+
 ROOT=Path(__file__).resolve().parents[1]
 ROUTES=ROOT/'references/task-routes.json'
-DOCS=ROOT/'references/cache/official-docs'
+DOCS=docs_checkout(ROOT)
 PRED_TERMS=('purrdiction','predicted','prediction','predictive','predict','prédit','prédite','predic','rollback','reconcil','lagcompensationtick','predictedtransform','predictedrigidbody','isverifiedview','sfloat')
 CLASSIC_TERMS=('networktransform','networkrigidbody','networkanimator','networkreflection','networkaudiosource','networkownershiptoggle','synclist','syncvar','syncinput','validatedsyncvar','networkbones','syncdictionary','networkstatemachine','networkstate machine')
 

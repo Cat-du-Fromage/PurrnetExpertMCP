@@ -13,8 +13,10 @@ import re
 import sys
 from urllib.parse import unquote, urlsplit
 
+from purrnet_common import docs_checkout
+
 ROOT=Path(__file__).resolve().parents[1]
-DOCS=ROOT/'references/cache/official-docs'
+DOCS=docs_checkout(ROOT)
 MD_LINK=re.compile(r'(?<!!)\[[^\]]+\]\((<[^>]+>|[^\s)]+)(?:\s+[^)]*)?\)')
 
 def inspect(docs:Path):

@@ -11,40 +11,13 @@ from pathlib import Path
 import re
 import sys
 
+from purrnet_common import docs_checkout, parse_version, satisfies
+
 HERE=Path(__file__).resolve().parents[1]
-CACHE=HERE/'references/cache/official-docs'
-GATE=re.compile(r'(?P<op>>=|<=|==|!=|>|<)\s*(?P<v>\d+\.\d+(?:\.\d+)?(?:-[\w.-]+)?)')
+CACHE=docs_checkout(HERE)
 FRONT=re.compile(r'^---\s*\n([\s\S]*?)\n---',re.M)
 MARKER=re.compile(r'{%\s*version\s+range=["\']([^"\']+)["\']\s*%}')
 ENDMARKER=re.compile(r'{%\s*endversion\s*%}')
-
-def parse_version(x):
-    if not x:return None
-    m=re.fullmatch(r'(\d+)\.(\d+)(?:\.(\d+))?(?:-([0-9A-Za-z.-]+))?(?:\+[0-9A-Za-z.-]+)?',str(x).strip())
-    if not m:return None
-    return (int(m[1]),int(m[2]),int(m[3] or 0),m[4] or '')
-
-def compare(a,b):
-    # Stable semver release ranks after its prerelease with identical numbers.
-    x=a[:3];y=b[:3]
-    if x!=y:return (x>y)-(x<y)
-    if a[3]==b[3]:return 0
-    if not a[3]:return 1
-    if not b[3]:return -1
-    def parts(s):
-        return tuple((0,int(p)) if p.isdigit() else (1,p) for p in s.split('.'))
-    pa,pb=parts(a[3]),parts(b[3]);return (pa>pb)-(pa<pb)
-
-def satisfies(version,expression):
-    if version is None:return None
-    tests=GATE.findall(expression)
-    if not tests:return None
-    for op,raw in tests:
-        other=parse_version(raw)
-        if other is None:return None
-        c=compare(version,other)
-        if not {'>':c>0,'>=':c>=0,'<':c<0,'<=':c<=0,'==':c==0,'!=':c!=0}[op]:return False
-    return True
 
 def detect(project:Path,package):
     """Fail closed when installed sources disagree without an exact lock version.

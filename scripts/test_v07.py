@@ -129,7 +129,7 @@ class StrayRegression(unittest.TestCase):
             git('config','user.name','Test Author',cwd=remote)
             (remote/'docs').mkdir();(remote/'docs/FAQ.md').write_text('## FAQ\nSyncVar null historical test')
             (remote/'README.md').write_text('# mock archive')
-            git('add','.',cwd=remote);git('commit','-m','mock',cwd=remote)
+            git('add','.',cwd=remote);git('-c','commit.gpgsign=false','commit','-m','mock',cwd=remote)
             sha=git('rev-parse','HEAD',cwd=remote)
             target=root/'cache'/'historical-stray-help'
             with patch.object(sync_stray_archive,'SOURCE_URL',str(remote)):

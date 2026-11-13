@@ -16,9 +16,12 @@ from install_activation import is_purrnet_project, instruction, replace_block
 
 ROOT=Path(__file__).resolve().parents[1]
 EXCLUDE={'__pycache__','.git','.pytest_cache','cache','official-docs','skill-backups'}
+SKILL_ENTRIES={'SKILL.md','README.md','QUALITY_REPORT.md','RELEASE_MANIFEST.json','LICENSE',
+               '.gitignore','references','scripts','assets','evals'}
 
-def ignore(_dir,names):
-    return [n for n in names if n in EXCLUDE or n.endswith(('.pyc','.pyo','.zip'))]
+def ignore(directory,names):
+    return [n for n in names if n in EXCLUDE or n.endswith(('.pyc','.pyo','.zip'))
+            or (Path(directory)==ROOT and n not in SKILL_ENTRIES)]
 
 def main(argv=None):
     a=argparse.ArgumentParser(description=__doc__)

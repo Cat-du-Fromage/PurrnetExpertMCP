@@ -49,6 +49,8 @@ Also load when editing or reviewing C# that imports `PurrNet`, subclasses
 `NetworkIdentity`, `NetworkBehaviour`, `PredictedIdentity` or `PredictedModule`,
 or refers to `NetworkManager`, `SyncVar`, `ObserversRpc`, `ServerRpc`,
 `NetworkTransform` or `PredictionManager` in this project.
+When PurrNet Expert MCP is available, call `get_purrnet_project_context`
+first. Use the loaded skill to select the documentation, API and version checks.
 Do **not** load for wholly offline UI, shaders, editor cosmetics or ordinary
 Unity problems unrelated to network behavior. For Edgegap-specific deployment,
 load `edgegap-purrnet` as the primary cloud engineer when available, then

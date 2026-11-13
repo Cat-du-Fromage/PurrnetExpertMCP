@@ -1,21 +1,21 @@
-# Recettes Sync Types : choisir, implémenter, valider
+# Sync Types Recipes: Choose, Implement, Validate
 
-**Sources** : [SyncVar](https://purrnet.dev/docs/systems-and-modules/network-modules/sync-types/syncvar), [ValidatedSyncVar](https://purrnet.dev/docs/systems-and-modules/network-modules/sync-types/validated-syncvar), [Owner Only](https://purrnet.dev/docs/systems-and-modules/network-modules/owner-only), [SyncInput](https://purrnet.dev/docs/systems-and-modules/network-modules/sync-types/syncinput), [SyncEvent](https://purrnet.dev/docs/systems-and-modules/network-modules/sync-types/syncevent), [Common Pitfalls](https://purrnet.dev/docs/systems-and-modules/network-modules/common-pitfalls). Voir aussi `core/sync-types.md` et `core/serialization-advanced.md`. **Extraits pédagogiques non compilés dans Unity** ; vérifier les signatures dans le package du projet.
+**Sources** : [SyncVar](https://purrnet.dev/docs/systems-and-modules/network-modules/sync-types/syncvar), [ValidatedSyncVar](https://purrnet.dev/docs/systems-and-modules/network-modules/sync-types/validated-syncvar), [Owner Only](https://purrnet.dev/docs/systems-and-modules/network-modules/owner-only), [SyncInput](https://purrnet.dev/docs/systems-and-modules/network-modules/sync-types/syncinput), [SyncEvent](https://purrnet.dev/docs/systems-and-modules/network-modules/sync-types/syncevent), [Common Pitfalls](https://purrnet.dev/docs/systems-and-modules/network-modules/common-pitfalls). See also `core/sync-types.md` and `core/serialization-advanced.md`. The examples were not compiled in Unity. Verify signatures in the installed package.
 
-## 1. Décider de l'objet à répliquer
+## 1. Decide on the object to be replicated
 
-| Nature de l'information | Premier choix | Rejet/contrôle |
+| Nature de l'information | First choice | Rejection/control |
 |---|---|---|
-| Santé, score, état persistant | `SyncVar<T>` | Mise à jour par l'autorité, snapshot pour late join |
-| Tableau d'objets/inventaire | `SyncList<T>` ou autres collections sync | Éléments sérialisables; jamais une liste **de modules** `List<SyncVar<...>>` |
-| Modification locale immédiate avec validation serveur | `ValidatedSyncVar<T>` | Callback de rejet; autorité réelle du serveur |
-| Événement ponctuel sans état à conserver | `SyncEvent<T>` | Ne remplace pas le dernier état pour late join |
-| Inputs continus vers logique serveur | `SyncInput<T>` | Accepte le délai réseau sans client-side prediction |
-| Compte à rebours | `SyncTimer` | Tick/intervalle de réconciliation et autorité |
-| Valeur privée du propriétaire | `ownerOnly: true` sur un module | Ne fait pas oublier une valeur déjà divulguée |
-| Input et état à prédire/rollback | PurrDiction `INPUT/STATE` | Ne pas mettre `SyncVar` dans la simulation prédite |
+| Health, score, persistent condition | `SyncVar<T>` | Update by the authority, snapshot for late join |
+| Table of objects/inventory | `SyncList<T>` or other sync collections | Serializable elements; never a **module list** `List<SyncVar<...>>` |
+| Immediate local change with server validation | `ValidatedSyncVar<T>` | Reject callback; actual server authority |
+| One-time event without condition to be kept | `SyncEvent<T>` | Do not replace last state for late join |
+| Continuous inputs to server logic | `SyncInput<T>` | Accepts network delay without client-side prediction |
+| Countdown | `SyncTimer` | Tick/reconciliation interval and authority |
+| Private value of the owner | `ownerOnly: true` on a module | Don't forget an already disclosed value |
+| Input and state to predict/rollback | PurrDiction `INPUT/STATE` | Do not put `SyncVar` in the predicted simulation |
 
-## 2. Santé synchronisée : exemple minimal tiré des API documentées
+## 2. Synchronized Health: Minimum example from documented APIs
 
 ```csharp
 using PurrNet;
@@ -38,26 +38,26 @@ public class ExampleHealth : NetworkBehaviour
 }
 ```
 
-Ne pas copier ce snippet tel quel dans un vrai système : prévoir unsubscribe selon le callback disponible, un accès public limité, une demande de dégâts authentifiée, les conditions de respawn et le test de host (double callback `OnSpawned(bool)`). Les dégâts ne doivent **jamais** être acceptés comme une nouvelle valeur décrétée par un client. Ne pas réinitialiser santé à 100 si un objet poolé ou reconnecté doit garder son état : choisir explicitement une politique d'initialisation.
+Do not copy this snippet as it is into a real system: provide a subscriber according to the available callback, limited public access, authenticated damage request, respawn conditions and host test (double callback `OnSpawned(bool)`). Damage should not **never** be accepted as a new value decreed by a client. Do not reset health to 100 if a polarized or reconnected object should keep its state: explicitly choose an initialization policy.
 
-## 3. `ownerOnly` : exemple et piège de confidentialité
+## 3. `ownerOnly`: example and privacy trap
 
 ```csharp
 private SyncList<int> _inventory = new(ownerOnly: true);
 private SyncVar<int> _gold = new(0, ownerOnly: true);
 ```
 
-Le module est invisible pour les non-owners, même si l'objet est observé. **Lors d'un transfert de propriété**, le précédent propriétaire conserve sa copie locale du dernier état. Ne transférez pas l'ownership en supposant que la mémoire du client est effacée ; purgez d'abord les données sensibles ou refondez le modèle de propriété (une identité privée par joueur), avec test réel de transfert. Une valeur envoyée au client peut être copiée même après nettoyage ; ne transmettez jamais un secret qui ne doit pas être découvert.
+The module is invisible to non-owners, even if the object is observed. **During a ownership transfer**, the previous owner retains his local copy of the last state. Do not transfer ownership on the assumption that the client's memory is erased; first purg the sensitive data or re-build the property model (a private identity per player), with a real transfer test. A value sent to the client can be copied even after cleaning; never transmit a secret that must not be discovered.
 
-## 4. ValidatedSyncVar : workflow à tester
+## 4. ValidatedSyncVar: workflow to test
 
-- Le client propriétaire écrit de manière optimiste ; l'autorité serveur vérifie avec `serverValidation` et confirme ou rejette ; `onValidationFail` est côté propriétaire.
-- Une validation de plage n'est pas la validation métier : les achats vérifient argent, stock, cooldown, transaction et propriétaire dans l'état du serveur.
-- Tester owner absent, transfert owner, changements rapides/ACK anciens, latence et client falsifié.
+- The owner client writes optimistically; the server authority checks with `serverValidation` and confirms or rejects; `onValidationFail` is owner-side.
+- A range validation is not business validation: purchases check money, stock, cooldown, transaction and owner in the server state.
+- Tester owner absent, transfer owner, old quick changes/ACK, latency and falsified client.
 
-## 5. Conditions de validité pour chaque recette
+## 5. Conditions of validity for each recipe
 
-1. Module déclaré **dans un champ/propriété de l'identité**, initialisé avant connexion/spawn (`OnInitializeModules()` possible). Il ne peut pas être remplacé après spawn, ni placé dans une collection de modules.
-2. Comparer `ownerAuth` (pouvoir d'écrire) et `ownerOnly` (destinataires), et Network Rules/Network Visibility.
-3. Pour un événement, préciser si un late join doit voir un état antérieur, sinon utiliser un Sync Type durable en plus.
-4. Vérifier sérialiseur, observer, permissions, état initial, server-only, host, deux clients, late join et reconnexion.
+1. Module declared **in a field/property of identity**, initialized before connection/spawn (`OnInitializeModules()` possible). It cannot be replaced after spawn, nor placed in a collection of modules.
+2. Compare `ownerAuth` (power to write) and `ownerOnly` (recipients), and Network Rules/Network Visibility.
+3. For an event, specify whether a late join should see an earlier state, otherwise use an extra durable Sync Type.
+4. Check serializer, observe, permissions, initial status, server-only, host, two clients, late join and reconnection.

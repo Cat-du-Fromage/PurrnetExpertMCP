@@ -1,23 +1,23 @@
-# Chronologie indicative du dépôt Stray — NE PAS utiliser comme guide « latest »
+# Indicative Timeline of Stray Deposit — DO NOT use as a "last" guide
 
-Source **archive uniquement** : `docs/changelogs/versions.md` à `e6140a571228044fe670b500e245f6bb370b2e06`. Les dates et versions ci-dessous sont des **repères pour enquêter**, pas une preuve que la correction existe ou fonctionne dans le package actuel.
+Source **archived only**: `docs/changelogs/versions.md` to `e6140a571228044fe670b500e245f6bb370b2e06`. The dates and versions below are **marks to investigate**, not proof that the correction exists or works in the current package.
 
-| Version PurrNet core mentionnée | Incident/fonctionnalité de l'époque | Question de diagnostic actuel |
+| PurrNet Core version mentioned | Incident/functionality of the time | Question de diagnostic actuel |
 |---|---|---|
-| 1.2.0 | RPC `runLocally` en host, SteamWorks | Est-ce un callback double-context plutôt qu'un double RPC ? |
-| 1.2.1 | spawns dupliqués, ownership host, WebTransport/transform | Spawn script exécuté deux fois ? autre writer ? |
-| 1.2.3 | `SyncVar<T>` nullable, NetworkReflection host | Quand les modules s'initialisent-ils ? quelle sérialisation ? |
-| 1.3.2 | BitPacker arrays / SyncDictionary | Le serializer actuel est-il configuré correctement ? |
-| 1.3.3 | scènes, PlayerSpawner, callback owner durant despawn, NetworkAnimator exclude hashes | Scène chargée vs membre ? valeur `isOwner` attendue ? |
-| 1.5.0 | late join listes, tick double, événements | Server state, observer, abonnement et host ? |
-| 1.8.0/1.8.2 | RPC host, Collider Rollback, EvaluateVisibility | Contrats des canaux, réévaluation des rules ? |
-| 1.9.3 | buffered RPC prématurés | Le destinataire observe-t-il déjà le NetworkIdentity ? |
-| 1.10.2 | NetworkTransform non-controller | Qui écrit le transform ? |
-| 1.13.2 | `GetClientPlayload` renommé `GetClientPayload`, types & ILPP | L'override existe-t-il dans la version installée ? |
-| 1.17.0/1.18.0 | ValidatedSyncVar, SyncBigData, TargetRpc serveur | Que supporte le code résolu, quelle direction RPC ? |
-| 1.19.1 | IL2CPP/build/stripping | Compiler avec le bon backend et le bon target. |
-| 1.20.0 | RPC, transform/rigidbody, paquets, scènes, assets, ownership, reconnect | Plusieurs correctifs historiques ne démontrent pas un bug actuel. |
+| 1.2.0 | RPC `runLocally` en host, SteamWorks | Is it a double-context callback rather than a double RPC? |
+| 1.2.1 | duplicate spawns, ownership host, WebTransport/transform | Spawn script executed twice ? another writer ? |
+| 1.2.3 | `SyncVar<T>` nullable, NetworkReflection host | When do the modules start? What serialization? |
+| 1.3.2 | BitPacker arrays / SyncDictionary | Is the current serializer configured correctly? |
+| 1.3.3 | scenes, PlayerSpawner, callback owner during despawn, NetworkAnimator excluded from hashes | Scene loaded vs member ? `isOwner` value expected ? |
+| 1.5.0 | late join lists, double tick, events | Server state, observe, subscription and host? |
+| 1.8.0/1.8.2 | RPC host, Collider Rollback, EvaluateVisibility | Channel contracts, re-evaluation of the rules? |
+| 1.9.3 | buffered RPC premature | Does the recipient already observe the NetworkIdentity? |
+| 1.10.2 | NetworkTransform non-controller | Who writes the transform? |
+| 1.13.2 | `GetClientPlayload` renowned `GetClientPayload`, types & ILPP | Does the override exist in the installed version? |
+| 1.17.0/1.18.0 | ValidatedSyncVar, SyncBigData, server TargetRpc | What does the resolved source support, which direction RPC? |
+| 1.19.1 | IL2CPP/build/stripping | Compile with the right backend and target. |
+| 1.20.0 | RPC, transform/rigidbody, packages, scenes, asset, ownership, reconnect | Several historical fixes do not show a current bug. |
 
-**PurrDiction : versionnage indépendant**. L'archive mentionne des milestones 1.2.3 et 1.3.3 en 2026 (input disposal, replay, hierarchy, policies, visibility). Les fonctionnalités `>=1.4.0` documentées sur PurrDocs **ne doivent pas être attribuées** à PurrDiction 1.3.3 sous prétexte que PurrNet core 1.20 existe.
+**PurrDiction: independent versioning**. The archive mentions milestones 1.2.3 and 1.3.3 in 2026 (input disposal, replay, hierarchy, policies, visibility). `>=1.4.0` features documented on PurrDocs **must not be assigned** to PurrDiction 1.3.3 on the pretext that PurrNet core 1.20 exists.
 
-Les URL anciennes `BlenMiner/PurrNet`, la négation d'une intégration Dissonance, et les « dernières versions » datées de l'archive ne sont pas normatives. En cas d'exception, prendre le `package.json` réellement installé et les release notes officielles de son commit.
+The old `BlenMiner/PurrNet` URLs, the denial of a Dissonance integration, and the "last versions" dated from the archive are not normative. In case of exception, take the `package.json` actually installed and the official release notes of its commit.

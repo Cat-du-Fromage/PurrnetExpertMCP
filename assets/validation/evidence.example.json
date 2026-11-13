@@ -12,5 +12,5 @@
     "D5": {"status": "not_run", "evidence": []},
     "D6": {"status": "not_run", "evidence": []}
   },
-  "notes": "Copier hors du dossier skill; remplacer les status uniquement après observation; ne jamais mettre de secrets ni tokens dans les preuves."
+  "notes": "Copy outside the skill directory. Update statuses only after observing the results. Keep secrets and tokens out of evidence."
 }

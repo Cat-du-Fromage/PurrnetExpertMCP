@@ -1,15 +1,15 @@
-# Cycle de vie connexion/joueur/observation
+# Life cycle connection/player/observation
 
-**Source officielle** : `systems-and-modules/network-manager/connection-and-player-events.md`, `network-manager/authentication.md`, `network-identity/networkbehaviour.md`.
+**Official source**: `systems-and-modules/network-manager/connection-and-player-events.md`, `network-manager/authentication.md`, `network-identity/networkbehaviour.md`.
 
-## Séquence et callbacks
-1. État transport : `onServerConnectionState` / `onClientConnectionState` (`Connecting`, `Connected`, `Disconnecting`, `Disconnected`). Pas encore de `PlayerID` garanti.
-2. Authentification acceptée : `onPlayerJoined(PlayerID, bool isReconnect, bool asServer)`. `isReconnect` indique qu'un identifiant déjà vu dans la session revient, pas que son monde est automatiquement restauré.
-3. Scènes : `onPlayerLoadedScene` / `onPlayerUnloadedScene`; attendre chargement pertinent avant de supposer un objet de scène prêt. Écouter le côté client/serveur documenté.
-4. Observation : callbacks `OnObserverAdded` / `OnObserverRemoved`, côté serveur; état de replication par joueur. Utiles pour late join et payload initial ciblé.
-5. `onPlayerLeft` : nettoyer l'état selon stratégie reconnexion/persistance, sans effacer une session récupérable par erreur.
+## Sequence and callbacks
+1. Transport condition : `onServerConnectionState` / `onClientConnectionState` (`Connecting`, `Connected`, `Disconnecting`, `Disconnected`). No `PlayerID` guaranteed yet.
+2. Accepted authentication: `onPlayerJoined(PlayerID, bool isReconnect, bool asServer)`. `isReconnect` indicates that an identifier already seen in the session returns, not that its world is automatically restored.
+3. Scenes: `onPlayerLoadedScene` / `onPlayerUnloadedScene`; wait for relevant loading before assuming a ready stage object. Listen to the documented client/server side.
+4. Observation: callbacks `OnObserverAdded` / `OnObserverRemoved`, server side; replication status per player. Useful for late join and targeted initial payload.
+5. `onPlayerLeft`: Clean the state according to reconnection/persistence strategy, without deleting a session that can be recovered by mistake.
 
-**Piège host** : `asServer` peut provoquer deux chemins distincts, un pour serveur et un pour client; vérifier explicitement le rôle. Abonner les handlers au bon moment (`OnSpawned` dans les comportements réseau selon docs) et les désabonner symétriquement; éviter les lambdas anonymes impossibles à détacher.
+**Host lifecycle**: `asServer` can cause two distinct paths, one for server and one for client; explicitly check the role. Subscribe at the documented lifecycle point, such as `OnSpawned`, and unsubscribe symmetrically. Keep delegate references so handlers can be removed.
 
 ## Validation
-Reconnexion par cookie, join tardif, changement de scène, visibilité gagnée/perdue, host/dédié, déconnexion pendant chargement. Mesurer l'ordre réel des événements dans les logs et garder les identifiants cohérents.
+Cookie reconnection, late join, scene change, win/lose visibility, host/dedicated, disconnection while loading. Measure the actual order of events in logs and keep consistent identifiers.

@@ -1,82 +1,80 @@
-# PurrDiction : contrat exhaustif des Best Practices officielles
+# PurrDiction Best Practices
 
-**Source primaire** : https://purrnet.dev/docs/client-side-prediction/best-practices — fichier https://github.com/PurrNet/PurrDocs/blob/main/client-side-prediction/best-practices.md (consulté le 12-11-2026). **Résumé original raisonné**, pas une copie de la page. Vérifier tout symbole contre la version installée. Lire la page intégrale synchronisée dans `references/cache/official-docs/client-side-prediction/best-practices.md` si disponible. Les 10 rubriques officielles sont toutes représentées ci-dessous.
+**Primary source** is the [official Best Practices page](https://purrnet.dev/docs/client-side-prediction/best-practices), also available in [PurrDocs](https://github.com/PurrNet/PurrDocs/blob/main/client-side-prediction/best-practices.md). Read the synchronized page at `references/cache/official-docs/client-side-prediction/best-practices.md` and verify symbols against the installed version. The checks below summarize and apply the official guidance.
 
-## BP-01 — Tout ce qui influe sur une simulation ultérieure est du STATE
+## BP-01 — Store everything that affects future simulation in STATE
 
-- `INPUT : struct, IPredictedData` et `STATE : struct, IPredictedData<STATE>` (le STATE participe également à l'interface math/packing de la version) ; déclarer `Dispose()`.
-- Position, vitesse, rotation, cooldowns, ammo, mode/animation affectant des règles, compteur de combos, cible, RNG et IDs stables appartiennent à STATE. Un champ Inspector mutable à runtime influant sur les ticks n'est **pas** un substitut : capturer dans STATE ou passer par une opération prévue.
-- `GetInitialState` définit le snapshot complet initial ; si Transform, Rigidbody ou d'autres composants Unity portent une partie du résultat de simulation, implémenter `GetUnityState(ref STATE)` et `SetUnityState(STATE)` pour rollback/restauration. Vérifier les composants intégrés qui le font déjà.
-- Pour interpolation de STATE : `IMath<T>`/surcharge `Interpolate` pour quaternions et données non linéaires ; **ne pas** ajouter les champs purement UI dans STATE.
-- **Contrôle** : énumérer tous les champs mutés pendant simulation et pour chacun indiquer sa présence dans STATE ou sa restitution par bridge explicite.
+- Use struct `INPUT` and `STATE` with the relevant `IPredictedData` interfaces, including `IPredictedData<STATE>` for state. Implement `Dispose()` and check the version's packing and math contracts.
+- Include position, velocity, rotation, cooldowns, ammo, gameplay or animation modes, combo counters, targets, RNG and stable IDs in STATE. Capture mutable Inspector settings that affect later ticks in STATE or change them through a predicted operation.
+- Return a complete snapshot from `GetInitialState`. Use `GetUnityState(ref STATE)` and `SetUnityState(STATE)` when Unity components such as Transform or Rigidbody own part of the state. Check how built-in components already do this.
+- Check `IMath<T>` and `Interpolate` for quaternions and nonlinear state. Keep presentation-only fields outside STATE.
+- List each value mutated by simulation and show where it is captured or restored.
 
-## BP-02 — Initialisation complète et état Unity restaurable
+## BP-02 — Initialize and restore Unity state explicitly
 
-- Pas de réinitialisation furtive dans `Awake`, `Update` ou `OnEnable` modifiant la vérité prédite en dehors du timeline ; pour un `DeterministicIdentity`, utiliser la simulation (`SimulationStart`) plutôt que des callbacks de setup variables selon les peers.
-- Les lectures/écritures de physique doivent être compatibles avec la restauration ; le moteur de physique Unity peut supporter rollback sans être strictement bit-déterministe multiplateforme.
-- **Contrôle** : après correction, chaque composant impactant un futur tick revient à l'état attendu.
+- Keep predicted state changes on the timeline. For `DeterministicIdentity`, use simulation initialization such as `SimulationStart` for state that would otherwise depend on peer-specific `Awake`, `Update` or `OnEnable` callbacks.
+- Ensure physics reads and writes can be restored. Unity physics can support rollback without guaranteeing bit-identical results across platforms.
+- Verify each component that affects a future tick returns to the expected state after correction.
 
-## BP-03 — Simulate/LateSimulate sont rejoués
+## BP-03 — Keep Simulate and LateSimulate replay-safe
 
-- Effets irréversibles interdits dans une simulation non gardée : audio, particules, achievements, sauvegardes, analytics, HTTP, monnaie, notifications, ordinary RPC répétés, etc.
-- `PredictedEvent`, vues (`UpdateView`/`LateUpdateView`) et `predictionManager.isVerifiedView` pour effets une seule fois, avec vérification de l'API exacte. Les récompenses serveur doivent être idempotentes.
-- Ne pas utiliser `isCatchingUpFrames` pour sauter une mutation déterministe (cela change le résultat du replay).
-- **Contrôle** : rejouer le même tick n'augmente pas les récompenses, coûts externes, RPC ni FX.
+- Keep irreversible effects out of replayed simulation, including audio, particles, achievements, saves, analytics, HTTP, currency changes, notifications and ordinary RPCs.
+- Verify `PredictedEvent`, view callbacks such as `UpdateView` and `LateUpdateView`, or `predictionManager.isVerifiedView` for one-shot effects. Make server rewards idempotent.
+- Preserve deterministic mutations during catch-up. Skipping them based on `isCatchingUpFrames` changes the replay result.
+- Replay the same tick and check that rewards, external costs, RPCs and effects are not duplicated.
 
-## BP-04 — Ne pas mélanger les deux modèles d'objets
+## BP-04 — Use one object model for predicted gameplay
 
-| Simulation classique à éviter *dans un gameplay prédit* | Remplacer par |
+| Classic mechanism | Predicted gameplay equivalent |
 | --- | --- |
-| `[ServerRpc]`, `[ObserversRpc]`, `[TargetRpc]` pour changer le gameplay | Actions `INPUT` puis calcul et restauration `STATE` |
-| `SyncVar`, `SyncList`, autres sync types | Champs dans le `STATE` prédit |
-| `Instantiate`, `Destroy` pour le prédictible | `predictionManager.hierarchy.Create/Delete` avec IDs stables |
-| `NetworkTransform` ou `NetworkRigidbody` classique sur la même simulation | `PredictedTransform` / `PredictedRigidbody` / `PredictedRigidbody2D` |
-| `NetworkAnimator` pour la même simulation | `Animator` alimenté par `UpdateView` |
-| `GameObject`, `Transform`, `PredictedIdentity` en INPUT/STATE | `PredictedObjectID` / `PredictedComponentID` puis résolution immédiate |
+| `[ServerRpc]`, `[ObserversRpc]`, `[TargetRpc]` to change gameplay | Simulate actions from `INPUT` and restore `STATE` |
+| `SyncVar`, `SyncList` and other Sync Types | Predicted `STATE` fields |
+| `Instantiate` and `Destroy` for predicted objects | `predictionManager.hierarchy.Create/Delete` and stable IDs |
+| Classic `NetworkTransform` or `NetworkRigidbody` writing the same state | `PredictedTransform`, `PredictedRigidbody` or `PredictedRigidbody2D` |
+| `NetworkAnimator` for the same simulation | Drive `Animator` from `UpdateView` |
+| `GameObject`, `Transform`, `PredictedIdentity` references in INPUT or STATE | `PredictedObjectID` or `PredictedComponentID`, resolved at use |
 
-**Exception indispensable** : RPC/sync classiques pour systèmes hors gameplay prédit (chat, lobby, affichage de nom) sur `NetworkIdentity` distinct/mirrored. À partir de PurrDiction **1.4.0**, les `NetworkIdentity` présents dans prefabs prédits sont mirroirés automatiquement et gouvernés par topologie/visibilité prédite ; les `Network Rules` de spawning/visibility classiques ne gouvernent pas cette mirror. Avant 1.4.0 le mécanisme `PredictedIdentitySpawner` est différent. Ne jamais déduire que les deux mécanismes marchent ensemble.
+Use classic RPCs and Sync Types on a separate or mirrored `NetworkIdentity` for chat, lobby and display names. Starting with PurrDiction 1.4.0, identities inside predicted prefabs mirror automatically and follow predicted topology and visibility. Classic spawn and visibility rules do not govern the mirror. Earlier versions use the distinct `PredictedIdentitySpawner` mechanism. Confirm the version before choosing a mechanism.
 
-## BP-05 — Temps et aléatoire de la simulation prédite
+## BP-05 — Use predicted time and randomness
 
-- Interdits dans le chemin des ticks : `Time.deltaTime`, `Time.time`, `Time.frameCount`, `DateTime.Now`, `Stopwatch` comme source de gameplay, `UnityEngine.Random`.
-- Utiliser `delta` fourni au callback, `PredictedTime`, `PredictedRandom` dans un flux rejouable et stateful ; vérifier API de la version.
-- Pour déterminisme fort : `DeterministicIdentity`, `sfloat`/fixe et math déterministe. Physics Unity classique **n'assure pas** le bit-à-bit entre machines.
+- Use callback `delta`, `PredictedTime` and a replayable `PredictedRandom` stream. Check the installed API.
+- Keep `Time.deltaTime`, `Time.time`, `Time.frameCount`, `DateTime.Now`, `Stopwatch` and `UnityEngine.Random` out of gameplay ticks.
+- Use `DeterministicIdentity`, `sfloat` or fixed-point math for stronger determinism. Test separately from classic Unity physics.
 
-## BP-06 — Validation des INPUT côté serveur
+## BP-06 — Validate INPUT on the server
 
-- `GetFinalInput(ref INPUT)` lit la commande par tick. `UpdateInput(ref INPUT)` capture `GetKeyDown` / `WasPressedThisFrame` pour ne pas rater un front entre deux ticks ; la simulation lit **uniquement** INPUT sauvegardé, pas un composant MonoBehaviour.
-- `SanitizeInput(ref INPUT)` borne mouvement, aim, valeurs non finies et tailles. Cela ne suffit pas : le serveur simule **cooldown, portée, ammo, stamina, autorisation/ownership, limites de débit**, collisions/hits.
-- `ModifyExtrapolatedInput(ref INPUT)` retire les one-shots (`jump`, `fire`, `interact`, `purchase`) avant répétition de paquet perdu. Configurer Repeat Input Factor selon le réseau réel ; trop faible fait arrêter les joueurs éloignés, trop fort entraîne overshoot et snaps.
-- L'authority n'est pas modifiée par une prediction policy ; jamais croire une position/dégât envoyé par le client comme verdict.
+- Verify how `GetFinalInput(ref INPUT)` provides tick input. Capture one-shot edges in `UpdateInput(ref INPUT)` so a press between ticks is retained. Simulate from recorded INPUT.
+- Use `SanitizeInput(ref INPUT)` to clamp movement, aim and sizes and reject non-finite values. Validate cooldown, range, ammo, stamina, permissions, rate and hits against authoritative state.
+- Remove one-shots such as jump, fire, interact and purchase in `ModifyExtrapolatedInput(ref INPUT)`. Tune Repeat Input Factor against actual loss. Too little repetition can stall remote players and too much can cause overshoot and snaps.
+- The server remains responsible for authoritative positions and damage under every prediction policy.
 
-## BP-07 — Choisir la policy la moins coûteuse et correcte
+## BP-07 — Choose the least expensive policy that preserves correctness
 
-- `FullPrediction`: interactions critiques et rollback exact ; coût de replay élevé.
-- `PredictedIfOwned`: full pour owner, relay pour remote ; bon défaut pour player/vehicle si interaction distante non critique.
-- `ServerRelay`: observe l'état serveur avec latence ; pas de future speculation client.
-- `SoftCorrection`: converge au lieu de restaurer/rejouer le vivant ; seulement si état non critique et composant officiellement supporté. Certains objets non compatibles basculent silencieusement en `ServerRelay` ; ne pas y cacher un bug.
-- `PredictedIfOwnedWithSoftFallback`: exists dans la doc actuelle, à **vérifier dans la version installée**, fallback soft/relay pour non-owner.
-- Scopes (`PredictionPolicyScope`), overrides, ownership change et pooling changent le résultat ; vérifier le comportement réel et la priorité de policy.
+- `FullPrediction` supports critical interactions and exact rollback at higher replay cost.
+- `PredictedIfOwned` predicts for the owner and relays to remote peers. Consider it for a player or vehicle with noncritical remote interactions.
+- `ServerRelay` follows verified server state with latency.
+- `SoftCorrection` converges on supported noncritical objects. Unsupported objects can fall back to `ServerRelay`. Investigate simulation defects directly.
+- Check whether `PredictedIfOwnedWithSoftFallback` exists in the installed version and how it selects soft correction or relay for non-owners.
+- Verify policy scope, overrides, ownership changes and pool reuse.
 
-## BP-08 — Gestion du cycle de vie mémoire
+## BP-08 — Manage snapshot memory
 
-- Collections `DisposableList<T>`, `DisposableDictionary<K,V>`, `DisposableArray<T>` via `Create`, puis `Dispose` en fin de vie / dans `STATE.Dispose`.
-- Une copie struct superficielle d'une collection disposable ne possède pas un buffer indépendant : `Duplicate` requis. `IDuplicate<T>` dans les structs composites si buffers possédés ; `IEquatable<T>` utile quand égalité chère/ambiguë.
-- Ne jamais conserver `CollisionContactList` ou autres contacts temporaires après callback ; vérifier docs versionnées de physique/pooling.
-- **Contrôle** : snapshot, cleanup, resimulation et pooling sans fuite, double dispose ou mutation du snapshot passé.
+- Create and dispose `DisposableList<T>`, `DisposableDictionary<K,V>` and `DisposableArray<T>` according to ownership. Dispose owned state in `STATE.Dispose`.
+- A shallow struct copy shares owned buffers. Use `Duplicate` and implement `IDuplicate<T>` for composite state. Use `IEquatable<T>` when comparison is expensive or ambiguous.
+- Release `CollisionContactList` and other temporary contacts according to the version's callback contract. Keep them within callback lifetime.
+- Test snapshots, cleanup, resimulation and pooling for leaks, double disposal and mutations of earlier snapshots.
 
-## BP-09 — Identifiants prédits stables
+## BP-09 — Use stable predicted IDs
 
-- `PredictedObjectID` et `PredictedComponentID` plutôt que référence d'objet si création, deletion, pooling ou rollback possibles. Résoudre au moment de l'emploi ; échec de résolution doit être géré.
-- `TryCreateAndGet` donne un objet valable dans **le tick courant**, pas une référence stable à garder après rewind.
-- `PredictedHierarchy` gère pièces parentes/enfants, ownership et topologie ; éviter `Transform.SetParent` arbitraire pour une hiérarchie prédite sans protocole documenté.
+- Store `PredictedObjectID` or `PredictedComponentID` for references that may change during creation, deletion, pooling or rollback. Resolve at use and handle failure.
+- Treat objects returned by `TryCreateAndGet` as valid for the current tick. Resolve again after rewind.
+- Let `PredictedHierarchy` manage parent-child relationships, ownership and topology. Check the documented protocol before changing a predicted hierarchy.
 
-## BP-10 — Tests des défaillances
+## BP-10 — Exercise failures
 
-- Toujours tester **client distant**, pas seulement host : ping, jitter, pertes, changement d'owner, reconnexion, téléports, gros écarts, late join, spawn/despawn au milieu de rollback, reuse du pool, frame rates/tick rates différents.
-- Mesurer avec profilers bandwidth **et prediction** : nombre/longueur de snapshots, coût par tick, fréquence des corrections, input redundancy ; optimiser à partir des mesures et non d'impressions.
-- Critères opérationnels dans `purrdiction-test-matrix.md`.
+- Test with a remote client. Cover latency, jitter, loss, ownership changes, reconnect, teleport, large corrections, late join, spawn and despawn during rollback, pool reuse, and different frame and tick rates.
+- Measure snapshot volume, tick cost, correction frequency and input redundancy with bandwidth and prediction profilers.
+- Use the [test matrix](purrdiction-test-matrix.md) for acceptance criteria.
 
-## Conditions pour affirmer « conforme Best Practices »
-
-Produire un tableau BP-01..BP-10 indiquant **OK démontré / N/A motivé / non vérifié / défaut**, avec chemin de code et test/preuve. Une absence de doc locale, de source API, de build Unity ou de tests distants **interdit** de déclarer conformité exhaustive. Le scan C# `scripts/guard_predicted_code.py` est **heuristique**, ne remplace pas la revue.
+Record evidence for BP-01 through BP-10 with code paths and test outcomes. Mark justified exceptions and unverified checks. Full compliance requires the applicable docs, installed API, Unity build and remote tests. Use `scripts/guard_predicted_code.py` as a heuristic alongside review.

@@ -1,36 +1,36 @@
-# Workflow B — Réparer un bug sans attribuer une cause prématurément
+# Workflow B — Repair a bug without assigning a cause prematurely
 
-## 0. Collecter des preuves
+## 0. Collecting evidence
 
-Demander/chercher, sans répétition : description exacte, rôle host/dedicated/client, version PurrNet/PurrDiction, OS/build vs Editor, transports, repro minimal, logs séparés `server.log` et `Player.log`, package lock. Capturer « attendu / observé » et nombre de joueurs.
+Request/Search, without repetition: exact description, host/dedicated/client role, version PurrNet/PurrDiction, OS/build vs Editor, transport, minimal repro, separate logs `server.log` and `Player.log`, lock package. Capture "anticipated/observed" and number of players.
 
-## 1. Reproduction contrôlée
+## 1. Controlled reproduction
 
-Établir la matrice : Editor host (serveur+client local), client distant, dedicated (sans client local), client tardif ; comparer les logs. Une correction plausible sans scénario reproduit doit être présentée comme hypothèse.
+Set the matrix: Editor host (server+local client), remote client, dedicated (without local client), late client; compare logs. A plausible correction without replicated scenario must be presented as a hypothesis.
 
-## 2. Arbre décisionnel des symptômes
+## 2. Decision tree of symptoms
 
-| Symptôme | Première vérification, puis docs |
+| Symptoms | First check, then docs |
 |---|---|
-| RPC manquant | spawn, ownership, observateurs, connexions, canal, mode host/client ; `core/messaging-and-mtu.md` |
-| RPC doublé | `OnSpawned(bool asServer)` host, subscriptions répétées, `runLocally`, appel serveur + client |
-| World vide sur dedicated | `isHost`, client-only `ObserversRpc` qui initialise le serveur, spawn serveur, scenes in build |
-| Connexion boucle instantanément | `StartClient` async ; état `Disconnected` transitoire, auto-start et port |
-| Transform jitter | plus d'un writer, ownership, sync buffer, Rigidbody patch, transport, FPS/latency |
-| Late join vide | `SyncVar/SyncList` état initial, observateurs, chargement de scène, pooling, abonnement tardif |
-| Build IL2CPP | .asmdef, stripping, type packer/codegen, versions installées, log exact |
-| Correction prédite | état non restauré, input externe en `Simulate`, effet non idempotent, policy, versions |
+| RPC missing | spawn, ownership, observers, connections, channel and host/client role ; `core/messaging-and-mtu.md` |
+| RPC doubled | `OnSpawned(bool asServer)` host, repeated subscriptions, `runLocally`, server call + client |
+| World empty on dedicated | `isHost`, client-only `ObserversRpc` that initializes the server, spawn server, scenes in build |
+| Connect loop instantly | `StartClient` async; transitional `Disconnected` state, auto-start and port |
+| Transform jitter | more than one writer, ownership, sync buffer, Rigidbody patch, transport, FPS/latency |
+| Empty state on late join | `SyncVar/SyncList` initial status, observers, stage loading, pooling, late subscription |
+| Build IL2CPP | .asmdef, stripping, packer/codegen type, installed versions, log exact |
+| Predicted correction | unrestored state, external input in `Simulate`, non-idempotent effect, policy, versions |
 
-Voir `references/tools/troubleshooting-playbook.md`, `references/dedicated-server.md` et `references/historical/triage-playbook.md`.
+See `references/tools/troubleshooting-playbook.md`, `references/dedicated-server.md` and `references/historical/triage-playbook.md`.
 
-## 3. Historique = piste, pas diagnostic
+## 3. History = track, not diagnosis
 
-`python scripts/historical_issues.py "<SYMPTÔME>" --project <PROJECT> --json`. Comparer le fix historique avec la version installée et le code actuel. Un bug « corrigé en 1.2.1 » **n'explique pas** le même symptôme en 1.25.0 sans preuve de régression.
+`python scripts/historical_issues.py "<SYMPTOM>" --project <PROJECT> --json`. Compare the historical fix with the installed version and the current code. A bug "corrected in 1.2.1" **does not explain** the same symptom in 1.25.0 without proof of regression.
 
-## 4. Isoler puis corriger
+## 4. Isolate and fix the cause
 
-Produire une cause testable : `« aucune initialisation serveur avant diffusion RPC »`, pas `« problème de PurrNet »`. Changer la zone minimale. Ne pas mettre `runLocally: true` sur tous les RPC sans discernement ; préférer souvent un appel explicite de la logique serveur + RPC purement client. Éviter de remplacer le transport/dépendance si les logs pointent vers une double souscription.
+Produce a testable cause: `“Server state is missing before the RPC is sent”`, not `“PurrNet issue”`. Change the minimum area. Do not place `runLocally: true` on all RPC without discernment; often prefer an explicit call from server logic + RPC purely client. Avoid replacing transport/dependence if logs point to a double subscription.
 
-## 5. Régression
+## 5. Regression
 
-Même reproducer AVANT/APRÈS, host+dédié si applicable, deux clients, late join, perte réseau et version. Si impossible, fournir script de reproduction et étapes de logging. Résultats observés et non observés selon `references/validation/acceptance.md`.
+Even reproduce BEFORE, host+dedicated if applicable, two clients, late join, network loss and version. If impossible, provide reproduction script and logging steps. Results observed and not observed according to `references/validation/acceptance.md`.

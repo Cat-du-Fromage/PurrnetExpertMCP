@@ -1,22 +1,22 @@
-# Coopération avec la skill edgegap-purrnet
+# Cooperation with the skill beggap-purrnet
 
 Source : https://github.com/edgegap/llm-agent-skills/tree/main/skills/edgegap-purrnet
 
-`purrnet-expert` intervient sur gameplay C#, RPC, modules de synchronisation, autorité, bugs host/dedicated, serialization, addon PurrDiction, version et débogage.
+`purrnet-expert` intervenes on gameplay C#, RPC, synchronization modules, authority, bugs host/dedicated, serialization, addon PurrDiction, version and debugging.
 
-`edgegap-purrnet` (si installée) prend le relais pour : dedicated Linux, bootstrap autonome, plugin/build Docker, déploiements sur Edgegap, matchmaking, panel de connexion, ports cloud, lifecycle et destruction des serveurs. Ne pas la forcer pour un serveur auto-hébergé ou un projet host/relay.
+`edgegap-purrnet` (if installed) takes over for: dedicated Linux, standalone bootstrap, plug-in/build Docker, deployments to Edgegap, matchmaking, connection panel, cloud ports, lifecycle and server destruction. Do not force it for a self-hosted server or host/relay project.
 
 ## Flux de collaboration
 
-1. `purrnet-expert` inspecte la version Unity/PurrNet et la logique du jeu ; note les changements host-only nécessaires.
-2. `edgegap-purrnet` configure son bootstrap, ses templates de serveur/client et ses étapes local → Docker → cloud → matchmaking.
-3. `purrnet-expert` relit les changements de logique jeu et les risques d'autorité, et vérifie que l'état monde existe sans client local.
-4. Les deux passent la matrice de tests ; ne pas présenter le sample Edgegap comme une preuve du projet utilisateur.
+1. `purrnet-expert` inspects the Unity/PurrNet version and the logic of the game; notes the host-only changes required.
+2. `edgegap-purrnet` configures its bootstrap, server/client templates and local steps → Docker → cloud → matchmaking.
+3. `purrnet-expert` rereads game logic changes and authority risks, and checks that the world state exists without local client.
+4. Both pass the test matrix; do not present the Edgegap sample as proof of the user project.
 
-Ne jamais intégrer de secret Edgegap dans le client ni dans les fichiers du projet. Pour toute action sur un compte réel ou un service facturé, respecter la confirmation attendue par l'outil concerné.
+Never integrate Edgegap secrets into the client or project files. For any action on a real account or invoiced service, follow the confirmation expected by the tool concerned.
 
-## v0.8 — Contrat opérationnel de transfert
+## v0.8 — Transfer Operational Contract
 
-Pour une demande Edgegap, charger `references/workflows/edgegap-handoff.md` puis, si la skill Edgegap est disponible, la laisser prendre le rôle principal dans le déploiement. Transmettre `Unity version`, `PurrNet version/commit`, `NetworkManager/scene`, `start flags`, `transport/port`, `callbacks host-only`, `build evidence` et `risks`. Retour attendu : logs d'un serveur **sans client local**, deux vrais clients, déploiement direct avant matchmaker, auto-stop et arrêt des ressources facturées. Ne jamais transformer une validation rapportée sur le sample Edgegap en preuve sur le projet utilisateur.
+For an Edgegap request, load `references/workflows/edgegap-handoff.md` and then, if the Edgegap skill is available, let it take the lead role in the deployment. Forward `Unity version`, `PurrNet version/commit`, `NetworkManager/scene`, `start flags`, `transport/port`, `callbacks host-only`, `build evidence` and `risks`. Expected return: logs of a server **without local client**, two real clients, direct deployment before matchmaker, auto-stop and stop billing resources. Never turn a validation reported on the Edgegap sample into proof on the user project.
 
-Comparaison détaillée et emplacement des évaluations Edgegap : `references/edgegap-comparison.md`.
+Detailed comparison and location of reviews Edgegap : `references/edgegap-comparison.md`.

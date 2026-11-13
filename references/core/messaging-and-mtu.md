@@ -1,16 +1,16 @@
-# Choix RPC / Broadcast / événements et MTU — procédure
+# Choice RPC / Broadcast / Events and MTU — Procedure
 
 **Sources** : [Remote Procedure Calls](https://purrnet.dev/docs/systems-and-modules/remote-procedure-call-rpc), [Network Manager](https://purrnet.dev/docs/systems-and-modules/network-manager), [Broadcasts](https://purrnet.dev/docs/systems-and-modules/broadcast), [Bandwidth Profiler](https://purrnet.dev/docs/systems-and-modules/bandwidth-profiler).
 
-## Direction et sécurité
+## Directorate and security
 
-| Besoin | Mécanisme | Contrôles |
+| Need | Mechanism | Controls |
 |---|---|---|
-| Client demande un achat | `[ServerRpc]` sur NetworkIdentity | Ownership/RequireOwnership selon règles, identité appelant, prix/stock côté serveur |
-| Serveur notifie observers | `[ObserversRpc]` | Vérifier qui observe, `BufferLast` pour dernière occurrence seulement |
-| Serveur répond à un joueur | `[TargetRpc]` avec `PlayerID` | PlayerID valide/authentifié; visibilité et timing |
-| Information sans NetworkIdentity | `Broadcast` | Abonnement/désabonnement, connection vs player scope, validation |
-| État durable côté late join | SyncVar/SyncList/State | Éviter de reconstruire un monde depuis une série d'RPC bufferisés |
+| Client demande un achat | `[ServerRpc]` on NetworkIdentity | Ownership/RequireOwnership according to rules, calling identity, server-side price/stock |
+| Server notifies observers | `[ObserversRpc]` | Check who observes, `BufferLast` for last occurrence only |
+| Server responds to a player | `[TargetRpc]` with `PlayerID` | Valid/authenticated PlayerID; visibility and timing |
+| Information without NetworkIdentity | `Broadcast` | Subscription/unsubscribe, connection vs player scope, validation |
+| Durable state on the late join side | SyncVar/SyncList/State | Avoid rebuilding a world from a series of buffered RPC |
 
 **Extrait documentaire illustratif** :
 
@@ -18,7 +18,7 @@
 [ServerRpc(requireOwnership: false)]
 private void RequestAction()
 {
-    // Valider ici l'appelant et les règles métier avant de muter l'état.
+    // Validate the caller and gameplay rules before changing state.
 }
 
 [ObserversRpc(bufferLast: true)]
@@ -28,19 +28,19 @@ private void AnnounceState(int value)
 }
 ```
 
-Les noms exacts/paramètres d'attributs peuvent varier dans le codegen/entre docs ; vérifier la casse/surcharge de **la version installée**. `RunLocally` peut entraîner l'exécution locale ; sur serveur dédié, ne pas mettre tout le spawn ou la génération du monde dans un observer-only callback exécuté uniquement côté client.
+The exact names/attribute parameters may vary in the codegen/between docs; check the case/overload of **the installed version**. `RunLocally` can result in local execution; on dedicated server, do not put the entire spawn or generation of the world into an observation-only callback executed only on the client side.
 
-## Livraison, fragmentation et volume
+## Delivery, fragmentation and volume
 
-- `ReliableOrdered` pour les opérations qui ne doivent pas être perdues; `Unreliable` ou `UnreliableSequenced` pour les états fréquemment remplacés. La sémantique d'`UnreliableSequenced` dépend du transport et du réglage MTU : inspecter code et docs actuels.
-- Un payload supérieur à la MTU peut être fragmenté, **promu en fiable** ou abandonné suivant `NetworkManager.mtuExceededBehaviour` ou l'override de RPC. Les fragments perdus peuvent invalider tout le message ; éviter d'utiliser la fragmentation comme protocole de fichier.
-- `Immediate` réduit l'attente de flush mais la mise en lot est moins efficace. Mesurer avant d'augmenter son usage.
-- Vérifier les pertes dans **Tools/PurrNet/Analysis/Bandwidth Profiler**. Les catégories `Expired`, `Evicted`, `BudgetExceeded`, `SequencedStale` guident le diagnostic.
+- `ReliableOrdered` for operations that must not be lost; `Unreliable` or `UnreliableSequenced` for frequently replaced states. The semantics of `UnreliableSequenced` depend on the transport and setting MTU: inspect current code and docs.
+- A payload higher than the MTU can be fragmented, **promoted as reliable** or abandoned following `NetworkManager.mtuExceededBehaviour` or the RPC override. Lost fragments can invalidate the entire message; avoid using fragmentation as a file protocol.
+- `Immediate` reduces flush wait but batching is less effective. Measure before increasing its use.
+- Check losses in **Tools/PurrNet/Analysis/Bandwidth Profiler**. The categories `Expired`, `Evicted`, `BudgetExceeded`, `SequencedStale` guide the diagnosis.
 
 ## Test reproductible
 
-1. Vérifier avec host, client distant, dédié (si pertinent), non-observateur et client non autorisé.
-2. Capturer et rejouer un input susceptible d'être perdu; déterminer si un état durable doit être synchronisé.
-3. Forcer payload volumineux, variation MTU, perte et latence; relever les messages tombés et bytes/sec.
-4. Tester des RPC envoyés avant fin d'auth/scène/observation : ne pas supposer que le destinataire existe déjà.
-5. Pour l'audio, l'Animator ou un Transform, évaluer d'abord les composants PurrNet (éviter RPC maison par tick).
+1. Check with host, remote client, dedicated (if relevant), non-observer and unauthorized client.
+2. Capture and replay an input likely to be lost; determine whether a lasting state should be synchronized.
+3. Force large payload, MTU variation, loss and latency; record fallen and bytes/sec messages.
+4. Test RPC sent before the end of auth/scene/observation: do not assume that the recipient already exists.
+5. For audio, Animator or Transform, first evaluate PurrNet components (avoid RPC home by tick).

@@ -1,33 +1,33 @@
-# Scènes Unity, prefabs et assets réseau — playbook
+# Unity scenes, prefabs and network assets — playbook
 
 **Docs** : [Network Assets](https://purrnet.dev/docs/systems-and-modules/network-manager/network-assets), [Scene Scoped](https://purrnet.dev/docs/systems-and-modules/network-manager/scene-scoped-prefabs-and-assets), [Scene Module](https://purrnet.dev/docs/systems-and-modules/scene-module), [Addressables](https://purrnet.dev/docs/systems-and-modules/addressables), [Connection/Player Events](https://purrnet.dev/docs/systems-and-modules/network-manager/connection-and-player-events).
 
 ## 1. Table de diagnostic
 
-| Symptom | À inspecter |
+| Symptom | To be inspected |
 |---|---|
-| Client connecté mais ne voit pas prefab | NetworkIdentity, registre, Network Rules, visibility, scène chargée |
-| Le nouveau joueur n'a pas de monde | onPlayerLoadedScene, observers, état durable, snapshots, scène réellement présente |
-| Instantiation fonctionne en Editor mais pas en build | asset inclus, Addressables catalog, scène au Build Settings, résolution par registry |
-| Le même prefab existe deux fois | host/server `asServer`, spawn path, auto-start flags, startup idempotent |
-| Perf mémoire se dégrade à chaque scène | registre global trop large, `NetworkScenePrefabs/NetworkSceneAssets`, pooling |
+| Client connected but does not see prefab | NetworkIdentity, registry, Network Rules, visibility, scene loaded |
+| The new player has no world | onPlayerLoadedScene, observation, durable condition, snapshots, scene actually present |
+| Instantiation works in Editor but not build | asset included, Addressables catalog, build settings scene, registry resolution |
+| The same prefab exists twice | host/server `asServer`, spawn path, auto-start flags, startup idempotent |
+| Perf memory degrades at each scene | registre global trop large, `NetworkScenePrefabs/NetworkSceneAssets`, pooling |
 
 ## 2. Checklist Inspector
 
-1. Dans la scène de démarrage : `NetworkManager`, transport, règles de spawn/autorité, registres `NetworkPrefabs`/`NetworkAssets` selon le jeu.
-2. Dans une scène de gameplay non globale : créer ses ScriptableObjects de registre avec `Folder / Scene` défini sur cette scène ; placer `NetworkScenePrefabs` et `NetworkSceneAssets` dans une GameObject de cette scène.
-3. Éviter les doublons avec registre global : global gagne. Les objets doivent être créés dans **la scène qui possède le registre** ; sinon fallback sur autre scène et risques pour des clients qui ne l'ont pas chargée.
-4. Charger la scène réseau **avant** de supposer que tous les joueurs reçoivent l'objet, vérifier les événements `onPlayerLoadedScene`/`onPlayerUnloadedScene` et la visibilité.
-5. Addressables : enregistrer les prefabs Addressables et tenir compte du caractère asynchrone pour spawn, RPC et scene; tester le chargement lent, l'annulation, le cleanup/release sur clients et serveur.
+1. In the boot scene: `NetworkManager`, transport, spawn/authority rules, `NetworkPrefabs`/`NetworkAssets` records depending on the game.
+2. In a non-global gameplay scene: create its ScriptableRegistry objects with `Folder / Scene` defined on this scene; place `NetworkScenePrefabs` and `NetworkSceneAssets` in a GameObject of this scene.
+3. Avoid duplicates with global registry: global wins. Objects must be created in **the scene that owns the registry**; otherwise fallback on other scene and risks for clients who have not loaded it.
+4. Load the network scene **before** assume that all players receive the object, check the `onPlayerLoadedScene`/`onPlayerUnloadedScene` events and visibility.
+5. Addressables: save Addressables prefabs and take into account asynchronous character for spawn, RPC and scene; test slow loading, cancellation, cleanup/release on clients and server.
 
-## 3. Timing et callbacks
+## 3. Timing and callbacks
 
-- Transport `Connected` est antérieur à l'auth et à l'attribution d'un `PlayerID`.
-- `onPlayerJoined` est appelé **après** authentification, mais pas nécessairement après toutes les scènes.
-- Les callbacks avec `asServer` s'exécutent pour serveur et client d'un host : garder le contrôle serveur dans la branche `asServer`.
-- `OnObserverAdded` / `OnObserverRemoved` sont côté serveur et permettent de produire un état ciblé. Ne jamais utiliser leur seule occurrence pour l'état durable global.
-- Des objets peuvent exister sur le serveur sans être visibles par un client, en raison des règles ou de la scène.
+- Transport `Connected` is prior to auth and allocation of a `PlayerID`.
+- `onPlayerJoined` is called **after** authentication, but not necessarily after all scenes.
+- Callbacks with `asServer` run for server and host client: keep server control in the `asServer` branch.
+- `OnObserverAdded` / `OnObserverRemoved` are server-side and allow to produce a targeted state. Never use their only occurrence for the global durable state.
+- Objects may exist on the server without being visible by a client, due to rules or scene.
 
 ## 4. Tests obligatoires
 
-Host + clone / deux builds clients / client tardif, rejoin avec cookie, chargement additif dans un ordre différent, unload d'une scène sous observation, connexion qui échoue durant chargement, prefab du registre scene-only, destruction + respawn pool, sérialisation d'un asset dynamique (par exemple AudioClip).
+Host + clone / two client / late client build, joins with cookie, additive loading in a different order, a load of a scene under observation, connection that fails during loading, prefab of the register scene-only, destruction + respawn pool, serialization of a dynamic asset (e.g. AudioClip).

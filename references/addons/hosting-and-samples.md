@@ -1,11 +1,11 @@
-# Hosting, déploiement et exemples de jeu
+# Hosting, deployment and game examples
 
 **Docs** : `game-server-hosting/`, `full-game-guides/`, `community-guides/`, `guides/setting-up-a-server.md`, `readme/performance/`.
 
-- Distinguer host joueur/P2P, relay, dédié. Préférer serveur autoritaire selon risque de triche, coûts et latence; valider connexion/ports avant matchmaking.
-- L'hébergement Edgegap et la configuration cloud détaillée relèvent de `edgegap-purrnet` lorsqu'elle est installée; la présente skill doit rester focalisée sur architecture PurrNet et correctifs réseau.
-- La skill `edgegap-purrnet` documente notamment l'auto-start `NetworkManager`, `StartClient()` asynchrone et `[ObserversRpc(runLocally: true)]` pour logique exécutée sur serveur dédié. Appliquer les corrections **seulement** après vérification de la version et du besoin.
-- Les exemples GitHub sont une source intermédiaire : un sample peut viser `dev`, une autre Unity version, des Network Rules permissives ou un API depuis remplacée. Ne pas considérer compilation du sample = compilation du projet utilisateur.
-- Les réponses Stray Help (Discord) sont historiques, utiles au diagnostic, et doivent être confirmées contre la version installée.
+- Distinguish host player/P2P, relay, dedicated. prefer authoritative server according to risk of cheating, costs and latency; validate connection/ports before matchmaking.
+- Edgegap hosting and the detailed cloud configuration are the responsibility of `edgegap-purrnet` when installed; this skill must remain focused on PurrNet architecture and network patches.
+- The `edgegap-purrnet` skill documents the `NetworkManager` autostart, `StartClient()` asynchronous, and `[ObserversRpc(runLocally: true)]` for logic executed on dedicated server. Apply the corrections **only** after checking the version and need.
+- GitHub examples are an intermediate source: a sample can target `dev`, another Unity version, permissive Network Rules or an API since replaced. Do not consider compilation of sample = compilation of user project.
+- The Stray Help (Discord) answers are historical, useful for diagnosis, and must be confirmed against the installed version.
 
-Livraison : séparer preuve D1 documentation, D2 API installé, D3 compilation Unity, D4 deux clients, D5 dédié, D6 perte/jitter. Présenter seulement les niveaux réellement obtenus.
+Delivery: separate proof D1 documentation, D2 API installed, D3 compilation Unity, D4 two clients, D5 dedicated, D6 loss/jitter. Show only the levels actually achieved.

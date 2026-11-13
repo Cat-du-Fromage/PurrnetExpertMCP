@@ -1,14 +1,14 @@
-# PredictedStateMachine / PredictedStateNode — procédure
+# PredictedStateMachine / PredictedStateNode — procedure
 
 **Sources** : [State Machine](https://purrnet.dev/docs/client-side-prediction/predicted-state-machine), [Predicted State Node](https://purrnet.dev/docs/client-side-prediction/predicted-state-machine/predicted-state-node), [Flow](https://purrnet.dev/docs/client-side-prediction/flow), [Best Practices](https://purrnet.dev/docs/client-side-prediction/best-practices).
 
-## Ne pas confondre
+## Do not confuse
 
-- `NetworkStateMachine` (PurrNet classique) réplique l'état; `StateNode` est un `NetworkBehaviour` dont les méthodes peuvent différencier `asServer`.
-- La machine **prédite** évolue dans la timeline PurrDiction avec simulation/réconciliation. Les transitions qui influencent le gameplay doivent se produire dans un état que l'historique peut rétablir.
-- `Enter`/`Exit` de simulation ne doivent pas envoyer de RPC, démarrer un audio irréversible ou écrire une sauvegarde à chaque replay. Les fonctions `ViewEnter`/`ViewExit` (selon version) sont liées à la présentation; vérifier leur signature avant implémentation.
+- `NetworkStateMachine` (PurrNet classic) replicates the state; `StateNode` is a `NetworkBehaviour` whose methods can differentiate `asServer`.
+- The **predite** machine evolves in the PurrDiction timeline with simulation/conciliation. Transitions that influence gameplay must occur in a state that history can restore.
+- `Enter`/`Exit` simulation should not send RPC, start an irreversible audio or write a backup at each replay. The `ViewEnter`/`ViewExit` functions (depending on version) are related to the presentation; check their signature before implementation.
 
-## Exemple de responsabilité (pseudo-code)
+## Example of liability (pseudo-code)
 
 ```text
 State: Idle -> Move -> Jump -> Land
@@ -19,10 +19,10 @@ On UpdateView / ViewEnter: change Animator pose / VFX as needed
 On rollback: restore previous state + replay transitions, no duplicate score/SFX.
 ```
 
-- Les versions génériques de `PredictedStateNode<INPUT,STATE>` et `PredictedStateNode<STATE>` ne possèdent pas nécessairement les mêmes callbacks; lire l'implémentation locale.
-- Si la machine contient des sous-modules dynamiques, leur création/destruction appartient à la simulation et suit le roster de predicted modules.
-- Une animation locale ne doit pas déterminer seule une collision ou un cooldown serveur.
+- Generic versions of `PredictedStateNode<INPUT,STATE>` and `PredictedStateNode<STATE>` do not necessarily have the same callbacks; read the local implementation.
+- If the machine contains dynamic submodules, their creation/destruction belongs to the simulation and follows the roster of predicted modules.
+- A local animation should not only determine a collision or cooldown server.
 
 ## Tests
 
-Attaques enchaînées, transition rapide Idle→Jump→Land, correction pendant Enter/Exit, plus faible frame rate que tick rate, same tick multiple passes, late join au milieu d'état, pool reset et authority invalidée.
+Chained attacks, fast transition Idle→Jump→Land, correction during Enter/Exit, lower frame rate than tick rate, same multiple pass tick, late join mid-state, pool reset and invalidated authority.

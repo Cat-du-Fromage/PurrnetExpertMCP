@@ -1,5 +1,5 @@
-// Demo PurrNet uniquement, non compilée dans Unity ici.
-// Vérifier la compatibilité de la version installée et configurer Network Rules.
+// PurrNet example. Not compiled in Unity.
+// Check the installed version and configure Network Rules.
 using PurrNet;
 using UnityEngine;
 
@@ -10,7 +10,7 @@ public class ExampleNetworkCounter : NetworkBehaviour
 
     public int Count => _count.value;
 
-    // Appeler depuis une UI du propriétaire autorisé (après spawn).
+    // Call from the authorized owner's UI after spawning.
     public void RequestIncrement()
     {
         IncrementOnServer();
@@ -19,7 +19,7 @@ public class ExampleNetworkCounter : NetworkBehaviour
     [ServerRpc]
     private void IncrementOnServer()
     {
-        // Démo : limite de valeur, PAS une protection contre le spam.
+        // Clamp the value. Rate limiting requires a separate check.
         if (_count.value >= maxValue)
             return;
 

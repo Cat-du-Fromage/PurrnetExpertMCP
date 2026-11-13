@@ -1,11 +1,11 @@
-# Carte des sources PurrNet
+# Source map PurrNet
 
-> Vérification initiale : 12 novembre 2026. Les branches et pages évoluent.
+> Initial verification: November 12, 2026. Branches and pages evolve.
 
-## 1. Documentation officielle
+## 1. Official documentation
 
 - Index humain : https://purrnet.dev/docs
-- Index source GitHub, navigable et versionnable : https://github.com/PurrNet/PurrDocs/blob/main/SUMMARY.md
+- GitHub source index, navigable and versionable : https://github.com/PurrNet/PurrDocs/blob/main/SUMMARY.md
 - Sources Markdown : https://github.com/PurrNet/PurrDocs
 - Installation : https://purrnet.dev/docs/getting-started/installation-setup
 - Minimal Setup : https://purrnet.dev/docs/getting-started/getting-started
@@ -18,16 +18,16 @@
 - Spawning/Despawning : https://purrnet.dev/docs/systems-and-modules/network-identity/spawning-and-despawning
 - Prediction : https://purrnet.dev/docs/client-side-prediction
 
-Le fichier `SUMMARY.md` est un **annuaire** de sujets, pas une preuve que
-chaque page correspond à la version installée. Le site dispose d'un sélecteur
-« Package versions » : vérifier les versions dans les questions sensibles.
+The `SUMMARY.md` file is a **yearbook** of subjects, not proof that
+each page corresponds to the installed version. The site has a selector
+"Package versions": check versions in sensitive questions.
 
 ## 2. Repositories officiels
 
 Organisation : https://github.com/orgs/PurrNet/repositories
 
 - Core : https://github.com/PurrNet/PurrNet (branche `release` stable,
-  `dev` plus récente, mais plus changeante)
+  `dev` more recent, but more changing)
 - Docs source : https://github.com/PurrNet/PurrDocs
 - Prediction : https://github.com/PurrNet/PurrDiction
 - Lobby : https://github.com/PurrNet/PurrLobby
@@ -35,49 +35,49 @@ Organisation : https://github.com/orgs/PurrNet/repositories
 - Sample : https://github.com/PurrNet/PurrNet-Incremental-Sample
 - Example/template : https://github.com/PurrNet/game-jam-template
 
-Code du core dans `Assets/PurrNet/Runtime/` ; package UPM dans
-`Assets/PurrNet/package.json`. Les exemples se trouvent aussi dans
-`Assets/PurrNet/Examples/`. Vérifier l'existence des fichiers et les symboles
-avant de citer une implémentation.
+Core code in `Assets/PurrNet/Runtime/`; package UPM in
+`Assets/PurrNet/package.json`. Examples can also be found in
+`Assets/PurrNet/Examples/`. Check file existence and symbols
+before quoting an implementation.
 
-Exemple d'installation stable documentée :
+Example of a documented stable installation:
 `https://github.com/PurrNet/PurrNet.git?path=/Assets/PurrNet#release`
 
 ## 3. Base historique Discord/Stray Help
 
-- Index `llms.txt` **épinglé au commit fourni** :
+- Index `llms.txt` **Added to commit provided**:
   https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/llms.txt
 - FAQ :
   https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/FAQ.md
 - Quick Reference :
   https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/QUICK_REFERENCE.md
-- Historique et développeurs : consulter les chemins répertoriés dans `llms.txt`.
+- History and developers: see the paths listed in `llms.txt`.
 
-L'index annonce plus de 15 000 Q/R et un historique jusqu'à v1.20.0. Il
-s'agit de **témoignages datés**, non d'une documentation officielle actuelle.
-Éviter d'importer l'intégralité des logs en contexte à chaque requête.
+The index announces more than 15,000 Q/R and a history up to v1.20.0.
+is **dated testimony**, not current official documentation.
+Avoid importing the entire logs into context at each query.
 
-## 4. Procédure de recherche ciblée
+## 4. Targeted search procedure
 
-1. Lire le nom de classe/attribut dans la demande.
-2. Ouvrir `SUMMARY.md` pour découvrir la page pertinente.
-3. Chercher le symbole dans le code exact installé (ou dépôt core au commit).
-4. Confirmer avec la documentation correspondante.
-5. Sur bug connu seulement, chercher la FAQ puis les réponses historiques.
-6. Pour une fonction d'addon, vérifier sa **dépendance et version séparées**.
+1. Read the class name/attribute in the application.
+2. Open `SUMMARY.md` to discover the relevant page.
+3. Search for the symbol in the exact code installed (or commit core repository).
+4. Confirm with the corresponding documentation.
+5. On known bug only, search the FAQ and then the historical answers.
+6. For an addon function, check its **dependence and separate version**.
 
-## Nouveaux points d'entrée en v0.3
+## New entry points in v0.3
 
-- `references/documentation-map.md` pour découvrir **toutes** les catégories documentées, pas une whitelist de neuf fichiers.
-- `references/documentation-policy.md` et `scripts/sync_sources.py` pour cloner PurrDocs et conserver SHA source (sans redistribution du dépôt doc dans le ZIP).
-- `scripts/docs_catalog.py coverage` : vérifie chemins critiques et liens SUMMARY, `search` : recherche dans tout le clone, y compris pages non listées dans SUMMARY.
-- `references/purrdiction-best-practices.md` et `references/purrdiction-architecture.md` : règles de prédiction obligatoires.
-- `references/networking-best-practices.md` : cycle de vie des modules, authority, RPC et limites en PurrNet classique.
-- `scripts/inspect_project.py` couvre `dev.purrnet.purrdiction` indépendamment du core.
+- `references/documentation-map.md` to discover **all** documented categories, not a whitelist of nine files.
+- `references/documentation-policy.md` and `scripts/sync_sources.py` to clone PurrDocs and keep SHA source (without redistributing doc to ZIP).
+- `scripts/docs_catalog.py coverage`: checks critical paths and links SUMMARY, `search`: searches all over the clone, including pages not listed in SUMMARY.
+- `references/purrdiction-best-practices.md` and `references/purrdiction-architecture.md`: mandatory prediction rules.
+- `references/networking-best-practices.md`: module life cycle, authority, RPC and standard PurrNet limits.
+- `scripts/inspect_project.py` covers `dev.purrnet.purrdiction` independently of the core.
 
-## Mise à jour v0.7 — incidents Stray Help épinglés
+## Update v0.7 — Stray Help pinned incidents
 
-- Cas vérifiés à la source historique `e6140a571228044fe670b500e245f6bb370b2e06` : `references/historical/incident-catalog.json` (35 scénarios **de triage**, pas 35 bugs actuels).
-- Sources synthétiques : [`docs/QUICK_REFERENCE.md`](https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/QUICK_REFERENCE.md), [`docs/FAQ.md`](https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/FAQ.md), [`docs/changelogs/versions.md`](https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md).
-- Les fichiers `docs/dev-answers/*.md` et les raw Discord (total annoncé : ~15k messages Q&A) ne sont **pas tous analysés**. Recherche locale optionnelle après `scripts/sync_stray_archive.py`, via `scripts/search_stray_archive.py`. Ne pas supposer une autorisation de redistribution.
-- Contradictions connues avec PurrDocs actuelle : version « latest », ancien repo `BlenMiner`, intégration Dissonance, sérialisation de références, membership vs loaded-scene events et vieux noms de callbacks. La source exacte du projet a priorité.
+- Case verified at historical source `e6140a571228044fe670b500e245f6bb370b2e06`: `references/historical/incident-catalog.json` (35 **sorting scenarios**, not 35 current bugs).
+- Synthetic sources: [`docs/QUICK_REFERENCE.md`](https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/QUICK_REFERENCE.md), [`docs/FAQ.md`](https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/FAQ.md), [`docs/changelogs/versions.md`](https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/changelogs/versions.md).
+- `docs/dev-answers/*.md` files and raw Discord (total advertised: ~15k Q&A messages) are **not all analyzed**. Optional local search after `scripts/sync_stray_archive.py`, via `scripts/search_stray_archive.py`. Do not assume redistribution permission.
+- Known contradictions with current PurrDocs: "last" version, old repo `BlenMiner`, integration Dissonance, serialization of references, membership vs loaded-scene events and old callback names. The exact source of the project takes precedence.

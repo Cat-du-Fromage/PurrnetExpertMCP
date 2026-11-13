@@ -1,13 +1,13 @@
-# Mémoire, historiques et pooling prédit
+# Memory, History and Predicted Pooling
 
 **Source** `client-side-prediction/disposable-collections.md`, `best-practices.md`, `predicted-hierarchy.md`, `predicted-modules/README.md`.
 
-- States et buffers sont dupliqués et disposés à fréquence élevée. Utiliser les collections adaptées `DisposableList<T>`, `DisposableDictionary<K,V>`, `DisposableArray<T>`, fabriquées par `Create(...)` et libérées via `STATE.Dispose`.
-- Ne pas faire `var second = first;` puis deux `Dispose()` de la collection struct partagée. Utiliser `.Duplicate()` et implémenter `IDuplicate<T>` sur les états composites possédant des buffers. `IEquatable<T>` peut aider packers/delta pour états coûteux.
-- Scratch allocations utilisent pools avec `Instantiate`/`Destroy` propres aux collections locales; ne pas confondre avec `Instantiate` Unity d'objets réseau.
-- Les `PredictedObjectID` sont des handles persistables, une référence GameObject/Component peut être invalidée par réconciliation, suppression ou re-pool. Résoudre à chaque usage pertinent.
-- Des collections de contacts physiques sont valides dans le callback, pas au-delà. Ne pas conserver de callback/event externe vers un module dynamique dont la vie a fini.
-- `PURR_LEAKS_CHECK` dans Editor permet la traque d'allocations sur certaines versions ; compiler et vérifier la directive avant de recommander.
+- States and buffers are duplicated and arranged at high frequency. Use adapted collections `DisposableList<T>`, `DisposableDictionary<K,V>`, `DisposableArray<T>`, manufactured by `Create(...)` and released via `STATE.Dispose`.
+- Do not make `var second = first;` then two `Dispose()` from the shared struct collection. Use `.Duplicate()` and implement `IDuplicate<T>` on composite states with buffers. `IEquatable<T>` can help packers/delta for expensive states.
+- Scratch allocations use pools with `Instantiate`/`Destroy` specific to local collections; do not confuse with `Instantiate` Unity network objects.
+- `PredictedObjectID` are persistent handles, a GameObject/Component reference can be invalidated by reconciliation, suppression or re-pool. Solve for each relevant use.
+- Collections of physical contacts are valid in the callback, not beyond. Do not keep external callback/event to a dynamic module whose life has ended.
+- `PURR_LEAKS_CHECK` in Editor allows tracking allocations on certain versions; compile and verify the directive before recommending.
 
 ## Tests
-1000 spawns/despawns répétés, rollback tous les 3 ticks, long replay, pool reuse, double dispose, collision contact expired, heap allocation delta et profil history.
+1000 repeated spawns/despawns, rollback every 3 ticks, long replay, pool, double disposes, collision contact expired, heap allocation delta and profile history.

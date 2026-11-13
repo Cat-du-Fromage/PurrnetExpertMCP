@@ -1,5 +1,5 @@
-// Demo PurrNet uniquement, non compilée dans Unity ici.
-// Vérifier les options nommées de ObserversRpc dans la version installée.
+// PurrNet example. Not compiled in Unity.
+// Check named ObserversRpc options in the installed version.
 using PurrNet;
 using UnityEngine;
 
@@ -12,7 +12,7 @@ public class ExampleWorldSeed : NetworkBehaviour
         if (!asServer)
             return;
 
-        // Le serveur choisit la graine même en dedicated (sans client local).
+        // The server selects the seed, including on a dedicated server without a local client.
         BroadcastSeed(Random.Range(1, int.MaxValue));
     }
 

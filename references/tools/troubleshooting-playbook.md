@@ -1,23 +1,23 @@
-# Débogage par symptôme — chemins de diagnostic
+# Debogage by symptom — diagnostic pathways
 
-**Pour tout symptôme de bug PurrNet** : ouvrir aussi `references/historical/triage-playbook.md` et utiliser `scripts/historical_issues.py` pour vérifier si un incident ancien a déjà été signalé et dans quelle version. Les anciennes corrections sont des indices, pas des patchs applicables tels quels. Voir `references/historical/case-studies.md` pour six scénarios complets.
+**For any PurrNet** bug symptoms: Open also `references/historical/triage-playbook.md` and use `scripts/historical_issues.py` to check if an old incident has already been reported and in which version. Old fixes are clues, not applicable patches as they are. See `references/historical/case-studies.md` for six full scenarios.
 
 **Sources** : [Bandwidth Profiler](https://purrnet.dev/docs/systems-and-modules/bandwidth-profiler), [Type Hash Resolver](https://purrnet.dev/docs/tools/type-hash-resolver), [Connection Events](https://purrnet.dev/docs/systems-and-modules/network-manager/connection-and-player-events), [Best Practices PurrDiction](https://purrnet.dev/docs/client-side-prediction/best-practices).
 
-| Symptom | Procédure dans l'ordre | Ne pas faire |
+| Symptom | Procedure in order | Do not do |
 |---|---|---|
-| `ServerRpc` non reçu | spawned identity → owner/rules → auth/playerID → transport/observer → signature/ILPP | désactiver toute restriction `RequireOwnership` sans validation |
-| Duplications host | OnSpawned `asServer` deux contextes, auto-start, instantiate path, observers RPC `RunLocally` | ajouter bool local non répliqué au hasard |
-| Écran vide sur serveur dédié | spawn exécuté en `ObserversRpc` uniquement client; asServer, headless scripts | croire qu'un host local équivaut à un dedicated |
-| Transform jitter | autorité writer, interpolation buffer, `NetworkTransform` vs `PredictedTransform`, physics writer, RTT, controller patch | mettre deux composants qui écrivent le même Transform |
-| Animator trigger ne réplique pas | `NetworkAnimator.SetTrigger` plutôt que `Animator.SetTrigger` seul, component setup | RPC maison avant examiner NetworkAnimator |
-| Player connected but sees no object | authorization, loaded scene, visibility rules/whitelist/owner, registry | supposer qu'un NetworkIdentity spawn sur serveur est toujours visible |
-| Hash inconnu dans sérialisation | Type Hash Resolver et registration assembly/codegen | inventer la signature de Packer |
-| Message perdu / packet > MTU | profiler drops, fractionner fonctionnellement, choisir channel ou SyncBigData | envoyer un gros fichier chaque frame par RPC |
-| Son/VFX joué plusieurs fois en prediction | audio/particles in Simulate/helper, PredictedEvent/isVerifiedView, view callback | ignorer replay et remettre effets dans LateSimulate |
-| Projectile prédit disparaît après frame | Create client hors Simulate, input non relayé au serveur, cooldown validation | transformer client en autorité |
-| SoftCorrection oscillations | supported component, correction rate, policy scope, verified vs view, state replay | choisir SoftCorrection juste pour masquer logique non déterministe |
+| `ServerRpc` not received | spawned identity → owner/rules → auth/playerID → transport/observer → signature/ILPP | disable any `RequireOwnership` restrictions without validation |
+| Duplications host | OnSpawned `asServer` deux contextes, auto-start, instantiate path, observers RPC `RunLocally` | add local bool not replicated at random |
+| Empty screen on dedicated server | spawn run in `ObserversRpc` only client; asServer, headless scripts | believe that a local host is equivalent to a dedicated |
+| Transform jitter | writing authority, buffer interpolation, `NetworkTransform` vs `PredictedTransform`, physics writer, RTT, patch controller | put two components that write the same Transform |
+| Animator trigger does not reply | `NetworkAnimator.SetTrigger` instead of `Animator.SetTrigger` alone, component setup | RPC house before examining NetworkAnimator |
+| Player connected but sees no object | authorization, loaded scene, visibility rules/whitelist/owner, registry | assuming that a NetworkIdentity spawn on server is still visible |
+| Hash unknown in serialization | Type Hash Resolver and registration assembly/codegen | Invent Packer's signature |
+| Message perdu / packet > MTU | profile drops, split functionally, choose channel or SyncBigData | send a large file each frame by RPC |
+| Sound/VFX played several times in foresight | audio/particles in Simulate/helper, PredictedEvent/isVerifiedView, view callback | ignore replay and restore effects in LateSimulate |
+| Projectile predicted disappears after frame | Create client out of Simulate, input not relayed to server, cooldown validation | Transforming client into authority |
+| SoftCorrection oscillations | supported component, correction rate, policy scope, verified vs view, state replay | choose SoftCorrection just to mask non-deterministic logic |
 
-## Trace de preuve minimale
+## Minimum evidence trace
 
-1. Version exacte Unity, PurrNet, PurrDiction et addons, branch/commit; 2. logs serveur ET client avec horodatage/ticks; 3. type/ID/owner/observer et scène; 4. reproduction host vs client distant, puis dedicated; 5. conditions réseau; 6. patch minimal et scénarios de non-régression.
+1. Exact version Unity, PurrNet, PurrDiction and addons, branch/commit; 2. server logs AND client with time stamping/ticks; 3. type/ID/owner/observer and scene; 4. reproduction host vs remote client, then dedicated; 5. network conditions; 6. minimum patch and non-regression scenarios.

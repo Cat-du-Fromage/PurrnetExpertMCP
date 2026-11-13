@@ -1,23 +1,23 @@
-# Workflow E — Collaboration avec edgegap-purrnet, pas duplication
+# Workflow E — Collaboration with edgegap-purrnet, not duplication
 
-L'étude de `edgegap/llm-agent-skills` montre que son projet testé sur Edgegap valide une chaîne concrète `local dedicated -> Docker -> deploy direct -> matchmaker -> 2 clients -> arrêt`, avec assets Unity, logs et assertions. Notre skill est **généraliste** : conserver son rôle d'analyse du gameplay et laisser `edgegap-purrnet` gérer le produit Edgegap. Lire `references/edgegap-comparison.md`.
+The `edgegap/llm-agent-skills` study shows that his project tested on Edgegap validates a concrete chain `local dedicated -> Docker -> deploy direct -> matchmaker -> 2 clients -> shutdown`, with Unity assets, logs and assertions. Our skill is **general**: maintain its role of gameplay analysis and let `edgegap-purrnet` manage the Edgegap product. Read `references/edgegap-comparison.md`.
 
 ## Interface de transfert
 
-**purrnet-expert transmet à edgegap-purrnet** : Unity exact, version PurrNet/package lock, nom de scène/NetworkManager, flags auto start existants, transport et port présents, `isHost`/`ObserversRpc` suspects, scénario de validation du monde autoritaire, limites de permissions. Produire un petit `HANDOFF.md` ou résumé avec chemins et lignes de code, sans secrets.
+**purrnet-expert transmits to edgegap-purrnet**: Unity exact, version PurrNet/package lock, stage name/NetworkManager, existing auto start flags, transport and port present, `isHost`/`ObserversRpc` suspicious, authoritative world validation scenario, permission limits. Produce a small `HANDOFF.md` or summary with paths and lines of code, without secrets.
 
-**edgegap-purrnet produit** : configuration de plugin/SDK, startup dédié, port interne vs externe, build Linux, Dockerfile/.dockerignore, registry et allocation, client connector, matchmaker, auto-stop, résultat des logs et tests. **Ne pas supposer** que l'accès Edgegap, Docker ou Unity existe ; séparer modifications locales et étapes manuelles. Ne pas envoyer tokens Edgegap au client, projet, logs ou fichiers versionnés.
+**edgegap-purrnet product**: plugin/SDK configuration, dedicated startup, internal vs external port, Linux build, Dockerfile/.dockerignore, registry and allocation, client connector, matchmaker, auto-stop, log result and tests. **Do not assume** that Edgegap, Docker or Unity access exists; separate local changes and manual steps. Do not send Edgegap tokens to client, project, logs or versioned files.
 
-**purrnet-expert vérifie ensuite** que les modifications serveur ne cassent pas l'ownership, le host local, le gameplay autoritaire, le late join et les RPCs ; reprendre les critères D2-D5. Ne pas réintroduire de logique `isHost` juste pour satisfaire un prefab Editor.
+**purrnet-expert then checks** that server changes do not break ownership, local host, authoritative gameplay, late join and RPCs; repeat the D2-D5 criteria. Do not reintroduce logic `isHost` just to satisfy a prefab Editor.
 
-## Routage de choix (exemples)
+## Route of choice (examples)
 
-- « Mon `SyncVar` ne se synchronise pas » → purrnet-expert uniquement.
-- « Le monde est vide sur dedicated sans aucune mention Edgegap » → purrnet-expert, avec audit dedicated générique.
-- « Je veux Find Match sur Edgegap avec PurrNet » → edgegap-purrnet propriétaire du déploiement ; purrnet-expert consultée pour changements de gameplay si besoin.
-- « J'ai besoin d'un serveur Linux auto-hébergé PurrNet » → purrnet-expert (et workflows généralistes), pas Edgegap imposé.
-- « Mirror ou FishNet sur Edgegap » → skills correspondantes, **pas** purrnet-expert.
+- "My `SyncVar` does not sync" → purrnet-expert only.
+- "The world is empty on dedicated without any mention Edgegap" → purrnet-expert, with audit dedicated generic.
+- "I want Find Match on Edgegap with PurrNet" → edgegap-purrnet owner of deployment; purrnet-expert consulted for gameplay changes if needed.
+- "I need a self-hosted Linux server PurrNet" → purrnet-expert (and generalist workflows), not Edgegap imposed.
+- « Mirror or FishNet on Edgegap » → corresponding skills, **not** purrnet-expert.
 
-## Définition de fini
+## Definition of finished
 
-Le projet Edgegap doit **vraiment être testé** par un serveur headless, deux clients, cloud/assignation externe, matchmaker et arrêt. Un échec de cloud access ne doit pas être déguisé : livrer modifications prêtes à tester et `HANDOFF.md` avec étapes restantes, pas un « déploiement réussi ».
+The Edgegap project must **really be tested** by a headless server, two clients, cloud/external assignment, matchmaker and shutdown. A cloud access failure must not be disguised: deliver ready-to-test modifications and `HANDOFF.md` with remaining steps, not a "successful deployment".

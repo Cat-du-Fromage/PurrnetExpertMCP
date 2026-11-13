@@ -1,34 +1,34 @@
-# Contrat de qualité Agent Skill — Anthropic
+# Quality contract Agent Skills — Anthropic
 
-**Source primaire** : https://platform.claude.com/docs/fr/agents-and-tools/agent-skills/best-practices (consultée pour la v0.9.0). Ne pas confondre critères de rédaction d'une skill et Best Practices **PurrDiction**.
+**Primary source**: https://platform.claude.com/docs/fr/agents-and-tools/agent-skills/best-practices (accessed for v0.9.0). Do not confuse skill writing criteria with Best Practices **PurrDiction**.
 
-## Checklist concrète et raison
+## Concrete checklist and reason
 
-| Aspect | Critère v0.9 | Pourquoi |
+| Aspect | Criterion v0.9 | Pourquoi |
 | --- | --- | --- |
-| Découverte | `description` à la 3e personne, action **et** déclencheurs, <=1024 caractères | C'est la métadonnée lue pour sélectionner la skill |
-| Métadonnées | `name` minuscule/tirets <=64 caractères, frontmatter YAML lisible | Compatibilité Agent Skills |
-| Contexte | `SKILL.md` <=500 lignes, seulement les garde-fous critiques + choix des workflows | Ne pas saturer le contexte à chaque activation |
-| Références | Chemins directs depuis `SKILL.md` pour les guides fréquents ; éviter chaîne guide -> guide -> details | Le modèle peut interrompre une navigation profonde |
-| Documentation longue | Table des matières si >100 lignes | L'agent peut lire seulement un extrait |
-| Workflows | Entrée, choix, séquence, gate de validation, correction après échec | Réduit les omissions de vérification |
-| Exemples | Distinguer fragment explicatif, recette à compléter, code Unity réellement compilé | Évite la fausse confiance |
-| Scripts | Python 3 stdlib lorsque possible, prérequis explicites, erreurs utiles, commandes safe et dry-run | Reproductibilité multi-environnements |
-| Évaluation | Cas positifs/négatifs, contexte concret, comparaison avec/sans, tests modèles réels | Les proxies locaux ne prouvent pas l'activation spontanée |
-| Composabilité | Handoff vers `edgegap-purrnet` seulement si tâches Edgegap ; ne pas détourner FishNet/Mirror | Compatible avec d'autres skills |
-| Versions | Pas de « latest » immuable ni d'API garanties hors package installé | Évite les instructions périmées |
+| Discovery | `description` to the 3rd person, action **and** triggers, <=1024 characters | This is the metadata read to select the skill |
+| Metadata | `name` tiny / tores <=64 characters, YAML readable frontmatter | Compatibility Agent Skills |
+| Contexte | `SKILL.md` <=500 lines, only critical safeguards + workflow choices | Do not saturate context with each activation |
+| References | Direct paths from `SKILL.md` for frequent guides; avoid guide chain -> guide -> details | The model can interrupt deep navigation |
+| Documentation longue | Table of contents if >100 lines | The agent can read only one extract |
+| Workflows | Enter, choose, sequence, validation gate, correction after failure | Reduces audit omissions |
+| Exemples | Distinguish explanatory fragment, recipe to complete, Unity code actually compiled | Avoid false confidence |
+| Scripts | Python 3 stdlib whenever possible, explicit prerequisites, useful errors, safe and dry-run commands | Multi-environment reproducibility |
+| Evaluation | Positive/negative cases, concrete context, comparison with/without, real model tests | Local proxies do not prove spontaneous activation |
+| Composability | Handoff to `edgegap-purrnet` only if Edgegap tasks; do not divert FishNet/Mirror | Compatible with other skills |
+| Versions | No immutable "last" or APIs guaranteed without installed package | Avoid outdated instructions |
 
-## Cycle de validation pour une mise à jour
+## Validation cycle for an update
 
-1. Auditer la découverte et le frontmatter : `python scripts/audit_skill_authoring.py`.
-2. Vérifier les guides, liens et routes : `python scripts/validate_skill.py` et `python scripts/route_docs.py "..."`.
-3. Vérifier les API **dans** Unity installé, puis compiler et tester les jeux si l'Editor est disponible.
-4. Exécuter des évaluations d'agent **réelles** : enregistrements déclenché / non déclenché, références effectivement ouvertes, modification finale et tests. Comparer plusieurs modèles si c'est le public visé.
-5. Corriger les erreurs détectées, puis répéter. Ne pas marquer « E2E réussi » parce que l'outil de tests Python est vert.
+1. Audit the discovery and frontmatter: `python scripts/audit_skill_authoring.py`.
+2. Check guides, links and routes: `python scripts/validate_skill.py` and `python scripts/route_docs.py "..."`.
+3. Check the API **in** Unity installed, then compile and test the games if the Editor is available.
+4. Perform agent evaluations **real**: triggered/untriggered recordings, actually open references, final modification and tests. Compare multiple models if it is the target audience.
+5. Correct detected errors, then repeat. Do not mark "E2E successful" because the Python test tool is green.
 
-## Niveaux de preuve
+## Levels of evidence
 
-- Structure/frontmatter et scripts : prouvables localement par Python.
-- Couverture : estimée par index et routes; aucune garantie de compréhension LLM.
-- Compétence/activation autonome : **nécessite des runs réels d'agent** (Haiku/Sonnet/Opus si ciblés).
-- Comportement réseau et compilation : **nécessite Unity** ; aucune sortie de Python ne peut s'y substituer.
+- Structure/frontmatter and scripts: Provable locally by Python.
+- Coverage: estimated by index and route; no guarantee of LLM comprehension.
+- Competency/autonomous activation: **requires real agent runs** (Haiku/Sonnet/Opus if targeted).
+- Network behavior and compilation: **Requires Unity**; no Python output can replace it.

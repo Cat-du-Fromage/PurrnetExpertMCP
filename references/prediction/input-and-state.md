@@ -1,14 +1,14 @@
-# INPUT, STATE, validation et répétition
+# INPUT, STATE, validation and repetition
 
 **Sources** `client-side-prediction/input-handling.md`, `state-handling.md`, `security.md`, `flow.md`, `predicted-identities.md`.
 
-- `PredictedIdentity<INPUT,STATE>` collecte l'intention locale via `GetFinalInput(ref INPUT)` **une fois par tick**; les fronts `GetKeyDown` doivent être accumulés en `UpdateInput(ref INPUT)` entre les ticks pour ne pas être perdus.
-- INPUT est une struct `IPredictedData`, STATE une struct `IPredictedData<STATE>`; stocker dans STATE toutes les données qui changent les ticks futurs (position, vitesse, cooldown, ammo, mode, RNG, IDs). Inspector = paramètres *constants* ou transférés à l'état lorsqu'ils changent.
-- `SanitizeInput(ref INPUT)` pour borner mouvement, nombres non finis, aim et tailles ; serveur valide EN PLUS cooldown, ressources, ownership, collision, vitesse et permissions. Un input « bien formé » n'est pas « légitime ».
-- `ModifyExtrapolatedInput(ref INPUT)` neutralise les événements one-shot (fire, jump, interact, achats) si input répété faute de paquet. Le `Repeat Input Factor` trop petit stoppe remote actors; trop grand les fait overshoot. Choisir selon RTT et policy.
-- Dans `Simulate(INPUT input, ref STATE state, float delta)`, ne jamais lire `Input`, `PlayerInput`, un `InputHandler` MonoBehaviour, les frames Unity ni un RPC. Simulation doit dépendre d'INPUT+STATE+sources prédictibles uniquement.
-- `GetInitialState` snapshot complet; `GetUnityState/SetUnityState` pour Unity physics/transform/caches qui impactent le futur tick. `UpdateView` utilise viewState interpole mais ne doit pas modifier le verdict du gameplay.
-- Les events du rendu utilisent `PredictedEvent`/verified view, pas mutation de state en callback audio.
+- `PredictedIdentity<INPUT,STATE>` collects local intent via `GetFinalInput(ref INPUT)` **once by tick**; the fronts `GetKeyDown` must be accumulated in `UpdateInput(ref INPUT)` between the ticks to avoid being lost.
+- INPUT is a `IPredictedData` struct, STATE a struct `IPredictedData<STATE>`; store in STATE all data that changes future ticks (position, speed, cooldown, ammo, mode, RNG, IDs). Inspector = parameters *constant* or transferred to the state when they change.
+- `SanitizeInput(ref INPUT)` to limit movement, unfinished numbers, love and sizes; valid EN PLUS cooldown server, resources, ownership, collision, speed and permissions. A "well-trained" input is not "legitimate".
+- `ModifyExtrapolatedInput(ref INPUT)` neutralizes one-shot events (fire, jump, interact, purchases) if input repeats for lack of package. The `Repeat Input Factor` too small stoppe removes actors; too big does them overshoot. Choose according to RTT and policy.
+- In `Simulate(INPUT input, ref STATE state, float delta)`, never read `Input`, `PlayerInput`, a `InputHandler` MonoBehaviour, frames Unity or a RPC. Simulation should depend on INPUT+STATE+predictable sources only.
+- `GetInitialState` full snapshot; `GetUnityState/SetUnityState` for Unity physics/transform/caches that impact the future tick. `UpdateView` uses viewState interpole but should not alter the gameplay verdict.
+- The rendering events use `PredictedEvent`/verified view, no state mutation to audio callback.
 
 ## Tests
-Press/release entre ticks, perte d'un paquet contenant un fire, input falsifié, cooldown, input stale, rollback, join tardif et changement de policy. Vérifier que state du serveur gagne toujours.
+Press/release between ticks, loss of a package containing a fire, falsified input, cooldown, input stable, rollback, late join and policy change. Check that server status always wins.

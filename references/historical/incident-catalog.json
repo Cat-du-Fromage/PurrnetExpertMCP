@@ -15,7 +15,7 @@
   "issues": [
     {
       "id": "HOST_OBSERVERS_RPC_TWICE",
-      "title": "ObserversRpc exécuté deux fois en host",
+      "title": "ObserversRpc runs twice on a host",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.2.0",
       "search_terms": [
@@ -38,7 +38,7 @@
     },
     {
       "id": "HOST_DEFAULT_OWNER",
-      "title": "Propriété par défaut absente en host",
+      "title": "Default owner missing on a host",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.2.1",
       "search_terms": [
@@ -60,7 +60,7 @@
     },
     {
       "id": "DUPLICATE_CLIENT_SPAWN",
-      "title": "GameObject dupliqué côté client",
+      "title": "Duplicate GameObject on the client",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.2.1",
       "search_terms": [
@@ -84,7 +84,7 @@
     },
     {
       "id": "WEB_TRANSPORT_TRANSFORM",
-      "title": "NetworkTransform tremble sous WebTransport",
+      "title": "NetworkTransform jitters over WebTransport",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.2.1",
       "search_terms": [
@@ -107,7 +107,7 @@
     },
     {
       "id": "HOST_REFLECTION",
-      "title": "NetworkReflection incorrect en host",
+      "title": "Incorrect NetworkReflection behavior on a host",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.2.3",
       "search_terms": [
@@ -127,7 +127,7 @@
     },
     {
       "id": "SYNCVAR_NULL_OLD",
-      "title": "Null exception dans SyncVar de référence",
+      "title": "Null exception in a reference-type SyncVar",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.2.3",
       "search_terms": [
@@ -149,7 +149,7 @@
     },
     {
       "id": "BITPACKER_ARRAY_SIZE",
-      "title": "Taille de tableau BitPacker incorrecte",
+      "title": "Incorrect BitPacker array length",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.3.2",
       "search_terms": [
@@ -170,7 +170,7 @@
     },
     {
       "id": "SYNCDICTIONARY_OLD",
-      "title": "SyncDictionary ne se sérialise pas",
+      "title": "SyncDictionary fails to serialize",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.3.2",
       "search_terms": [
@@ -192,7 +192,7 @@
     },
     {
       "id": "PLAYER_SPAWNER_SCENE",
-      "title": "PlayerSpawner apparaît dans mauvaise scène",
+      "title": "PlayerSpawner appears in the wrong scene",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.3.3",
       "search_terms": [
@@ -214,7 +214,7 @@
     },
     {
       "id": "SCENE_LOAD_CLEANUP",
-      "title": "Chargement et cleanup de scènes incohérents",
+      "title": "Inconsistent scene loading and cleanup",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.3.3",
       "search_terms": [
@@ -238,7 +238,7 @@
     },
     {
       "id": "NETANIM_EXCLUDE_HASH",
-      "title": "Exclusion de paramètres NetworkAnimator",
+      "title": "Excluding NetworkAnimator parameters",
       "classification": "feature_milestone",
       "claimed_fixed_in": "1.3.3",
       "search_terms": [
@@ -260,7 +260,7 @@
     },
     {
       "id": "OWNER_FALSE_DESPAWN",
-      "title": "isOwner faux pendant OnDespawn",
+      "title": "isOwner is false during OnDespawn",
       "classification": "expected_behavior",
       "claimed_fixed_in": "1.3.3",
       "search_terms": [
@@ -281,7 +281,7 @@
     },
     {
       "id": "LATE_JOIN_LIST",
-      "title": "Late join reçoit SyncList vide",
+      "title": "Late join receives an empty SyncList",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.5.0",
       "search_terms": [
@@ -303,7 +303,7 @@
     },
     {
       "id": "ONTICK_DOUBLE",
-      "title": "OnTick appelé deux fois",
+      "title": "OnTick runs twice",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.5.0",
       "search_terms": [
@@ -324,7 +324,7 @@
     },
     {
       "id": "RPC_DUPLICATE_HOST",
-      "title": "ServerRpc appelé en double en host",
+      "title": "ServerRpc runs twice on a host",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.8.0",
       "search_terms": [
@@ -344,7 +344,7 @@
     },
     {
       "id": "VISIBILITY_EVALUATION",
-      "title": "Évaluation de visibilité nécessaire après changement",
+      "title": "Visibility needs reevaluation after a change",
       "classification": "feature_milestone",
       "claimed_fixed_in": "1.8.2",
       "search_terms": [
@@ -366,7 +366,7 @@
     },
     {
       "id": "BUFFERED_RPC_EARLY",
-      "title": "Buffered RPC manquant pour nouveau client",
+      "title": "Buffered RPC missing for a new client",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.9.3",
       "search_terms": [
@@ -388,7 +388,7 @@
     },
     {
       "id": "NETTRANSFORM_NON_CONTROLLER",
-      "title": "NetworkTransform n’actualise pas le non-controller",
+      "title": "NetworkTransform does not update a non-controller",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.10.2",
       "search_terms": [
@@ -408,7 +408,7 @@
     },
     {
       "id": "AUTH_API_TYPO",
-      "title": "Ancienne méthode GetClientPlayload",
+      "title": "Old GetClientPlayload spelling",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.13.2",
       "search_terms": [
@@ -429,7 +429,7 @@
     },
     {
       "id": "GENERIC_RPC_ILPP",
-      "title": "Generic RPC échec ILPP ou IL2CPP",
+      "title": "Generic RPC fails during ILPP or IL2CPP",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.20.0",
       "search_terms": [
@@ -452,7 +452,7 @@
     },
     {
       "id": "RPC_BATCH_ORDER",
-      "title": "RPCs hors ordre/host loopback",
+      "title": "RPC order and host loopback",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.20.0",
       "search_terms": [
@@ -475,7 +475,7 @@
     },
     {
       "id": "NETRIGIDBODY_PARENT_TELEPORT",
-      "title": "Rigidbody et Transform jitter lors du parenting/teleport",
+      "title": "Rigidbody and Transform jitter during parenting or teleporting",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.20.0",
       "search_terms": [
@@ -497,7 +497,7 @@
     },
     {
       "id": "NETWORK_MODULE_POOL_RECONNECT",
-      "title": "SyncVar/collections divergent au reconnect/pooling",
+      "title": "SyncVar or collections diverge after reconnect or pooling",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.20.0",
       "search_terms": [
@@ -519,7 +519,7 @@
     },
     {
       "id": "PACKET_MTU_FRAGMENT",
-      "title": "Paquets Unreliable fragmentés/perdus",
+      "title": "Unreliable packet fragmentation or loss",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.20.0",
       "search_terms": [
@@ -542,7 +542,7 @@
     },
     {
       "id": "NETASSETS_ADDRESSABLES",
-      "title": "Addressables et network assets au late join",
+      "title": "Addressables and network assets for late joiners",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.20.0",
       "search_terms": [
@@ -564,7 +564,7 @@
     },
     {
       "id": "IL2CPP_PRODUCTION",
-      "title": "IL2CPP/build/stripping plantage",
+      "title": "IL2CPP build or stripping failure",
       "classification": "historical_fixed",
       "claimed_fixed_in": "1.19.1",
       "search_terms": [
@@ -608,7 +608,7 @@
     },
     {
       "id": "STEAM_CS1061",
-      "title": "SteamWorks CS1061 après import",
+      "title": "Steamworks CS1061 after import",
       "classification": "historical_workaround",
       "claimed_fixed_in": null,
       "search_terms": [
@@ -629,7 +629,7 @@
     },
     {
       "id": "UPM_GIT_NOT_FOUND",
-      "title": "Unity ne trouve pas git",
+      "title": "Unity cannot find Git",
       "classification": "historical_workaround",
       "claimed_fixed_in": null,
       "search_terms": [
@@ -650,7 +650,7 @@
     },
     {
       "id": "DISSONANCE_NO_INTEGRATION",
-      "title": "Ancienne affirmation: pas d’intégration Dissonance",
+      "title": "Historical claim about Dissonance integration",
       "classification": "stale_guidance",
       "claimed_fixed_in": null,
       "search_terms": [
@@ -670,7 +670,7 @@
     },
     {
       "id": "TRANSFORM_NOT_SERIALIZABLE",
-      "title": "Ancienne règle absolue sur Transform/GameObject",
+      "title": "Historical rule about Transform and GameObject serialization",
       "classification": "stale_guidance",
       "claimed_fixed_in": null,
       "search_terms": [
@@ -692,7 +692,7 @@
     },
     {
       "id": "LEGACY_SCENE_EVENT",
-      "title": "Ancien onPlayerJoinedScene utilisé comme signal prêt",
+      "title": "Historical use of onPlayerJoinedScene for readiness",
       "classification": "stale_guidance",
       "claimed_fixed_in": null,
       "search_terms": [
@@ -713,7 +713,7 @@
     },
     {
       "id": "LEGACY_LATEST",
-      "title": "Ancien latest/stable v1.20.0 et vieux dépôt BlenMiner",
+      "title": "Historical stable v1.20.0 and old BlenMiner repository",
       "classification": "stale_guidance",
       "claimed_fixed_in": null,
       "search_terms": [
@@ -734,7 +734,7 @@
     },
     {
       "id": "PURRTRANSPORT_PRODUCTION",
-      "title": "Ancien avertissement relay PurrTransport dev-only",
+      "title": "Historical warning about the development-only PurrTransport relay",
       "classification": "stale_guidance",
       "claimed_fixed_in": null,
       "search_terms": [
@@ -755,7 +755,7 @@
     },
     {
       "id": "SCENE_PERSISTENT_CHAT",
-      "title": "Chat entre serveurs non connectés",
+      "title": "Chat across disconnected servers",
       "classification": "current_pattern",
       "claimed_fixed_in": null,
       "search_terms": [

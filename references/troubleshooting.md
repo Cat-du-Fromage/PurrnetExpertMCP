@@ -1,59 +1,59 @@
-# Diagnostic PurrNet — arbre de décision
+# Diagnostic PurrNet — decision tree
 
-D'abord demander/inspecter : version et commit, modèle host/dédié, transport,
-Network Rules, prefab ou scène, logs et étapes de reproduction.
+First ask/inspect: version and commit, host/dedicated model, transport,
+Network Rules, prefab or scene, logs and reproduction steps.
 
-## RPC n'arrive pas
+## RPC does not arrive
 
-1. Confirmer que l'objet porteur d'une `NetworkIdentity` est bien spawné et
-   observable par le destinataire.
-2. Identifier l'appelant : serveur, client owner, client non owner, host.
-3. Vérifier `Network Rules` et les restrictions des attributs RPC de la version.
-4. Confirmer la direction (`ServerRpc`, `ObserversRpc`, `TargetRpc`) et le canal.
-5. Ajouter temporairement des logs de rôles, d'identité réseau et de moment
-   d'appel, puis tester en serveur dédié + deux clients.
+1. Confirm that the object carrying a `NetworkIdentity` is spawned and
+   Observable by the recipient.
+2. Identify caller: server, client owner, client non owner, host.
+3. Check `Network Rules` and the restrictions of RPC attributes of the version.
+4. Confirm the direction (`ServerRpc`, `ObserversRpc`, `TargetRpc`) and channel.
+5. Temporarily add roles, network identity and moment logs
+   then test in a dedicated server + two clients.
 
-## Double exécution en host
+## Double execution in host
 
-`OnSpawned(bool asServer)` peut être appelé côté serveur ET client dans un
-host. Ne pas diagnostiquer automatiquement un bug de duplication : vérifier
-le rôle, les `RunLocally` RPC et la logique de callback.
+`OnSpawned(bool asServer)` can be called server-side AND client-side in a
+host. Do not automatically diagnose a duplication bug: check
+role, `RunLocally` RPC and callback logic.
 
-## Objet invisible, disparu ou dupliqué
+## Invisible, disappeared or duplicated object
 
-1. Confirmer prefab enregistré (Network Prefabs) ou identité de scène.
-2. Contrôler les règles de spawn/despawn et la visibilité.
-3. Vérifier qui appelle `Instantiate()`/`Destroy()`, combien de fois,
-   et le modèle de scène/late join.
-4. Ne pas ajouter de `Spawn()` emprunté à Mirror sans preuve dans PurrNet.
+1. Confirm registered prefab (Network Prefabs) or scene identity.
+2. Control the spawn/despawn rules and visibility.
+3. Check who calls `Instantiate()`/`Destroy()`, how many times,
+   and stage model/late join.
+4. Do not add `Spawn()` borrowed from Mirror without proof in PurrNet.
 
-## SyncVar ou state incorrect
+## Incorrect SyncVar or state
 
-1. Vérifier l'autorité d'écriture (server/owner) et les options (`ownerAuth`,
-   `ownerOnly`) prises en charge par la version.
-2. Vérifier la sérialisation effective du type.
-3. Vérifier le moment de souscription aux événements, les initialisations
-   et le démarrage réseau.
-4. Tester les valeurs initiales, les changements, puis l'arrivée tardive.
+1. Check the write authority (server/owner) and the options (`ownerAuth`,
+   `ownerOnly`) supported by version.
+2. Check the actual serialization of the type.
+3. Check the moment of subscription to events, initializations
+   and network startup.
+4. Test initial values, changes, and late arrival.
 
-## Références réseau et sérialisation
+## Network references and serialization
 
-Ne pas supposer que `Transform` ou `GameObject` se sérialisent directement.
-Consulter le code actuel du `BitPacker`, les identifiants réseau et le type
-attendu. Le Quick Reference historique suggère `NetworkId` pour certains cas,
-mais confirmer le nom/type et les API actuelles.
+Do not assume that `Transform` or `GameObject` are serialized directly.
+See the current `BitPacker` code, network identifiers and type
+The historical Quick Reference suggests `NetworkId` for some cases,
+but confirm the current name/type and APIs.
 
 ## Transport / performances
 
-Diagnostiquer latence, perte de paquets, tailles de payload, canaux RPC et
-les limites MTU documentées. Adapter la fréquence et le mode de transmission.
-Ne pas recommander un transport ou relay « production » sur la seule foi
-d'une réponse Discord datée.
+Diagnosing latency, packet loss, payload sizes, RPC channels and
+MTU limits documented. Adapt frequency and mode of transmission.
+Do not recommend a transport or relay "production" on faith alone
+of a reply Discord dated.
 
-## Vérifier un problème historique
+## Check a historical problem
 
-Consulter d'abord le changelog officiel de **la version installée** :
+First consult the official changelog of **installed version**:
 https://github.com/PurrNet/PurrNet/blob/release/Assets/PurrNet/CHANGELOG.md
-Puis vérifier l'ancienne FAQ :
+Then check the old FAQ:
 https://github.com/nmban/Purrnet-Stray_Help/blob/e6140a571228044fe670b500e245f6bb370b2e06/docs/QUICK_REFERENCE.md
-Ne pas proposer de « fix de v1.2.1 » comme si ce bug était encore présent.
+Do not propose a "v1.2.1 fix" as if this bug were still present.

@@ -1,68 +1,68 @@
-# Politique de version et résolution des conflits
+# Version Policy and Conflict Resolution
 
-La doc en ligne et le code `dev` peuvent documenter une API absente de la
-branche `release` ou de la version Unity installée.
+Online doc and `dev` code can document an API missing from the
+`release` or Unity installed.
 
-## Détection de version dans le projet
+## Version detection in the project
 
-Exécuter : `python scripts/inspect_project.py /chemin/vers/UnityProject`
+Run: `python scripts/inspect_project.py /chemin/vers/UnityProject`
 
-Dans l'ordre, comparer :
+In order, compare:
 
 - `Packages/manifest.json` > `dependencies["dev.purrnet.purrnet"]` :
-  référence directe (URL git, registry, package local, etc.).
+  direct reference (git URL, registry, local package, etc.).
 - `Packages/packages-lock.json` > `dependencies["dev.purrnet.purrnet"]` :
-  version et, si disponible, hash/révision verrouillée.
-- `Packages/dev.purrnet.purrnet/package.json` ou
+  version and, if available, hash/revision locked.
+- `Packages/dev.purrnet.purrnet/package.json` or
   `Library/PackageCache/dev.purrnet.purrnet@*/package.json` ;
-  en projet Unity embarqué, `Assets/PurrNet/package.json`.
-- `ProjectSettings/ProjectVersion.txt` pour la version exacte d'Unity.
+  on board project Unity, `Assets/PurrNet/package.json`.
+- `ProjectSettings/ProjectVersion.txt` for the exact version of Unity.
 
-Si seul `#release` ou `#dev` est disponible dans le manifest, la référence
-est **mobile**. Rechercher le commit résolu dans le lockfile ; sinon éviter
-d'annoncer une révision précise.
+If only `#release` or `#dev` is available in the manifest, the reference
+is **mobile**. Search for the committed solved in the lockfile; otherwise avoid
+to announce a precise revision.
 
-## Cas concret de source périmée
+## Concrete case of outdated source
 
-Vérifié le 2026-11-12 : `PurrNet/PurrNet` branche `release`, fichier
-`Assets/PurrNet/package.json`, annonce `1.25.0`. L'index Discord épinglé par
-l'utilisateur annonce un historique allant jusqu'à `v1.20.0` et certaines FAQ
-emploient l'ancien propriétaire `BlenMiner/PurrNet`.
+Verified on 2026-11-12: `PurrNet/PurrNet` branch `release`, file
+`Assets/PurrNet/package.json`, announces `1.25.0`. The index Discord pinned by
+user announces a history up to `v1.20.0` and some FAQs
+employ the former owner `BlenMiner/PurrNet`.
 
-Autre contradiction : la FAQ Stray peut dire « pas d'intégration Dissonance »,
-mais l'organisation maintient `PurrNet/PurrNet-Dissonance`, et `PurrDocs` contient
-une page `integrations/dissonance.md`. Une réponse Discord a un contexte de date.
-Ne **jamais** reprendre aveuglément un diagnostic ancien.
+Another contradiction: the Stray FAQ can say "no Dissonance integration",
+but the organization maintains `PurrNet/PurrNet-Dissonance`, and `PurrDocs` contains
+a `integrations/dissonance.md` page. A Discord answer has a date context.
+Treat an archived diagnosis as a hypothesis and check it against current evidence.
 
-## Ce qu'il faut rendre visible à l'utilisateur
+## What to make visible to the user
 
-- API confirmée dans le projet : **Vérifié (package local)**.
-- Confirmée seulement dans un commit officiel : **Vérifié (commit/branche)**.
-- Mentionnée seulement dans les docs : **Documenté, non compilé ici**.
-- Tirée d'une FAQ ou d'un message : **Historique / à confirmer**.
-- Sans source : **Hypothèse**, ne pas inventer d'API.
+- API confirmed in project: **Checked (local package)**.
+- Confirmed only in an official commit: **Checked (commit/branche)**.
+- Mentioned only in docs: **Documented, not compiled here**.
+- From a FAQ or message: **History / to be confirmed**.
+- Without source: **Hypothesis**, do not invent API.
 
-Conserver la provenance : fichier/repo, URL, commit ou version quand possible,
-date de consultation, et restriction de branche. En cas de conflit,
-faire primer le code **exact** utilisé par Unity.
+Keep source: file/repo, URL, commit or version where possible,
+consultation date, and branch restriction. In case of conflict,
+prime the **exact** code used by Unity.
 
-## Mise à jour v0.3 — addons indépendants et changements PurrDiction
+## Update v0.3 — independent addons and changes PurrDiction
 
-La résolution **doit être faite par package** : `dev.purrnet.purrnet` (core), `dev.purrnet.purrdiction` (prédiction), et tout autre `dev.purrnet.*` détecté. `scripts/inspect_project.py` renvoie désormais `packages[]` avec `manifest_spec`, `lock_hash` et `local_packages` pour chacun. Un projet avec core récent peut installer un addon plus ancien ; les docs de la branche `PurrDocs/main` ne doivent pas remplacer la source C# installée.
+The resolution **must be done by package**: `dev.purrnet.purrnet` (core), `dev.purrnet.purrdiction` (prediction), and any other `dev.purrnet.*` detected. `scripts/inspect_project.py` now returns `packages[]` with `manifest_spec`, `lock_hash` and `local_packages` for each. A project with recent core can install an older addon; the docs of the `PurrDocs/main` branch must not replace the installed C# source.
 
-Cas versionnés identifiés dans les docs officielles :
-- **PurrDiction < 1.4.0** : ancienne architecture pour intégration de `NetworkIdentity` dans les prefabs prédits et diagnostics d'input ; suivre la doc/version exacte.
-- **PurrDiction >= 1.4.0** : mirroring automatique des `NetworkIdentity` dans les prefabs prédits, `PredictedIdentitySpawner` obsolète ; certaines pages de lag compensation marquées >=1.4.0 ; `PredictedIfOwnedWithSoftFallback` apparaît dans la doc récente. Ne pas inférer la présence de n'importe quelle API sans `find_api.py` et package installé.
-- Les docs officielles sont un dépôt mobile (capturer SHA Git) ; les anciens messages Stray Help ne sont **pas normatifs** et peuvent contredire la doc actuelle.
+Versioned cases identified in official documents:
+- **PurrDiction < 1.4.0**: old architecture for integration of `NetworkIdentity` into predicted prefabs and input diagnostics; follow the exact doc/version.
+- **PurrDiction >= 1.4.0**: automatic mirroring of `NetworkIdentity` in predicted prefabs, `PredictedIdentitySpawner` obsolete; some pages of lag compensation marked >= 1.4.0; `PredictedIfOwnedWithSoftFallback` appears in the recent doc. Do not infer the presence of any API without `find_api.py` and package installed.
+- Official docs are a mobile repository (capturer SHA Git); the old Stray Help messages are **not normative** and may contradict the current doc.
 
-## Mise à jour v0.4.0 — gate check explicite
+## Update v0.4.0 — explicit gate check
 
-Lancer `scripts/check_doc_versions.py <page relative> --project <UnityProject> --strict` pour obtenir, par section `{% version range="..." %}` et frontmatter `version`, le statut applicable / exclu / inconnu selon la **version PurrDiction ou core installée**. Ce script ne filtre pas automatiquement la doc et ne remplace pas le contrôle des méthodes et attributs dans le code C# réellement compilé.
+Run `scripts/check_doc_versions.py <page relative> --project <UnityProject> --strict` to obtain, by section `{% version range="..." %}` and frontmatter `version`, the applicable / excluded / unknown status according to **version PurrDiction or installed core**. This script does not automatically filter the doc and does not replace control of methods and attributes in the actually compiled C# code.
 
-Lors d'un refresh Git des docs, `scripts/sync_sources.py` préserve `references/cache/docs-index.previous.json`. `scripts/docs_drift.py` liste les changements et les guides à vérifier via les routes. Une page non mappée n'est jamais considérée comme automatiquement couverte ; elle nécessite classification. Les anciens guides restent à revoir jusqu'à examen humain/agent des changements.
+During a refresh Git docs, `scripts/sync_sources.py` preserves `references/cache/docs-index.previous.json`. `scripts/docs_drift.py` lists the changes and guides to check via roads. An unmapped page is never considered to be automatically covered; it requires classification. The old guides remain to be reviewed until human review/change agent.
 
-## v0.7 — version des bugs historiques ≠ version de compatibilité d'API
+## v0.7 — version of the historical bugs, API compatibility version
 
-`python scripts/historical_issues.py "double RPC" --project <UnityProject>` compare la version résolue au jalon de **fix historique rapporté**. Les statuts `older_than_claimed_fix` et `at_or_after_claimed_fix` ne prouvent **ni** la cause actuelle ni sa disparition. `PREDICTION_*` lit la version PurrDiction, les autres lisent la version PurrNet core. Les incohérences entre `packages-lock.json` et package installé renvoient `CONFLICTING` et désactivent la comparaison.
+`python scripts/historical_issues.py "double RPC" --project <UnityProject>` compares the resolved version with the **reported historical fix**. The `older_than_claimed_fix` and `at_or_after_claimed_fix` statuses give version context. Check the actual cause independently. `PREDICTION_*` uses the PurrDiction version and other incidents use the PurrNet core version. Conflicts between `packages-lock.json` and the installed package return `CONFLICTING` and disable comparison.
 
-Ne jamais utiliser le jalon historique `1.20.0` comme la « version actuelle » automatiquement. Toujours lire le package Unity résolu ; le core `release` observé le 13 novembre 2026 annonçait `1.25.0`, mais ceci est seulement une observation datée.
+Never use the `1.20.0` historical milestone as the "current version" automatically. Always read the solved Unity package; the core `release` observed on November 13, 2026 announced `1.25.0`, but this is only a dated observation.

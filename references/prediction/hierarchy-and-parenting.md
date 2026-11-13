@@ -1,14 +1,14 @@
-# PredictedHierarchy, pièces, spawn et PredictedParent
+# PredictedHierarchy, parts, spawn and PredictedParent
 
 **Sources** `client-side-prediction/predicted-hierarchy.md`, `predicted-object-references.md`, `built-in-components/predicted-parent.md`, `built-in-components/predicted-identity-spawner.md`, `best-practices.md`.
 
-- Le predicted world crée/détruit les pièces avec `predictionManager.hierarchy.Create/Delete`; `Instantiate`/`Destroy` classiques dans la simulation créent des objets non synchronisés avec rollback.
-- Une **pièce** est un GameObject muni d'une `PredictedIdentity` au sein du prefab; un root peut contenir plusieurs pièces. Les IDs sont `PredictedObjectID` ou `PredictedComponentID`; stocker ces IDs en STATE, **pas** une référence GameObject/Transform entre ticks, puis résoudre au tick d'utilisation.
-- La création client qui doit être immédiate doit être causée par INPUT dans `Simulate` pour être exécutée aussi sur le serveur; un simple clic UI qui appelle `hierarchy.Create` côté client peut disparaître à la prochaine vérification. Pour une action one-shot sensible aux paquets répétés, envisager compteur d'action, plutôt qu'un booléen constamment vrai.
-- Alternative **acceptée** : le bouton UI demande via un ServerRpc sur une NetworkIdentity autorisée, le serveur crée l'objet prédit; pas de prédiction côté client, apparition après RTT. N'envoyer jamais ce RPC depuis chaque replay `Simulate`.
-- `PredictedGameObject.SetActive` utile pour toggle réversible; `Delete` effectue une vraie suppression de pièce.
-- Pour reparenting de gameplay, ajouter **`PredictedParent`** sur la pièce. L'attachement se produit pendant la simulation et est enregistré dans state, restauré lors du rollback et envoyé au late join. Sans composant, changer de parent est purement une décoration locale au mieux; parent sous Transform imbriqué non-pièce non répliqué identiquement.
-- Préfabs prédits avec `NetworkIdentity` pour chat/UI: **>=1.4** mirror automatiquement, ne pas ajouter `PredictedIdentitySpawner` obsolète; **<1.4** bridge distinct. Mirror suit le verified world, pas le spawn spéculatif, et visibilité/ownership mirror dérivent de la prédiction, pas des Network Rules ordinaires.
+- Predicted world creates/destructs parts with `predictionManager.hierarchy.Create/Delete`; `Instantiate`/`Destroy` classic in simulation create non-synchronized objects with rollback.
+- A **piece** is a GameObject equipped with a `PredictedIdentity` within the prefab; a root can contain several parts. The IDs are `PredictedObjectID` or `PredictedComponentID`; store these IDs in STATE, **not** a GameObject reference/Transform between ticks, then solve to the use tick.
+- The client creation that must be immediate must be caused by INPUT in `Simulate` to be executed also on the server; a simple IU click that calls `hierarchy.Create` on the client side can disappear at the next check. For one-shot action sensitive to repeat packages, consider action counter, rather than a constantly true boolean.
+- Alternative **accepted**: the UI button requests via a ServerRpc on an authorized NetworkIdentity, the server creates the predicted object; no client-side prediction, appearance after RTT. Never send this RPC from each `Simulate` replay.
+- `PredictedGameObject.SetActive` useful for reversible toggle; `Delete` performs a true part removal.
+- To repair gameplay, add **`PredictedParent`** to the room. The attachment occurs during the simulation and is recorded in state, restored during rollback and sent to the late join. Without component, changing parent is purely a local decoration at best; parent under Imbricated Transform non-part not replicated identically.
+- Prefabs predicted with `NetworkIdentity` for cat/IU: **>=1.4** mirror automatically, do not add obsolete `PredictedIdentitySpawner`; **<1.4** bridge distinct. Mirror follows the verified world, not speculative spawn, and visibility/ownership mirror derive from prediction, not ordinary Network Rules.
 
 ## Tests
-Spawn client puis rejet serveur, projectile pool rollback, parent détruit/recréé, reparent cross-prefab, owner transfer, scene reload, late join et visibility cachée.
+Spawn client then reject server, projectile pool rollback, parent destroyed/recreated, repair cross-prefab, owner transfer, scene reload, late join and hidden visibility.

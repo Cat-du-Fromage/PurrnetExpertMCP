@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "purrnet-expert": {
+      "type": "stdio",
+      "command": "uv",
+      "args": ["--directory", "/absolute/path/to/PurrnetExpertMCP", "run", "--no-sync", "purrnet-expert-mcp"],
+      "env": {
+        "PURRNET_PROJECT_ROOTS": "/absolute/path/to/UnityProject"
+      }
+    }
+  }
+}

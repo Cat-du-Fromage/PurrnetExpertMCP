@@ -15,9 +15,11 @@ from pathlib import Path
 import re
 import sys
 
+from purrnet_common import docs_checkout
+
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT = ROOT / "references" / "cache" / "official-docs"
-INDEX = ROOT / "references" / "cache" / "docs-index.json"
+DEFAULT = docs_checkout(ROOT)
+INDEX = DEFAULT.parent / "docs-index.json"
 CRITICAL = [
     "SUMMARY.md", "README.md",
     "client-side-prediction/README.md",

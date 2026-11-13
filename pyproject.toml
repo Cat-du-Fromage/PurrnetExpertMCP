@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling==1.29.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "purrnet-expert-mcp"
+version = "0.1.0"
+description = "Local PurrNet and PurrDiction documentation and Unity package evidence over MCP"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {file = "LICENSE"}
+dependencies = [
+    "mcp>=2.3.0,<3",
+    "tree-sitter>=0.25,<0.27",
+    "tree-sitter-c-sharp>=0.23,<0.24",
+]
+
+[project.scripts]
+purrnet-expert-mcp = "purrnet_expert_mcp.server:main"
+purrnet-expert-cache = "purrnet_expert_mcp.indexer:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/purrnet_expert_mcp"]
+dev-mode-dirs = ["src", "scripts"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"scripts/purrnet_common.py" = "purrnet_common.py"

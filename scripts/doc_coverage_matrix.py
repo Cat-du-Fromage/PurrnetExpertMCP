@@ -11,9 +11,11 @@ import json
 from pathlib import Path
 import sys
 
+from purrnet_common import docs_checkout
+
 ROOT=Path(__file__).resolve().parents[1]
 ROUTES=ROOT/'references/task-routes.json'
-DOCS=ROOT/'references/cache/official-docs'
+DOCS=docs_checkout(ROOT)
 TECH=('systems-and-modules/','client-side-prediction/','plug-n-play-components/','tools/','integrations/','addons/','guides/','getting-started/','game-server-hosting/','terminology/')
 # High-risk pages checked for a *mandatory topical route* when docs are synced.
 # This is NOT the complete official documentation; all other files remain in the inventory.

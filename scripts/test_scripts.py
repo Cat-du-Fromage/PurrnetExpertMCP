@@ -101,6 +101,7 @@ class SkillScriptsTests(unittest.TestCase):
             upstream = root / 'PurrDocs-upstream'
             upstream.mkdir()
             git('init', '-b', 'main', str(upstream))
+            git('config', 'commit.gpgsign', 'false', cwd=upstream)
             git('config', 'user.name', 'Skill Test', cwd=upstream)
             git('config', 'user.email', 'skill-test@example.com', cwd=upstream)
             for path in docs_catalog.CRITICAL:

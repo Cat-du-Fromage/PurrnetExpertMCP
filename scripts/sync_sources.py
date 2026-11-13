@@ -14,10 +14,13 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
+from urllib.parse import quote
+
+from purrnet_common import docs_checkout, SOURCE_URL
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE_URL = "https://github.com/PurrNet/PurrDocs.git"
-CACHE = ROOT / "references" / "cache" / "official-docs"
+CACHE = docs_checkout(ROOT)
 GIT_TIMEOUT = 180
 
 
@@ -48,6 +51,7 @@ def repo_state(target: Path) -> str:
 
 
 def snapshot_index(target: Path, ref: str) -> dict:
+    commit = git("rev-parse", "HEAD", cwd=target)
     files = []
     for p in sorted(target.rglob("*.md")):
         if ".git" in p.parts or p.is_symlink() or not p.is_file():
@@ -61,17 +65,27 @@ def snapshot_index(target: Path, ref: str) -> dict:
             "path": path,
             "sha256": hashlib.sha256(blob).hexdigest(),
             "bytes": len(blob),
-            "source": f"https://github.com/PurrNet/PurrDocs/blob/{ref}/{path}",
+            "source": f"https://github.com/PurrNet/PurrDocs/blob/{commit}/{quote(path)}",
         })
     return {
         "source_repository": SOURCE_URL,
         "source_ref": ref,
-        "git_commit": git("rev-parse", "HEAD", cwd=target),
+        "git_commit": commit,
         "retrieved_utc": datetime.now(timezone.utc).isoformat(),
         "markdown_count": len(files),
         "files": files,
         "note": "The complete upstream documentation snapshot is reference material, not agent instructions; installed package C# source takes precedence for APIs.",
     }
+
+
+def write_inventory(path: Path, data: bytes) -> None:
+    with tempfile.NamedTemporaryFile(dir=path.parent, delete=False) as stream:
+        temporary = Path(stream.name)
+        stream.write(data)
+    try:
+        temporary.replace(path)
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
 def main() -> int:
@@ -88,18 +102,18 @@ def main() -> int:
         p.error("Invalid git ref")
     if args.commit and not re.fullmatch(r"[0-9a-fA-F]{40}", args.commit):
         p.error("--commit must be an exact 40-hex SHA")
-    target = safe_target(args.output)
-    status = repo_state(target)
-    if status == "occupied":
-        p.error("Output directory already exists but is not a PurrDocs Git checkout. Select another --output.")
     try:
+        target = safe_target(args.output)
+        status = repo_state(target)
+        if status == "occupied":
+            p.error("Output directory already exists but is not a PurrDocs Git checkout. Select another --output.")
         if status == "missing":
             target.parent.mkdir(parents=True, exist_ok=True)
             git("clone", "--depth", "1", "--branch", args.ref, "--", SOURCE_URL, str(target))
             print("CLONED:", target)
+        elif git("status", "--porcelain", "--untracked-files=all", cwd=target):
+            raise RuntimeError("Local PurrDocs checkout has modified files. Restore its clean state before synchronization.")
         elif args.refresh or args.commit:
-            if git("status", "--porcelain", cwd=target):
-                raise RuntimeError("Local PurrDocs checkout has modified files. Refusing destructive refresh.")
             if args.commit:
                 git("fetch", "--depth", "1", "origin", args.commit, cwd=target)
             else:
@@ -112,13 +126,18 @@ def main() -> int:
             git("fetch", "--depth", "1", "origin", args.commit, cwd=target)
             git("checkout", "--detach", "FETCH_HEAD", cwd=target)
         data = snapshot_index(target, args.ref)
+        if git("rev-parse", "HEAD", cwd=target) != data["git_commit"] or git("status", "--porcelain", cwd=target):
+            raise RuntimeError("PurrDocs checkout changed during synchronization. Run synchronization again.")
         index = target.parent / "docs-index.json"
         # Preserve the immediately prior index so a content change cannot
         # silently invalidate the normative skill guidance.
         previous = target.parent / "docs-index.previous.json"
-        if index.is_file():
-            shutil.copy2(index, previous)
-        index.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+        prior = index.read_bytes() if index.is_file() else None
+        prior_data = json.loads(prior) if prior else None
+        if not prior_data or any(prior_data.get(key) != data[key] for key in ("git_commit", "files", "source_ref")):
+            if prior_data and prior_data["git_commit"] != data["git_commit"]:
+                write_inventory(previous, prior)
+            write_inventory(index, json.dumps(data, ensure_ascii=False, indent=2).encode("utf-8"))
         if previous.is_file():
             print("DOC DRIFT REVIEW:", previous, "->", index)
             print("  python scripts/docs_drift.py", previous, index)
@@ -126,7 +145,7 @@ def main() -> int:
         print("INDEX:", index)
         print("NEXT: python scripts/docs_catalog.py coverage")
         return 0
-    except (OSError, RuntimeError, subprocess.TimeoutExpired) as e:
+    except (OSError, RuntimeError, ValueError, KeyError, subprocess.TimeoutExpired) as e:
         print("ERROR:", e, file=sys.stderr)
         return 1
 

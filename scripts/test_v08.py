@@ -4,11 +4,14 @@
 These tests do NOT run Unity, Docker, Edgegap, or an agent model.
 """
 from __future__ import annotations
+from contextlib import redirect_stdout
+from io import StringIO
 import json
 import sys
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
@@ -155,23 +158,32 @@ class V08Tests(unittest.TestCase):
             self.assertFalse((root/'out.log').exists())
 
     def test_mock_unity_error_is_not_passed_as_compile(self):
-        # Tests tool plumbing with a FAKE process, not Unity itself.
+        # Stub the editor subprocess so the fixture behaves identically on Windows and POSIX.
         with tempfile.TemporaryDirectory() as td:
             root=Path(td);(root/'Assets').mkdir();(root/'ProjectSettings').mkdir()
             fake=root/'mock-editor'
-            fake.write_text('#!/usr/bin/env python3\nimport sys\nfrom pathlib import Path\nPath(sys.argv[sys.argv.index("-logFile")+1]).write_text("Assets/Bad.cs(1,2): error CS0246: fake compilation error\\n")\n')
-            fake.chmod(0o755)
-            r=subprocess.run([sys.executable,str(ROOT/'scripts/unity_compile_check.py'),str(root),
-                              '--unity-exe',str(fake),'--log-file',str(root/'out.log'),'--run','--json'],
-                              capture_output=True,text=True)
-            self.assertEqual(r.returncode,1,r.stderr)
-            obj=json.loads(r.stdout)
+            fake.touch()
+            log = root / 'out.log'
+
+            def run_editor(command, **kwargs):
+                self.assertEqual(command[command.index('-logFile') + 1], str(log))
+                log.write_text('Assets/Bad.cs(1,2): error CS0246: fake compilation error\n')
+                return subprocess.CompletedProcess(command, 0)
+
+            output = StringIO()
+            with patch.object(unity_compile_check.subprocess, 'run', side_effect=run_editor), redirect_stdout(output):
+                result = unity_compile_check.main([
+                    str(root), '--unity-exe', str(fake), '--log-file', str(log), '--run', '--json',
+                ])
+            self.assertEqual(result, 1)
+            obj=json.loads(output.getvalue())
             self.assertTrue(obj['ran'])
             self.assertFalse(obj['success'])
             self.assertTrue(obj['compiler_errors'])
 
     def test_no_distributed_purrdocs_dump(self):
-        self.assertFalse((ROOT/'references/cache/official-docs').exists())
+        import install_project
+        self.assertIn('cache', install_project.ignore(ROOT / 'references', ['cache']))
 
 
 if __name__=='__main__': unittest.main()

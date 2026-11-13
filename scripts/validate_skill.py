@@ -2,6 +2,7 @@
 """Static pack audit, Python/JSON checks and required PurrDiction coverage gates (not Unity)."""
 from pathlib import Path
 import ast
+import argparse
 import json
 import re
 import sys
@@ -69,6 +70,9 @@ REQUIRED = [
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--release', action='store_true', help='Refuse a local docs cache in a distribution tree')
+    args = parser.parse_args()
     errors = []
     for name in REQUIRED:
         if not (ROOT / name).is_file():
@@ -144,7 +148,7 @@ def main():
         except (OSError, SyntaxError) as e:
             errors.append(f'Invalid Python {path.name}: {e}')
     cache = ROOT / 'references' / 'cache' / 'official-docs'
-    if cache.exists():
+    if args.release and cache.exists():
         errors.append('Docs cache present: do not package original full documentation without explicit licence review')
     if errors:
         for error in errors: print('ERROR:', error, file=sys.stderr)

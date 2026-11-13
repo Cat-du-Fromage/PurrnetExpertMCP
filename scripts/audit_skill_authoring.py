@@ -65,6 +65,8 @@ def audit(root: Path) -> dict:
 
     long_refs = []
     for f in (root / 'references').rglob('*.md'):
+        if 'cache' in f.relative_to(root / 'references').parts:
+            continue
         lines = f.read_text(encoding='utf-8').splitlines()
         if len(lines) > 100:
             long_refs.append(f.relative_to(root).as_posix())

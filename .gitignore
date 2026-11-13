@@ -3,3 +3,10 @@ references/cache/
 __pycache__/
 *.pyc
 .DS_Store
+.venv/
+.uv-cache/
+.uv-python/
+dist/
+*.sqlite3
+*.sqlite3-*
+*.egg-info/
